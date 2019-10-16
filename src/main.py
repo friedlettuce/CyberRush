@@ -1,21 +1,23 @@
-import sys
 import pygame
+
+from settings import Settings
+import game_functions as gfn
 
 
 def run_game():
 
     pygame.init()
+    game_settings = Settings()
 
-    screen = pygame.display.set_mode((600,400))
-    pygame.display.set_caption("Cyber Rush")
+    screen = pygame.display.set_mode((
+        game_settings.screen_w, game_settings.screen_h))
+    pygame.display.set_caption(game_settings.game_name)
 
     while True:
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
+        gfn.check_events()
 
-        pygame.display.flip()
+        gfn.update_screen()
 
 
 run_game()
