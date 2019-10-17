@@ -3,3 +3,4 @@ src/__pycache__/
 .idea
 .vs/
 
+src/main.py

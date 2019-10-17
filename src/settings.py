@@ -38,6 +38,11 @@ class Settings:
         
         # Custom font
         self.cb2_path = os.path.join(resources_folder, "cb2.ttf")
+        
+        # Music Settings
+        music_folder = os.path.join(resources_folder, "music")
+        
+        self.titleMusic_path = os.path.join(music_folder, "Title Music.mp3")
 
 class GameState(Enum):
     TITLE = 0
