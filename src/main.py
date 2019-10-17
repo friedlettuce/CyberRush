@@ -15,10 +15,6 @@ def run_game():
     
     clock = pygame.time.Clock()
 
-    # pygame.mixer.music.load(game_settings.titleMusic_path)
-    # pygame.mixer.music.set_volume(0.025)
-    # pygame.mixer.music.play(-1)
-
     screen = pygame.display.set_mode((
         game_settings.screen_w, game_settings.screen_h))
     pygame.display.set_caption(game_settings.game_name)

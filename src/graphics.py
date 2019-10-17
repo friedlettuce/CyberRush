@@ -12,6 +12,11 @@ class TitleScreen:
         self.screen_rect = self.screen.get_rect()
         self.bk_color = game_settings.bk_color
 
+        # Music
+        pygame.mixer.music.load(game_settings.titleMusic_path)
+        pygame.mixer.music.set_volume(game_settings.music_volume)
+        pygame.mixer.music.play(-1)
+
         # Image display for the title
         self.title_img = pygame.image.load(game_settings.title_path)
         self.title_rect = self.title_img.get_rect()
@@ -116,10 +121,19 @@ class SettingsScreen:
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
         self.bk_color = game_settings.bk_color
+        self.game_settings = game_settings
 
         self.mainmenu_button = Button(
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
             int(self.screen_rect.centery * 1.9))
+
+        self.vol_up_button = Button(
+            screen, game_settings.vol_up_path, int(self.screen_rect.centerx / 1.5),
+            int(self.screen_rect.centery /1.5 ))
+
+        self.vol_down_button = Button(
+            screen, game_settings.vol_down_path, int(self.screen_rect.centerx / 2.5),
+            int(self.screen_rect.centery /1.5 ))
 
     def check_events(self):
 
@@ -137,12 +151,40 @@ class SettingsScreen:
                 if self.mainmenu_button.image_rect.colliderect(mouse_pos):
                     ret_game_state = GameState.TITLE
 
+                # Volume buttons
+                elif self.vol_down_button.image_rect.colliderect(mouse_pos):
+                    self.game_settings.music_volume -= .025
+                    if(self.game_settings.music_volume < 0):
+                        self.game_settings.music_volume = 0
+                    pygame.mixer.music.set_volume(self.game_settings.music_volume)
+
+                elif self.vol_up_button.image_rect.colliderect(mouse_pos):
+                    self.game_settings.music_volume += .025
+                    if(self.game_settings.music_volume > 1):
+                        self.game_settings.music_volume = 1
+                    pygame.mixer.music.set_volume(self.game_settings.music_volume)
+
+
         return ret_game_state
 
     def blitme(self):
         self.screen.fill(self.bk_color)
 
+        ## Volume settings
+        # Volume text 
+        text = "Change Volume"
+
+        largeText = pygame.font.Font(self.game_settings.cb2_path,25)
+        self.textSurface = largeText.render(text, True, (0,0,0))
+        self.TextRect = self.textSurface.get_rect()
+        self.TextRect.center = ((self.screen_rect.centerx / 2),(self.screen_rect.centery / 3))
+        self.screen.blit(self.textSurface, self.TextRect)
+
         self.mainmenu_button.blitme()
+
+        # Volume Buttons
+        self.vol_up_button.blitme()
+        self.vol_down_button.blitme()
 
 
 class AboutScreen:
