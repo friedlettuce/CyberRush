@@ -1,7 +1,8 @@
-import pygame
-from enum import Enum
+import sys
 
-from settings import Settings
+import pygame
+
+from settings import Settings, GameState
 import game_functions as gfn
 from graphics import TitleScreen
 
@@ -19,18 +20,13 @@ def run_game():
     title_screen = TitleScreen(screen, game_settings)
 
     while True:
+        if gamestate is GameState.QUIT:
+            sys.exit()
+        elif gamestate is GameState.TITLE:
+            gamestate = title_screen.check_events()
+            title_screen.blitme()
 
-        gfn.check_events()
-
-        gfn.update_screen(title_screen)
-
-
-class GameState(Enum):
-    TITLE = 0
-    SETTINGS = 1
-    ABOUT = 2
-    PLAYING = 3
-    SCORE = 4
+        pygame.display.flip()
 
 
 run_game()

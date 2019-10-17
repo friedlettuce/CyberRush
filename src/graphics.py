@@ -1,4 +1,7 @@
 import pygame
+import sys
+
+from settings import GameState
 
 
 class TitleScreen:
@@ -39,6 +42,32 @@ class TitleScreen:
         self.quit_button = Button(
             screen, game_settings.quit_path, int(self.screen_rect.centerx * 1.5),
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
+
+        self.buttons = [self.play_button, self.settings_button, self.about_button, self.quit_button]
+
+    def check_events(self):
+
+        ret_game_state = GameState(0)
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                ret_game_state = GameState.QUIT
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+
+                mouse_pos = pygame.Rect((pygame.mouse.get_pos()), (0, 0))
+
+                if self.play_button.image_rect.colliderect(mouse_pos):
+                    ret_game_state = GameState.PLAYING
+                elif self.settings_button.image_rect.colliderect(mouse_pos):
+                    ret_game_state = GameState.SETTINGS
+                elif self.about_button.image_rect.colliderect(mouse_pos):
+                    ret_game_state = GameState.ABOUT
+                elif self.quit_button.image_rect.colliderect(mouse_pos):
+                    ret_game_state = GameState.QUIT
+
+        return ret_game_state
 
     def blitme(self):
         # Draws Title/Background/Buttons

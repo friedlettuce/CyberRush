@@ -1,4 +1,5 @@
 import os
+from enum import Enum
 
 class Settings:
 
@@ -23,3 +24,10 @@ class Settings:
         self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
 
 
+class GameState(Enum):
+    TITLE = 0
+    SETTINGS = 1
+    ABOUT = 2
+    PLAYING = 3
+    SCORE = 4
+    QUIT = 5
