@@ -18,6 +18,13 @@ class TitleScreen:
         self.title_rect.centerx = self.screen_rect.centerx / 2
         self.title_rect.centery = self.screen_rect.centery / 2
 
+        # Image display for the background
+        self.background_img = pygame.image.load(game_settings.title_background_path)
+        self.background_rect = self.background_img.get_rect()
+
+        self.background_rect.centerx = self.screen_rect.centerx
+        self.background_rect.centery = self.screen_rect.centery
+
         # Buttons
         button_num = game_settings.num_buttons  # Tracks which button we're initializing
         self.play_button = Button(
@@ -71,7 +78,7 @@ class TitleScreen:
     def blitme(self):
         # Draws Title/Background/Buttons
 
-        self.screen.fill(self.bk_color)
+        self.screen.blit(self.background_img, self.background_rect)
 
         self.screen.blit(self.title_img, self.title_rect)
 
