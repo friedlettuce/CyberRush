@@ -11,11 +11,7 @@ class TitleScreen:
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
         self.bk_color = game_settings.bk_color
-
-        # Music
-        pygame.mixer.music.load(game_settings.titleMusic_path)
-        pygame.mixer.music.set_volume(game_settings.music_volume)
-        pygame.mixer.music.play(-1)
+        self.game_settings = game_settings
 
         # Image display for the title
         self.title_img = pygame.image.load(game_settings.title_path)
@@ -59,6 +55,16 @@ class TitleScreen:
         
         self.Robot1 = HoveringEnemyX(game_settings, 0, 300, 150, 150, self.screen_rect.centerx)
         self.Robot2 = HoveringEnemyY(game_settings, self.screen_rect.centerx, 0, 150,150, self.screen_rect.centery)
+
+    def screen_start(self):
+        # Music
+        pygame.mixer.music.load(self.game_settings.titleMusic_path)
+        pygame.mixer.music.set_volume(self.game_settings.music_volume)
+        pygame.mixer.music.play(-1)
+
+    def screen_end(self):
+        # Temporary for now
+        pygame.mixer.music.stop()
 
     def check_events(self):
 
