@@ -28,6 +28,7 @@ def run_game():
         clock.tick(60)
         
         if gamestate is GameState.QUIT:
+            pygame.quit()
             sys.exit()
 
         elif gamestate is GameState.TITLE:
