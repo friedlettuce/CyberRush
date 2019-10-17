@@ -28,3 +28,7 @@ class GameScreen(object):
     def blitme(self):
 
         self.city_street.blitme()
+        self.screen.blit(self.textSurface, self.text_rect)
+
+    def screen_start(self):
+        pygame.mixer.music.stop()
