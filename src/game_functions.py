@@ -16,7 +16,9 @@ def check_events():
             # Update player/game state
 
 
-def update_screen():
+def update_screen(title_screen):
     # Blit/Update/Manage game display
+
+    title_screen.blitme()
 
     pygame.display.flip()

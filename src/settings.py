@@ -7,7 +7,5 @@ class Settings:
         self.screen_h = 450
         self.game_name = "Cyber Rush"
 
-        # Title Screen Settings - Tentative
-        self.title_font = "harrington"
-        self.title_size = 75
-        self.title_color = (128, 128, 128)
+        # Title Screen Settings
+        self.title_path = "../resources/Title.bmp"
