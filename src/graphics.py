@@ -58,13 +58,14 @@ class TitleScreen:
 
     def screen_start(self):
         # Music
-        pygame.mixer.music.load(self.game_settings.titleMusic_path)
-        pygame.mixer.music.set_volume(self.game_settings.music_volume)
-        pygame.mixer.music.play(-1)
+        if not pygame.mixer.music.get_busy():
+            pygame.mixer.music.load(self.game_settings.titleMusic_path)
+            pygame.mixer.music.set_volume(self.game_settings.music_volume)
+            pygame.mixer.music.play(-1)
 
     def screen_end(self):
         # Temporary for now
-        pygame.mixer.music.stop()
+        pass
 
     def check_events(self):
 

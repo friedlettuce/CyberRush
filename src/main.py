@@ -63,6 +63,7 @@ def run_game():
             if cur_gamestate != new_gamestate:
                 # Run screen start function
                 cur_gamestate = new_gamestate
+                game_screen.screen_start()
             new_gamestate = game_screen.check_events()
             game_screen.blitme()    
             #put screen_end function here if needed later
