@@ -30,7 +30,7 @@ class Settings:
         # Mob Settings
         sprites_folder = os.path.join(resources_folder, "sprites")
 
-        self.hovering_enemy_velocity = 5
+        self.hovering_enemy_velocity = 3
         self.rhl1_path = os.path.join(sprites_folder, "RobotHoverLeft1.png")
         self.rhl2_path = os.path.join(sprites_folder, "RobotHoverLeft2.png")
         self.rhr1_path = os.path.join(sprites_folder, "RobotHoverRight1.png")

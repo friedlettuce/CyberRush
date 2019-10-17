@@ -5,6 +5,7 @@ import pygame
 from settings import Settings, GameState
 from graphics import TitleScreen, SettingsScreen, AboutScreen
 from gamescreen import GameScreen
+from mobs import Enemy, HoveringEnemy_X
 
 
 def run_game():
@@ -12,6 +13,8 @@ def run_game():
     pygame.init()
     gamestate = GameState(0)
     game_settings = Settings()
+    
+    clock = pygame.time.Clock()
 
     screen = pygame.display.set_mode((
         game_settings.screen_w, game_settings.screen_h))
@@ -22,13 +25,18 @@ def run_game():
     about_screen = AboutScreen(screen, game_settings)
     game_screen = GameScreen(screen, game_settings)
 
+    Robot1 = HoveringEnemy_X(game_settings, 0, 300, 150, 150, 480)
+
     while True:
+        clock.tick(60)
+        
         if gamestate is GameState.QUIT:
             sys.exit()
 
         elif gamestate is GameState.TITLE:
             gamestate = title_screen.check_events()
             title_screen.blitme()
+            Robot1.draw(screen)
 
         elif gamestate is GameState.SETTINGS:
             gamestate = settings_screen.check_events()
