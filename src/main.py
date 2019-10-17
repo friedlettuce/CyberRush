@@ -25,8 +25,6 @@ def run_game():
     about_screen = AboutScreen(screen, game_settings)
     game_screen = GameScreen(screen, game_settings)
 
-    Robot1 = HoveringEnemy_X(game_settings, 0, 300, 150, 150, 480)
-
     while True:
         clock.tick(60)
         
@@ -36,7 +34,6 @@ def run_game():
         elif gamestate is GameState.TITLE:
             gamestate = title_screen.check_events()
             title_screen.blitme()
-            Robot1.draw(screen)
 
         elif gamestate is GameState.SETTINGS:
             gamestate = settings_screen.check_events()

@@ -1,6 +1,7 @@
-import pygame
+import pygame, os
 
 from settings import GameState
+from mobs import HoveringEnemy_X, Enemy
 
 
 class TitleScreen:
@@ -50,6 +51,9 @@ class TitleScreen:
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
 
         self.buttons = [self.play_button, self.settings_button, self.about_button, self.quit_button]
+        
+        self.Robot1 = HoveringEnemy_X(game_settings, 0, 300, 150, 150, 480)
+        
 
     def check_events(self):
 
@@ -86,6 +90,8 @@ class TitleScreen:
         self.settings_button.blitme()
         self.about_button.blitme()
         self.quit_button.blitme()
+        
+        self.Robot1.draw(self.screen)
 
 
 class Button:
