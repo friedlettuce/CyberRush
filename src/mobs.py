@@ -10,6 +10,8 @@ class Enemy(object):
 		self.height = height
 		self.pathX = [x, end]
 		self.pathY = [y, end]
+		self.movement = 0
+		self.vel = 0
 	
 	#Function For An Enemy To Move Side To Side On The X Axis
 	def move_AlongX(self):
@@ -20,7 +22,7 @@ class Enemy(object):
 			else:
 				self.vel = self.vel * -1
 				self.x = self.x + self.vel
-				self.movementCount = 0
+				self.movement = 0
 				
 		# If Velocity < 0, Enemy Is Moving To The Left
 		elif self.vel < 0:
@@ -29,7 +31,7 @@ class Enemy(object):
 			else:
 				self.vel = self.vel * -1
 				self.x = self.x + self.vel
-				self.movementCount = 0
+				self.movement = 0
 	
 	#Function For An Enemy To Move Side To Side On The Y Axis
 	def move_AlongY(self):
@@ -40,13 +42,31 @@ class Enemy(object):
 			else:
 				self.vel = self.vel * -1
 				self.y = self.y + self.vel
-				self.movementCount = 0
+				self.movement = 0
 				
-		# If Velocity < 0, Enemy Is Moving Down
+		# If Velocity < 0, Enemy Is Moving Up
 		elif self.vel < 0:
 			if self.y > self.pathY[0] - self.vel:
 				self.y = self.y + self.vel
 			else:
 				self.vel = self.vel * -1
 				self.y = self.y + self.vel
-				self.movementCount = 0
+				self.movement = 0
+
+#Enemy That Will Hover Along X Axis
+class HoveringEnemy_X(Enemy):
+	def __init__(self, x, y, width, height, end):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		self.pathX = [x, end]
+		self.movement = 0
+		self.vel = 5
+	
+	def draw(self, screen):
+		self.move_AlongY()
+		
+		
+	
+	
