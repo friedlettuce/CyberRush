@@ -45,6 +45,9 @@ class Settings:
         
         self.titleMusic_path = os.path.join(music_folder, "Title Music.mp3")
 
+        # Settings Screen Settings
+        self.vol_up_path = os.path.join(resources_folder, "VolUpButton.bmp")
+        self.vol_down_path = os.path.join(resources_folder, "VolDownButton.bmp")
 
 class GameState(Enum):
     TITLE = 0
