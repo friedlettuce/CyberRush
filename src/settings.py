@@ -22,6 +22,7 @@ class Settings:
         self.quit_path = os.path.join(resources_folder, "QuitButton.bmp")
         self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
         self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
+        self.mainmenu_path = os.path.join(resources_folder, "MainMenuButton.bmp")
 
 
 class GameState(Enum):

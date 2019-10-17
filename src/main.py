@@ -3,7 +3,7 @@ import sys
 import pygame
 
 from settings import Settings, GameState
-from graphics import TitleScreen
+from graphics import TitleScreen, SettingsScreen
 
 
 def run_game():
@@ -17,6 +17,7 @@ def run_game():
     pygame.display.set_caption(game_settings.game_name)
 
     title_screen = TitleScreen(screen, game_settings)
+    settings_screen = SettingsScreen(screen, game_settings)
 
     while True:
         if gamestate is GameState.QUIT:
@@ -24,6 +25,9 @@ def run_game():
         elif gamestate is GameState.TITLE:
             gamestate = title_screen.check_events()
             title_screen.blitme()
+        elif gamestate is GameState.SETTINGS:
+            gamestate = settings_screen.check_events()
+            settings_screen.blitme()
 
         pygame.display.flip()
 
