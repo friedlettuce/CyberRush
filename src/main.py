@@ -5,7 +5,6 @@ import pygame
 from settings import Settings, GameState
 from graphics import TitleScreen, SettingsScreen, AboutScreen
 from gamescreen import GameScreen
-from mobs import Enemy, HoveringEnemy_X
 
 
 def run_game():
