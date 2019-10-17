@@ -67,18 +67,29 @@ class HoveringEnemy_X(Enemy):
         self.moveRight = [pygame.transform.scale(pygame.image.load(game_settings.rhr1_path), (150,150)),
                      pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), (150,150))]
     
+
     def draw(self, screen):
         self.move_AlongX()
         
-        if self.movement + 1 == 60:
+        if self.movement + 1 == 40:
             self.movement = 0
         
         if self.vel < 0:
-            screen.blit(self.moveLeft[self.movement//30],(self.x,self.y))
+            screen.blit(self.moveLeft[self.movement//20],(self.x,self.y))
+            self.hitbox = (self.x + 50, self.y + 25, 45, 110)
+            self.hitbox2 = (self.x + 40, self.y + 25, 80, 35)
         elif self.vel > 0:
-            screen.blit(self.moveRight[self.movement//30],(self.x,self.y))
+            screen.blit(self.moveRight[self.movement//20],(self.x,self.y))
+            self.hitbox = (self.x + 50, self.y + 25, 45, 110)
+            self.hitbox2 = (self.x + 30, self.y + 25, 80, 35)
         
         self.movement = self.movement + 1
+        
+        self.drawHitbox(screen)
+       
+    def drawHitbox(self, screen):
+        pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
+        pygame.draw.rect(screen, (255, 0, 0), self.hitbox2, 2)
 
 #Enemy That Will Hover Along Y Axis
 class HoveringEnemy_Y(Enemy):
