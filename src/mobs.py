@@ -1,6 +1,7 @@
 import pygame, os
 
-#Generic Enemy Class For Enemies To Utilize
+
+# Generic Enemy Class For Enemies To Utilize
 class Enemy(object):
     
     def __init__(self, x, y, width, height, end):
@@ -10,8 +11,9 @@ class Enemy(object):
         self.height = height
         self.movement = 0
         self.vel = 0
+        self.end = end
     
-    #Function For An Enemy To Move Side To Side On The X Axis
+    # Function For An Enemy To Move Side To Side On The X Axis
     def move_AlongX(self):
         # If Velocity > 0, Enemy Is Moving To The Right
         if self.vel > 0:
@@ -51,19 +53,19 @@ class Enemy(object):
                 self.y = self.y + self.vel
                 self.movement = 0
 
+
 #Enemy That Will Hover Along X Axis
 class HoveringEnemy_X(Enemy):
-    moveLeft = [pygame.image.load('Sprites/RobotHoverLeft1.png'), pygame.image.load('Sprites/RobotHoverLeft2.png')]
-    moveRight = [pygame.image.load('Sprites/RobotHoverRight1.png'), pygame.image.load('Sprites/RobotHoverRight2.png')]
 
-    def __init__(self, x, y, width, height, end):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
-        self.movement = 0
-        self.pathX = [x, end]
-        self.vel = 5
+    def __init__(self, game_settings, x, y, width, height, end):
+        super().__init__(x, y, width, height, end)
+        self.pathX = [self.x, self.end]
+        self.vel = game_settings.hovering_enemy_velocity
+
+        self.moveLeft = [pygame.image.load(game_settings.rhl1_path),
+                    pygame.image.load(game_settings.rhl2_path)]
+        self.moveRight = [pygame.image.load(game_settings.rhr1_path),
+                     pygame.image.load(game_settings.rhr2_path)]
     
     def draw(self, screen):
         self.move_AlongX()
