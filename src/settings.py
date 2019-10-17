@@ -23,7 +23,9 @@ class Settings:
         self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
         self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
         self.mainmenu_path = os.path.join(resources_folder, "MainMenuButton.bmp")
-
+        
+        # Custom font
+        self.cb2_path = os.path.join(resources_folder, "cb2.ttf")
 
 class GameState(Enum):
     TITLE = 0

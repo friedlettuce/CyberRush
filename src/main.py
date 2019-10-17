@@ -4,6 +4,7 @@ import pygame
 
 from settings import Settings, GameState
 from graphics import TitleScreen, SettingsScreen, AboutScreen
+from gamescreen import GameScreen
 
 
 def run_game():
@@ -19,19 +20,27 @@ def run_game():
     title_screen = TitleScreen(screen, game_settings)
     settings_screen = SettingsScreen(screen, game_settings)
     about_screen = AboutScreen(screen, game_settings)
+    game_screen = GameScreen(screen, game_settings)
 
     while True:
         if gamestate is GameState.QUIT:
             sys.exit()
+
         elif gamestate is GameState.TITLE:
             gamestate = title_screen.check_events()
             title_screen.blitme()
+
         elif gamestate is GameState.SETTINGS:
             gamestate = settings_screen.check_events()
             settings_screen.blitme()
+
         elif gamestate is GameState.ABOUT:
             gamestate = about_screen.check_events()
             about_screen.blitme()
+
+        elif gamestate is GameState.PLAYING:
+            gamestate = game_screen.check_events()
+            game_screen.blitme()           
 
         pygame.display.flip()
 
