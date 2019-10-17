@@ -22,6 +22,7 @@ class Settings:
         self.quit_path = os.path.join(resources_folder, "QuitButton.bmp")
         self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
         self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
+<<<<<<< HEAD
 
         # Mob Settings
         sprites_folder = os.path.join(resources_folder, "sprites")
@@ -32,6 +33,12 @@ class Settings:
         self.rhr1_path = os.path.join(sprites_folder, "RobotHoverRight1.png")
         self.rhr2_path = os.path.join(sprites_folder, "RobotHoverRight2.png")
         print(os.path.exists(self.rhr1_path))
+=======
+        self.mainmenu_path = os.path.join(resources_folder, "MainMenuButton.bmp")
+        
+        # Custom font
+        self.cb2_path = os.path.join(resources_folder, "cb2.ttf")
+>>>>>>> tempscreens
 
 class GameState(Enum):
     TITLE = 0
