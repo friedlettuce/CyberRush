@@ -85,7 +85,7 @@ class HoveringEnemy_X(Enemy):
         
         self.movement = self.movement + 1
         
-        self.drawHitbox(screen)
+        #self.drawHitbox(screen)
        
     def drawHitbox(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
