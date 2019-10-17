@@ -30,3 +30,23 @@ class Enemy(object):
 				self.vel = self.vel * -1
 				self.x = self.x + self.vel
 				self.movementCount = 0
+	
+	#Function For An Enemy To Move Side To Side On The Y Axis
+	def move_AlongY(self):
+		# If Velocity > 0, Enemy Is Moving Down
+		if self.vel > 0:
+			if self.y < self.pathY[1] + self.vel:
+				self.y = self.y + self.vel
+			else:
+				self.vel = self.vel * -1
+				self.y = self.y + self.vel
+				self.movementCount = 0
+				
+		# If Velocity < 0, Enemy Is Moving Down
+		elif self.vel < 0:
+			if self.y > self.pathY[0] - self.vel:
+				self.y = self.y + self.vel
+			else:
+				self.vel = self.vel * -1
+				self.y = self.y + self.vel
+				self.movementCount = 0
