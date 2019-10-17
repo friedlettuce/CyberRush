@@ -27,11 +27,11 @@ class Settings:
         sprites_folder = os.path.join(resources_folder, "sprites")
 
         self.hovering_enemy_velocity = 5
-        self.rhl1_path = os.path.join(resources_folder, "RobotHoverLeft1.png")
-        self.rhl2_path = os.path.join(resources_folder, "RobotHoverLeft2.png")
-        self.rhr1_path = os.path.join(resources_folder, "RobotHoverRight1.png")
-        self.rhr2_path = os.path.join(resources_folder, "RobotHoverRight2.png")
-
+        self.rhl1_path = os.path.join(sprites_folder, "RobotHoverLeft1.png")
+        self.rhl2_path = os.path.join(sprites_folder, "RobotHoverLeft2.png")
+        self.rhr1_path = os.path.join(sprites_folder, "RobotHoverRight1.png")
+        self.rhr2_path = os.path.join(sprites_folder, "RobotHoverRight2.png")
+        print(os.path.exists(self.rhr1_path))
 
 class GameState(Enum):
     TITLE = 0
