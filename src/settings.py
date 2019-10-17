@@ -15,7 +15,11 @@ class Settings:
         # Title Screen Settings
         self.bk_color = (39, 184, 184)
 
-        self.num_buttons = 2
+        self.num_buttons = 4
         self.title_path = os.path.join(resources_folder, "Title.bmp")
         self.play_path = os.path.join(resources_folder, "PlayButton.bmp")
         self.quit_path = os.path.join(resources_folder, "QuitButton.bmp")
+        self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
+        self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
+
+

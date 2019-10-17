@@ -24,6 +24,18 @@ class TitleScreen:
 
         button_num -= 1
 
+        self.settings_button = Button(
+            screen, game_settings.settings_path, int(self.screen_rect.centerx * 1.5),
+            int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
+
+        button_num -= 1
+
+        self.about_button = Button(
+            screen, game_settings.about_path, int(self.screen_rect.centerx * 1.5),
+            int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
+
+        button_num -= 1
+
         self.quit_button = Button(
             screen, game_settings.quit_path, int(self.screen_rect.centerx * 1.5),
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
@@ -36,6 +48,8 @@ class TitleScreen:
         self.screen.blit(self.title_img, self.title_rect)
 
         self.play_button.blitme()
+        self.settings_button.blitme()
+        self.about_button.blitme()
         self.quit_button.blitme()
 
 
