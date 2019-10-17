@@ -26,9 +26,7 @@ class GameScreen(object):
         return ret_game_state
 
     def blitme(self):
-
         self.city_street.blitme()
-        self.screen.blit(self.textSurface, self.text_rect)
 
     def screen_start(self):
         pygame.mixer.music.stop()
