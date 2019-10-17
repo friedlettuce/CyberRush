@@ -52,7 +52,7 @@ class TitleScreen:
 
         self.buttons = [self.play_button, self.settings_button, self.about_button, self.quit_button]
         
-        self.Robot1 = HoveringEnemy_X(game_settings, 0, 300, 150, 150, 480)
+        self.Robot1 = HoveringEnemy_X(game_settings, 0, 300, 150, 150, self.screen_rect.centerx)
         
 
     def check_events(self):
