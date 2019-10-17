@@ -68,7 +68,7 @@ class HoveringEnemy_X(Enemy):
                      pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), (150,150))]
     
 
-    def draw(self, screen):
+    def blitme(self, screen):
         self.move_AlongX()
         
         if self.movement + 1 == 40:
@@ -96,14 +96,14 @@ class HoveringEnemy_Y(Enemy):
 
     def __init__(self, game_settings, x, y, width, height, end):
         super().__init__(x, y, width, height, end)
-        self.pathX = [self.y, self.end]
+        self.pathY = [self.y, self.end]
         self.vel = game_settings.hovering_enemy_velocity
 
-        self.moveLeft = [pygame.image.load(game_settings.rhl1_path),
-                    pygame.image.load(game_settings.rhl2_path)]
+        self.moveLeft = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path),(150,150)),
+                    pygame.transform.scale(pygame.image.load(game_settings.rhl2_path),(150,150))]
     
-    def draw(self, screen):
-        self.move_AlongX()
+    def blitme(self, screen):
+        self.move_AlongY()
         
         if self.movement + 1 == 60:
             self.movement = 0
