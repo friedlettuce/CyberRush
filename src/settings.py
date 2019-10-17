@@ -8,4 +8,9 @@ class Settings:
         self.game_name = "Cyber Rush"
 
         # Title Screen Settings
+        self.bk_color = (39, 184, 184)
+
+        self.num_buttons = 2
         self.title_path = "../resources/Title.bmp"
+        self.play_path = "../resources/PlayButton.bmp"
+        self.quit_path = "../resources/QuitButton.bmp"
