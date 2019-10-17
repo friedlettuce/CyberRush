@@ -30,6 +30,7 @@ class Settings:
         # Mob Settings
         sprites_folder = os.path.join(resources_folder, "sprites")
 
+        self.hov_size = (150, 150)
         self.hovering_enemy_velocity = 2
         self.rhl1_path = os.path.join(sprites_folder, "RobotHoverLeft1.png")
         self.rhl2_path = os.path.join(sprites_folder, "RobotHoverLeft2.png")
@@ -43,6 +44,7 @@ class Settings:
         music_folder = os.path.join(resources_folder, "music")
         
         self.titleMusic_path = os.path.join(music_folder, "Title Music.mp3")
+
 
 class GameState(Enum):
     TITLE = 0

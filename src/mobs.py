@@ -10,11 +10,14 @@ class Enemy(object):
         self.width = width
         self.height = height
         self.movement = 0
-        self.vel = 0
         self.end = end
-	
+
+        self.hitbox = 0
+        self.hitbox2 = 0
+        self.vel = 0
+
     # Function For An Enemy To Move Side To Side On The X Axis
-    def move_AlongX(self):
+    def moving_x(self):
         # If Velocity > 0, Enemy Is Moving To The Right
         if self.vel > 0:
             if self.x < self.pathX[1] + self.vel:
@@ -33,8 +36,8 @@ class Enemy(object):
                 self.x = self.x + self.vel
                 self.movement = 0
     
-    #Function For An Enemy To Move Side To Side On The Y Axis
-    def move_AlongY(self):
+    # Function For An Enemy To Move Side To Side On The Y Axis
+    def moving_y(self):
         # If Velocity > 0, Enemy Is Moving Down
         if self.vel > 0:
             if self.y < self.pathY[1] + self.vel:
@@ -54,59 +57,59 @@ class Enemy(object):
                 self.movement = 0
 
 
-#Enemy That Will Hover Along X Axis
-class HoveringEnemy_X(Enemy):
+# Enemy That Will Hover Along X Axis
+class HoveringEnemyX(Enemy):
 
     def __init__(self, game_settings, x, y, width, height, end):
         super().__init__(x, y, width, height, end)
         self.pathX = [self.x, self.end]
         self.vel = game_settings.hovering_enemy_velocity
 
-        self.moveLeft = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), (150,150)),
-                    pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), (150,150))]
-        self.moveRight = [pygame.transform.scale(pygame.image.load(game_settings.rhr1_path), (150,150)),
-                     pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), (150,150))]
-    
+        self.moveLeft = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), game_settings.hov_size),
+                    pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]
+        self.moveRight = [pygame.transform.scale(pygame.image.load(game_settings.rhr1_path), game_settings.hov_size),
+                     pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
 
     def blitme(self, screen):
-        self.move_AlongX()
-        
+        self.moving_x()
+
         if self.movement + 1 == 40:
             self.movement = 0
         
         if self.vel < 0:
-            screen.blit(self.moveLeft[self.movement//20],(self.x,self.y))
+            screen.blit(self.moveLeft[self.movement//20],(self.x, self.y))
             self.hitbox = (self.x + 50, self.y + 25, 45, 110)
             self.hitbox2 = (self.x + 40, self.y + 25, 80, 35)
         elif self.vel > 0:
-            screen.blit(self.moveRight[self.movement//20],(self.x,self.y))
+            screen.blit(self.moveRight[self.movement//20],(self.x, self.y))
             self.hitbox = (self.x + 50, self.y + 25, 45, 110)
             self.hitbox2 = (self.x + 30, self.y + 25, 80, 35)
         
         self.movement = self.movement + 1
         
-        #self.drawHitbox(screen)
+        # self.draw_hitbox(screen)
        
-    def drawHitbox(self, screen):
+    def draw_hitbox(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
         pygame.draw.rect(screen, (255, 0, 0), self.hitbox2, 2)
 
-#Enemy That Will Hover Along Y Axis
-class HoveringEnemy_Y(Enemy):
+
+# Enemy That Will Hover Along Y Axis
+class HoveringEnemyY(Enemy):
 
     def __init__(self, game_settings, x, y, width, height, end):
         super().__init__(x, y, width, height, end)
         self.pathY = [self.y, self.end]
         self.vel = game_settings.hovering_enemy_velocity
 
-        self.moveLeft = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path),(150,150)),
-                    pygame.transform.scale(pygame.image.load(game_settings.rhl2_path),(150,150))]
+        self.moveLeft = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), game_settings.hov_size),
+                    pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]
     
     def blitme(self, screen):
-        self.move_AlongY()
+        self.moving_y()
         
         if self.movement + 1 == 60:
             self.movement = 0
         
-        screen.blit(self.moveLeft[self.movement//30],(self.x,self.y))
+        screen.blit(self.moveLeft[self.movement//30], (self.x, self.y))
         self.movement = self.movement + 1

@@ -1,7 +1,7 @@
 import pygame, os
 
 from settings import GameState
-from mobs import HoveringEnemy_X, HoveringEnemy_Y, Enemy
+from mobs import HoveringEnemyX, HoveringEnemyY, Enemy
 
 
 class TitleScreen:
@@ -52,9 +52,8 @@ class TitleScreen:
 
         self.buttons = [self.play_button, self.settings_button, self.about_button, self.quit_button]
         
-        self.Robot1 = HoveringEnemy_X(game_settings, 0, 300, 150, 150, self.screen_rect.centerx)
-        self.Robot2 = HoveringEnemy_Y(game_settings, self.screen_rect.centerx, 0, 150,150, self.screen_rect.centery)
-        
+        self.Robot1 = HoveringEnemyX(game_settings, 0, 300, 150, 150, self.screen_rect.centerx)
+        self.Robot2 = HoveringEnemyY(game_settings, self.screen_rect.centerx, 0, 150,150, self.screen_rect.centery)
 
     def check_events(self):
 
@@ -110,6 +109,7 @@ class Button:
     def blitme(self):
         self.screen.blit(self.image, self.image_rect)
 
+
 class SettingsScreen:
 
     def __init__(self, screen, game_settings):
@@ -143,6 +143,7 @@ class SettingsScreen:
         self.screen.fill(self.bk_color)
 
         self.mainmenu_button.blitme()
+
 
 class AboutScreen:
 

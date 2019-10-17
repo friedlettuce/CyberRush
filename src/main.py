@@ -5,7 +5,6 @@ import pygame
 from settings import Settings, GameState
 from graphics import TitleScreen, SettingsScreen, AboutScreen
 from gamescreen import GameScreen
-from mobs import Enemy, HoveringEnemy_X
 
 
 def run_game():
@@ -15,10 +14,10 @@ def run_game():
     game_settings = Settings()
     
     clock = pygame.time.Clock()
-	
-    #pygame.mixer.music.load(game_settings.titleMusic_path)
-    #pygame.mixer.music.set_volume(0.025)
-    #pygame.mixer.music.play(-1)
+
+    # pygame.mixer.music.load(game_settings.titleMusic_path)
+    # pygame.mixer.music.set_volume(0.025)
+    # pygame.mixer.music.play(-1)
 
     screen = pygame.display.set_mode((
         game_settings.screen_w, game_settings.screen_h))
