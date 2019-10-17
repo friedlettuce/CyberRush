@@ -1,6 +1,8 @@
+import sys
+
 import pygame
 
-from settings import Settings
+from settings import Settings, GameState
 import game_functions as gfn
 from graphics import TitleScreen
 
@@ -8,6 +10,7 @@ from graphics import TitleScreen
 def run_game():
 
     pygame.init()
+    gamestate = GameState(0)
     game_settings = Settings()
 
     screen = pygame.display.set_mode((
@@ -17,10 +20,13 @@ def run_game():
     title_screen = TitleScreen(screen, game_settings)
 
     while True:
+        if gamestate is GameState.QUIT:
+            sys.exit()
+        elif gamestate is GameState.TITLE:
+            gamestate = title_screen.check_events()
+            title_screen.blitme()
 
-        gfn.check_events()
-
-        gfn.update_screen(title_screen)
+        pygame.display.flip()
 
 
 run_game()
