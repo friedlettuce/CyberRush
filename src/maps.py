@@ -1,5 +1,5 @@
 import pygame
-
+from player import Player
 
 class CityStreet:
 
@@ -16,6 +16,10 @@ class CityStreet:
         self.img_rect = self.img.get_rect()
         self.img_rect.centerx = self.screen_rect.centerx
         self.img_rect.centery = self.screen_rect.centery
+        
+        self.Player = Player(self.screen, game_settings, 0 , 0) 
 
     def blitme(self):
         self.screen.blit(self.img, self.img_rect)
+        self.Player.move(self.screen)
+        self.Player.blitme(self.screen)
