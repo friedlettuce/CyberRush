@@ -3,7 +3,6 @@ import sys
 import pygame
 
 from settings import Settings, GameState
-import game_functions as gfn
 from graphics import TitleScreen
 
 
