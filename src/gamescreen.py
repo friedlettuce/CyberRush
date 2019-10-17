@@ -14,13 +14,6 @@ class GameScreen(object):
 
         self.city_street = CityStreet(screen, game_settings)
 
-        text = "BOTTOM TEXT"
-
-        large_text = pygame.font.Font(self.game_settings.cb2_path, 80)
-        self.textSurface = large_text.render(text, True, (0, 0, 0))
-        self.text_rect = self.textSurface.get_rect()
-        self.text_rect.center = (self.screen_rect.centerx, self.screen_rect.centery)
-
     def check_events(self):
 
         ret_game_state = GameState(3)
@@ -35,4 +28,3 @@ class GameScreen(object):
     def blitme(self):
 
         self.city_street.blitme()
-        self.screen.blit(self.textSurface, self.text_rect)
