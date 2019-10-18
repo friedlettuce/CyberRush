@@ -113,3 +113,16 @@ class HoveringEnemyY(Enemy):
         
         screen.blit(self.moveLeft[self.movement//30], (self.x, self.y))
         self.movement = self.movement + 1
+
+class Projectile_X(object):
+	
+	def __init__(self, game_settings, x, y, width, height):
+		self.x = x
+		self.y = y
+		self.width = width
+		self.height = height
+		
+	
+	def blitme(self, screen):
+		pass
+		 
