@@ -11,9 +11,9 @@ class Player:
         # Initial Player Starting Point
         self.x = x
         self.y = y
-        self.vel = 3
+        self.vel = game_settings.player_speed
 
-    def move(self, screen):
+    def move(self):
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_LEFT]:
@@ -25,5 +25,5 @@ class Player:
         if keys[pygame.K_DOWN]:
             self.y += self.vel
     
-    def blitme(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), (self.x, self.y, 50, 50))
+    def blitme(self):
+        pygame.draw.rect(self.screen, (255, 0, 0), (self.x, self.y, 50, 50))

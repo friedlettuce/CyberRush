@@ -1,27 +1,33 @@
 import pygame
-from player import Player
 
 
-class CityStreet:
+class Map:
 
-    def __init__(self, screen, game_settings):
+    def __init__(self, screen, game_settings, background_path):
+        # Maps can store the screen and background image for all maps
 
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
-        # Load and scale image
-        self.img = pygame.image.load(game_settings.city_background_path)
-        self.img = pygame.transform.scale(
-            self.img, (game_settings.screen_w, game_settings.screen_h))
+        # Load, scale, and position background image
+        self.bg = pygame.image.load(background_path)
+        self.bg = pygame.transform.scale(
+            self.bg, (game_settings.screen_w, game_settings.screen_h))
 
-        self.img_rect = self.img.get_rect()
-        self.img_rect.centerx = self.screen_rect.centerx
-        self.img_rect.centery = self.screen_rect.centery
-        
-        self.Player = Player(self.screen, game_settings, 0, 0)
+        self.bg_rect = self.bg.get_rect()
+        self.bg_rect.centerx = self.screen_rect.centerx
+        self.bg_rect.centery = self.screen_rect.centery
 
     def blitme(self):
 
-        self.screen.blit(self.img, self.img_rect)
-        self.Player.move(self.screen)
-        self.Player.blitme(self.screen)
+        self.screen.blit(self.bg, self.bg_rect)
+
+
+'''
+Fill out class when class by class functionality arises
+
+class CityStreet:
+
+    def __init__(self, screen, game_settings, background_path):
+        super().__init__(screen, game_settings, background_path)
+'''

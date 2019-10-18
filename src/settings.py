@@ -56,6 +56,9 @@ class Settings:
         # FPS
         self.clock_tick_interval = 60
 
+        # Player Settings
+        self.player_speed = 3
+
 
 class GameState(Enum):
     TITLE = 0

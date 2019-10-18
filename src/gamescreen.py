@@ -1,7 +1,8 @@
 import pygame
 
 from settings import GameState
-from maps import CityStreet
+from player import Player
+from maps import Map
 
 
 class GameScreen(object):
@@ -12,7 +13,21 @@ class GameScreen(object):
         self.screen_rect = self.screen.get_rect()
         self.game_settings = game_settings
 
-        self.city_street = CityStreet(screen, game_settings)
+        self.Player = Player(self.screen, game_settings, 0, 0)
+
+        # Stores maps in map list (Load Map, Store in maps)
+        self.city_street = Map(screen, game_settings,
+                                      game_settings.city_background_path)
+        self.maps = [self.city_street]
+
+        # Sets first map to city street
+        self.map = self.city_street
+
+    def screen_start(self):
+        pygame.mixer.music.stop()
+
+    def screen_end(self):
+        pass
 
     def check_events(self):
 
@@ -26,7 +41,7 @@ class GameScreen(object):
         return ret_game_state
 
     def blitme(self):
-        self.city_street.blitme()
+        self.map.blitme()
 
-    def screen_start(self):
-        pygame.mixer.music.stop()
+        self.Player.move()
+        self.Player.blitme()
