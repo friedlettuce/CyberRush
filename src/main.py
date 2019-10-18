@@ -3,7 +3,7 @@ import sys
 import pygame
 
 from settings import Settings, GameState
-from graphics import TitleScreen, SettingsScreen, AboutScreen
+from screens import TitleScreen, SettingsScreen, AboutScreen
 from gamescreen import GameScreen
 
 
@@ -25,48 +25,38 @@ def run_game():
     about_screen = AboutScreen(screen, game_settings)
     game_screen = GameScreen(screen, game_settings)
 
+    screens = {
+        GameState.TITLE: title_screen,
+        GameState.SETTINGS: settings_screen,
+        GameState.ABOUT: about_screen,
+        GameState.PLAYING: game_screen
+    }
+
+    screen = title_screen
+
     while True:
+
         clock.tick(game_settings.clock_tick_interval)
         
         if new_gamestate is GameState.QUIT:
+
             pygame.quit()
             sys.exit()
 
-        elif new_gamestate is GameState.TITLE:
-            if cur_gamestate != new_gamestate:
-                # Run screen start function
-                cur_gamestate = new_gamestate
-                title_screen.screen_start()
-            new_gamestate = title_screen.check_events()
-            title_screen.blitme()
-            if cur_gamestate != new_gamestate:
-                # If gamestate has changed, run screen end function
-                title_screen.screen_end()
+        if cur_gamestate != new_gamestate:
 
-        elif new_gamestate is GameState.SETTINGS:
-            if cur_gamestate != new_gamestate:
-                # Run screen start function
-                cur_gamestate = new_gamestate
-            new_gamestate = settings_screen.check_events()
-            settings_screen.blitme()
-            #put screen_end function here if needed later
+            # Run screen start function
+            cur_gamestate = new_gamestate
+            screen = screens[cur_gamestate]
+            screen.screen_start()
 
-        elif new_gamestate is GameState.ABOUT:
-            if cur_gamestate != new_gamestate:
-                # Run screen start function
-                cur_gamestate = new_gamestate
-            new_gamestate = about_screen.check_events()
-            about_screen.blitme()
-            #put screen_end function here if needed later
+        new_gamestate = screen.check_events()
+        screen.blitme()
 
-        elif new_gamestate is GameState.PLAYING:
-            if cur_gamestate != new_gamestate:
-                # Run screen start function
-                cur_gamestate = new_gamestate
-                game_screen.screen_start()
-            new_gamestate = game_screen.check_events()
-            game_screen.blitme()    
-            #put screen_end function here if needed later
+        if cur_gamestate != new_gamestate:
+
+            # If gamestate has changed, run screen end function
+            screen.screen_end()
 
         pygame.display.flip()
 

@@ -1,6 +1,7 @@
 import os
 from enum import Enum
 
+
 class Settings:
 
     def __init__(self):
@@ -54,6 +55,7 @@ class Settings:
 
         # FPS
         self.clock_tick_interval = 60
+
 
 class GameState(Enum):
     TITLE = 0

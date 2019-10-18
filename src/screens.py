@@ -4,14 +4,27 @@ from settings import GameState
 from mobs import HoveringEnemyX, HoveringEnemyY, Enemy
 
 
-class TitleScreen:
+class Screen:
 
     def __init__(self, screen, game_settings):
 
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
-        self.bk_color = game_settings.bk_color
+
         self.game_settings = game_settings
+        self.bk_color = game_settings.bk_color
+
+    def screen_start(self):
+        pass
+
+    def screen_end(self):
+        pass
+
+
+class TitleScreen(Screen):
+
+    def __init__(self, screen, game_settings):
+        super().__init__(screen, game_settings)
 
         # Image display for the title
         self.title_img = pygame.image.load(game_settings.title_path)
@@ -122,25 +135,30 @@ class Button:
         self.screen.blit(self.image, self.image_rect)
 
 
-class SettingsScreen:
+class SettingsScreen(Screen):
 
     def __init__(self, screen, game_settings):
-        self.screen = screen
-        self.screen_rect = self.screen.get_rect()
-        self.bk_color = game_settings.bk_color
-        self.game_settings = game_settings
+        super().__init__(screen, game_settings)
 
         self.mainmenu_button = Button(
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
             int(self.screen_rect.centery * 1.9))
 
+        # Volume settings
         self.vol_up_button = Button(
             screen, game_settings.vol_up_path, int(self.screen_rect.centerx / 1.5),
-            int(self.screen_rect.centery /1.5 ))
+            int(self.screen_rect.centery / 1.5))
 
         self.vol_down_button = Button(
             screen, game_settings.vol_down_path, int(self.screen_rect.centerx / 2.5),
-            int(self.screen_rect.centery /1.5 ))
+            int(self.screen_rect.centery / 1.5))
+
+        # Volume text
+        text = "Change Volume"
+        largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface = largeText.render(text, True, (0, 0, 0))
+        self.TextRect = self.textSurface.get_rect()
+        self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
 
     def check_events(self):
 
@@ -161,30 +179,25 @@ class SettingsScreen:
                 # Volume buttons
                 elif self.vol_down_button.image_rect.colliderect(mouse_pos):
                     self.game_settings.music_volume -= .025
-                    if(self.game_settings.music_volume < 0):
+
+                    if self.game_settings.music_volume < 0:
                         self.game_settings.music_volume = 0
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
                 elif self.vol_up_button.image_rect.colliderect(mouse_pos):
+
                     self.game_settings.music_volume += .025
-                    if(self.game_settings.music_volume > 1):
+
+                    if self.game_settings.music_volume > 1:
                         self.game_settings.music_volume = 1
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
-
 
         return ret_game_state
 
     def blitme(self):
+
         self.screen.fill(self.bk_color)
 
-        ## Volume settings
-        # Volume text 
-        text = "Change Volume"
-
-        largeText = pygame.font.Font(self.game_settings.cb2_path,25)
-        self.textSurface = largeText.render(text, True, (0,0,0))
-        self.TextRect = self.textSurface.get_rect()
-        self.TextRect.center = ((self.screen_rect.centerx / 2),(self.screen_rect.centery / 3))
         self.screen.blit(self.textSurface, self.TextRect)
 
         self.mainmenu_button.blitme()
@@ -194,12 +207,10 @@ class SettingsScreen:
         self.vol_down_button.blitme()
 
 
-class AboutScreen:
+class AboutScreen(Screen):
 
     def __init__(self, screen, game_settings):
-        self.screen = screen
-        self.screen_rect = self.screen.get_rect()
-        self.bk_color = game_settings.bk_color
+        super().__init__(screen, game_settings)
 
         self.mainmenu_button = Button(
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
