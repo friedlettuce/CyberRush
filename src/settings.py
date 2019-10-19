@@ -35,6 +35,7 @@ class Settings:
         self.rhl2_path = os.path.join(sprites_folder, "RobotHoverLeft2.png")
         self.rhr1_path = os.path.join(sprites_folder, "RobotHoverRight1.png")
         self.rhr2_path = os.path.join(sprites_folder, "RobotHoverRight2.png")
+        self.rhA_path = os.path.join(sprites_folder, "RobotHoverAttack.png")
         
         # Custom font
         self.cb2_path = os.path.join(resources_folder, "cb2.ttf")
