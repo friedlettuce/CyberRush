@@ -132,30 +132,69 @@ class HoveringEnemyY(Enemy):
         pygame.draw.rect(screen, (255, 0, 0), self.hitbox2, 2)
 
 
-projectiles = []
 
-class Projectile_X(object):
+projectiles_X = []
+projectiles_Y = []
+
+class Projectile(object):
 
     def __init__(self, x, y, width, height, direction, screen):
         self.x = x
-        self.startX = x
         self.y = y
         self.width = width
         self.height = height
         self.screen = screen
+
+    def blitme():
+        if projectiles_X:
+            Projectile_X.blitme()
+        if projectiles_Y:
+            Projectile_Y.blitme()
+    
+
+class Projectile_X(Projectile):
+
+    def __init__(self, x, y, width, height, direction, screen):
+        super().__init__(x, y, width, height, direction, screen)
+        self.startX = x
         
         # Direction Will Either Be -1 For Left or 1 For Right
         self.direction = direction
         
-        projectiles.append(self)
+        projectiles_X.append(self)
     
     def move(self):
         self.x = self.x + 5*self.direction
-        
+    
     def blitme():
-        for projectile in projectiles:
+        for projectile in projectiles_X:
             if projectile.x < projectile.startX - 250:
-                projectiles.pop(projectiles.index(projectile))
+                projectiles_X.pop(projectiles_X.index(projectile))
             else:
                 projectile.move()
                 pygame.draw.rect(projectile.screen, (0,255,0), (projectile.x, projectile.y, projectile.width, projectile.height))
+
+class Projectile_Y(Projectile):
+
+    def __init__(self, x, y, width, height, direction, screen):
+        super().__init__(x, y, width, height, direction, screen)
+        self.startY = y
+        
+        # Direction Will Either Be -1 For Up or 1 For Down
+        self.direction = direction
+        
+        projectiles_Y.append(self)
+    
+    def move(self):
+        self.y = self.y + 5*self.direction
+        
+    def blitme():
+        for projectile in projectiles_Y:
+            if projectile.y < projectile.startY - 250:
+                projectiles_Y.pop(projectiles_Y.index(projectile))
+            else:
+                projectile.move()
+                pygame.draw.rect(projectile.screen, (0,255,0), (projectile.x, projectile.y, projectile.width, projectile.height))
+    
+    
+    

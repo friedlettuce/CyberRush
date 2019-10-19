@@ -1,7 +1,7 @@
 import pygame, os
 
 from settings import GameState
-from mobs import HoveringEnemyX, HoveringEnemyY, Enemy, Projectile_X
+from mobs import HoveringEnemyX, HoveringEnemyY, Enemy, Projectile
 
 
 class Screen:
@@ -118,7 +118,7 @@ class TitleScreen(Screen):
         
         self.Robot1.blitme(self.screen)
         self.Robot2.blitme(self.screen)
-        Projectile_X.blitme()
+        Projectile.blitme()
 
 
 class Button:
