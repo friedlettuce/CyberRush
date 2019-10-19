@@ -55,7 +55,7 @@ class Settings:
         self.clock_tick_interval = 60
 
         # Player Settings
-        self.player_size = (58, 100)
+        self.player_size = (70, 120)
         self.player_speed = 3
 
         player_folder = os.path.join(sprites_folder, "temp_player")
