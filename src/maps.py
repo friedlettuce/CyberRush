@@ -19,9 +19,20 @@ class Map:
         self.bg_rect.centerx = self.screen_rect.centerx
         self.bg_rect.centery = self.screen_rect.centery
 
+        self.enemies = []
+
+    def add_enemy(self, enemy):
+        self.enemies.append(enemy)
+
+    def remove_enemy(self, enemy):
+        self.enemies.remove(enemy)
+
     def blitme(self):
 
         self.screen.blit(self.bg, self.bg_rect)
+
+        for enemy in self.enemies:
+            enemy.blitme()
 
 
 '''

@@ -2,6 +2,7 @@ import pygame, copy
 
 from settings import GameState
 from player import Player
+from mobs import HoveringEnemy
 from maps import Map
 
 
@@ -20,7 +21,17 @@ class GameScreen(object):
                 game_settings.city_background_path, "City Street")
 
         # Stores maps and sets first map to city street
-        self.maps = [self.city_street, copy.copy(self.city_street)]
+        self.maps = [self.city_street]
+
+        # Temp Map
+        self.maps.append(Map(screen, game_settings,
+                game_settings.city_background_path, "City Street"))
+
+        # Tentative space to spawn enemy for demo
+        self.Robot1 = HoveringEnemy(screen, game_settings, int(self.screen_rect.width * .75), (
+                self.screen_rect.centery / 2), game_settings.hov_size[0], game_settings.hov_size[0],
+                    0, self.screen_rect.centery * 1.2)
+        self.maps[0].add_enemy(self.Robot1)
 
         self.map = self.city_street
         self.map_counter = 0

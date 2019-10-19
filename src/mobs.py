@@ -39,6 +39,8 @@ class Enemy(object):
         self.hitbox = 0
         self.hitbox2 = 0
 
+        print(self.moving_x, self.moving_y)
+
     # Function For An Enemy To Move Side To Side On The X Axis
     def update_x(self):
         # If Velocity > 0, Enemy Is Moving To The Right
@@ -68,19 +70,19 @@ class Enemy(object):
         # If Velocity > 0, Enemy Is Moving Down
         if self.vel_y > 0:
             if self.y < self.path_y[1] + self.vel_y:
-                self.y = self.y + self.vel_y
+                self.y += self.vel_y
             else:
                 self.vel_y *= -1
-                self.y = self.y + self.vel_y
+                self.y += self.vel_y
                 self.movement = 0
                 
         # If Velocity < 0, Enemy Is Moving Up
         elif self.vel_y < 0:
             if self.y > self.path_y[0] - self.vel_y:
-                self.y = self.y + self.vel_y
+                self.y += self.vel_y
             else:
                 self.vel_y *= -1
-                self.y = self.y + self.vel_y
+                self.y += self.vel_y
                 self.movement = 0
 
     def update(self):
