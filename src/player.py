@@ -16,6 +16,13 @@ class Player:
         self.y = y
         self.vel = game_settings.player_speed
 
+        # Flags for if there's maps available to the left or right
+        self.map_left = False
+        self.map_right = False
+        # Flags if player has gone to another map
+        self.off_left = False
+        self.off_right = False
+
     def pos(self, pos):
         self.x, self.y = pos
 
@@ -23,12 +30,26 @@ class Player:
         keys = pygame.key.get_pressed()
         
         if keys[pygame.K_LEFT]:
-            self.x -= self.vel
-        if keys[pygame.K_RIGHT]:
-            self.x += self.vel
-        if keys[pygame.K_UP]:
+
+            if (self.x - self.vel) < self.screen_rect.left and self.map_left:
+                self.x -= self.vel
+                self.off_left = True
+            elif (self.x + int(self.player_w / 2) - self.vel) >= self.screen_rect.left:
+                self.x -= self.vel
+
+        elif keys[pygame.K_RIGHT]:
+
+            if (self.x + self.vel) > self.screen_rect.right and self.map_right:
+                self.x += self.vel
+                self.off_right = True
+                print(1)
+            elif (self.x + int(self.player_w / 2) + self.vel) <= self.screen_rect.right:
+                self.x += self.vel
+                print(self.x)
+
+        elif keys[pygame.K_UP] and (self.y - self.vel > 0):
             self.y -= self.vel
-        if keys[pygame.K_DOWN]:
+        elif keys[pygame.K_DOWN] and ((self.y + self.player_h) + self.vel < self.screen_rect.height):
             self.y += self.vel
     
     def blitme(self):
