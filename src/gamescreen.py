@@ -27,11 +27,15 @@ class GameScreen(object):
 
     def screen_start(self):
         pygame.mixer.music.stop()
-        self.pos_player(0)
+        self.player.x = (self.player.screen_rect.right / 8)
+        self.player.y = (int((self.screen_rect.bottom / 1.25)))
 
-    def pos_player(self, side):
+    def pos(self, side):
         # When first displaying player on a map, loads the player at either spawn positions of map
-        self.player.pos(self.player_map[self.map.name][side])
+        if not side:
+            self.player.x = self.screen_rect.right + int(self.player.player_w / 2)
+        else:
+            self.player.x = self.player.screen_rect.left - int(self.player.player_w / 2)
 
         if self.map_counter > 0:
             self.player.map_left = True
@@ -55,13 +59,13 @@ class GameScreen(object):
         if self.player.off_left:
             self.map_counter -= 1
             self.map = self.maps[self.map_counter]
-            self.pos_player(1)
+            self.pos(0)
             self.player.off_left = False
 
         elif self.player.off_right:
             self.map_counter += 1
             self.map = self.maps[self.map_counter]
-            self.pos_player(0)
+            self.pos(1)
             self.player.off_right = False
 
         self.player.move()

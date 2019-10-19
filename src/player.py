@@ -23,9 +23,6 @@ class Player:
         self.off_left = False
         self.off_right = False
 
-    def pos(self, pos):
-        self.x, self.y = pos
-
     def move(self):
         keys = pygame.key.get_pressed()
         
