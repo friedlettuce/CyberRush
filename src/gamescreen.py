@@ -28,8 +28,7 @@ class GameScreen(object):
     def screen_start(self):
         pygame.mixer.music.stop()
         self.pos(0)
-        self.player.x = (self.player.screen_rect.right / 8)
-        self.player.y = (int((self.screen_rect.bottom / 1.25)))
+        self.player.x = self.player.screen_rect.right / 8
 
     def pos(self, side):
         # When first displaying player on a map, loads the player at either spawn positions of map
