@@ -3,9 +3,10 @@ import pygame
 
 class Map:
 
-    def __init__(self, screen, game_settings, background_path):
+    def __init__(self, screen, game_settings, background_path, name='Map'):
         # Maps can store the screen and background image for all maps
 
+        self.name = name
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
@@ -24,10 +25,12 @@ class Map:
 
 
 '''
-Fill out class when class by class functionality arises
+# Fill out class when class by class functionality arises
 
 class CityStreet:
 
     def __init__(self, screen, game_settings, background_path):
         super().__init__(screen, game_settings, background_path)
+
+        self.name = "City Street"
 '''

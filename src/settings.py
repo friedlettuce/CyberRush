@@ -15,6 +15,7 @@ class Settings:
         self.game_name = "Cyber Rush"
 
         # Title Screen Settings
+        self.title_background_path = os.path.join(resources_folder, "title_bg.png")
         self.bk_color = (39, 184, 184)
 
         self.num_buttons = 4
@@ -24,10 +25,6 @@ class Settings:
         self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
         self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
         self.mainmenu_path = os.path.join(resources_folder, "MainMenuButton.bmp")
-
-        # Screen Backgrounds
-        self.title_background_path = os.path.join(resources_folder, "title_bg.png")
-        self.city_background_path = os.path.join(resources_folder, "city_bg.png")
 
         # Mob Settings
         sprites_folder = os.path.join(resources_folder, "sprites")
@@ -57,7 +54,18 @@ class Settings:
         self.clock_tick_interval = 60
 
         # Player Settings
+        self.player_w = 50
+        self.player_h = 50
         self.player_speed = 3
+
+        # Screen Backgrounds
+        self.city_background_path = os.path.join(resources_folder, "city_bg.png")
+
+        self.player_map = {
+            "Map": ((0, 0), (0, 0)),
+            "City Street": ((0, int((self.screen_h / 1.25))), (
+                self.screen_w, int((self.screen_h / 1.25))))
+        }
 
 
 class GameState(Enum):

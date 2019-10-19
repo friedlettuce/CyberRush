@@ -3,15 +3,21 @@ import pygame
 
 class Player:
 
-    def __init__(self, screen, game_settings, x ,y):
+    def __init__(self, screen, game_settings, x, y):
 
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
+
+        self.player_w = game_settings.player_w
+        self.player_h = game_settings.player_h
         
         # Initial Player Starting Point
         self.x = x
         self.y = y
         self.vel = game_settings.player_speed
+
+    def pos(self, pos):
+        self.x, self.y = pos
 
     def move(self):
         keys = pygame.key.get_pressed()
@@ -26,4 +32,4 @@ class Player:
             self.y += self.vel
     
     def blitme(self):
-        pygame.draw.rect(self.screen, (255, 0, 0), (self.x, self.y, 50, 50))
+        pygame.draw.rect(self.screen, (255, 0, 0), (self.x, self.y, self.player_w, self.player_h))

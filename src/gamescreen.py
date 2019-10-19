@@ -13,21 +13,24 @@ class GameScreen(object):
         self.screen_rect = self.screen.get_rect()
         self.game_settings = game_settings
 
-        self.Player = Player(self.screen, game_settings, 0, 0)
+        self.player = Player(self.screen, game_settings, 0, 0)
 
         # Stores maps in map list (Load Map, Store in maps)
         self.city_street = Map(screen, game_settings,
-                                      game_settings.city_background_path)
+                game_settings.city_background_path, "City Street")
         self.maps = [self.city_street]
+        self.player_map = game_settings.player_map
 
         # Sets first map to city street
         self.map = self.city_street
 
     def screen_start(self):
         pygame.mixer.music.stop()
+        self.pos_player(0)
 
-    def screen_end(self):
-        pass
+    def pos_player(self, side):
+        # When first displaying player on a map, loads the player at either spawn positions of map
+        self.player.pos(self.player_map[self.map.name][side])
 
     def check_events(self):
 
@@ -40,8 +43,11 @@ class GameScreen(object):
 
         return ret_game_state
 
+    def screen_end(self):
+        pass
+
     def blitme(self):
         self.map.blitme()
 
-        self.Player.move()
-        self.Player.blitme()
+        self.player.move()
+        self.player.blitme()
