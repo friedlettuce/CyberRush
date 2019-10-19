@@ -155,8 +155,8 @@ class SettingsScreen(Screen):
 
         # Volume text
         text = "Change Volume"
-        self.largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface = self.largeText.render(text, True, (0, 0, 0))
+        largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface = largeText.render(text, True, (0, 0, 0))
         self.TextRect = self.textSurface.get_rect()
         self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
         
@@ -211,10 +211,10 @@ class SettingsScreen(Screen):
         self.volumeDisplay()
 
     def volumeDisplay(self):
-    
+        largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
         self.volume_display = self.game_settings.music_volume*100
         
-        volumeDisplay = self.largeText.render((str(round(self.volume_display, 2)) + "%"), True, (0,0,0))
+        volumeDisplay = largeText.render((str(round(self.volume_display, 2)) + "%"), True, (0,0,0))
         self.screen.blit(volumeDisplay, (int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery / 1.7)))
         
 
