@@ -104,8 +104,6 @@ class HoveringEnemyY(Enemy):
 
         self.moveLeft = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), game_settings.hov_size),
                     pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]
-    
-        self.projectiles = []
         
     def blitme(self, screen):
         self.moving_y()
@@ -117,17 +115,13 @@ class HoveringEnemyY(Enemy):
         self.movement = self.movement + 1
         
         if not self.y > self.pathY[0] - self.vel:
-            self.projectiles.append(Projectile_X(self.x, self.y + 40, 25, 25))
-        elif not self.y < self.pathY[1] + self.vel and len(self.projectiles) < 1:
-            self.projectiles.append(Projectile_X(self.x, self.y + 20, 25, 25))
+            pass
+            #Projectile_X(self.x, self.y + 40, 25, 25, -1, screen)
+        elif not self.y < self.pathY[1] + self.vel:
+            pass
+            #Projectile_X(self.x, self.y + 20, 25, 25, -1, screen)
         
-        for projectile in self.projectiles:
-                if projectile.x < self.x - 250:
-                    self.projectiles.pop(self.projectiles.index(projectile))
-                else:
-                    projectile.move()
-                    #projectile.blitme(screen)
-        
+       
         self.hitbox = (self.x + 50, self.y + 25, 45, 110)
         self.hitbox2 = (self.x + 40, self.y + 25, 80, 35)
         
@@ -138,16 +132,30 @@ class HoveringEnemyY(Enemy):
         pygame.draw.rect(screen, (255, 0, 0), self.hitbox2, 2)
 
 
+projectiles = []
+
 class Projectile_X(object):
-    
-    def __init__(self, x, y, width, height):
+
+    def __init__(self, x, y, width, height, direction, screen):
         self.x = x
+        self.startX = x
         self.y = y
         self.width = width
         self.height = height
+        self.screen = screen
+        
+        # Direction Will Either Be 1 For Left, -1 For Right
+        self.direction = direction
+        
+        projectiles.append(self)
     
     def move(self):
-        self.x = self.x - 5
+        self.x = self.x + 5*self.direction
         
-    def blitme(self, screen):
-        pygame.draw.rect(screen, (0,255,0), (self.x, self.y, self.width, self.height))
+    def blitme():
+        for projectile in projectiles:
+            if projectile.x < projectile.startX - 250:
+                projectiles.pop(projectiles.index(projectile))
+            else:
+                projectile.move()
+                pygame.draw.rect(projectile.screen, (0,255,0), (projectile.x, projectile.y, projectile.width, projectile.height))

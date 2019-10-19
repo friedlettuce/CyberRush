@@ -118,6 +118,7 @@ class TitleScreen(Screen):
         
         self.Robot1.blitme(self.screen)
         self.Robot2.blitme(self.screen)
+        Projectile_X.blitme()
 
 
 class Button:
