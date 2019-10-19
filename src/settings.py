@@ -60,12 +60,7 @@ class Settings:
 
         # Screen Backgrounds
         self.city_background_path = os.path.join(resources_folder, "city_bg.png")
-
-        self.player_map = {
-            "Map": ((0, 0), (0, 0)),
-            "City Street": ((0, int((self.screen_h / 1.25))), (
-                self.screen_w, int((self.screen_h / 1.25))))
-        }
+        self.mountains_background_path = os.path.join(resources_folder, "parallax-mountain-bg.png")
 
 
 class GameState(Enum):

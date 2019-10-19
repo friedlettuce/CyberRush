@@ -18,15 +18,17 @@ class GameScreen(object):
         # Stores maps in map list (Load Map, Store in maps)
         self.city_street = Map(screen, game_settings,
                 game_settings.city_background_path, "City Street")
-        self.maps = [self.city_street]
-        self.player_map = game_settings.player_map
+        self.mountains = Map(screen, game_settings,
+                             game_settings.mountains_background_path, "Mountains")
 
-        # Sets first map to city street
+        # Stores maps and sets first map to city street
+        self.maps = [self.city_street, self.mountains]
         self.map = self.city_street
         self.map_counter = 0
 
     def screen_start(self):
         pygame.mixer.music.stop()
+        self.pos(0)
         self.player.x = (self.player.screen_rect.right / 8)
         self.player.y = (int((self.screen_rect.bottom / 1.25)))
 

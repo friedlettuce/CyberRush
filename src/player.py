@@ -28,7 +28,7 @@ class Player:
         
         if keys[pygame.K_LEFT]:
 
-            if (self.x - self.vel) < self.screen_rect.left and self.map_left:
+            if (self.x + int(self.player_w / 2) - self.vel) < self.screen_rect.left and self.map_left:
                 self.x -= self.vel
                 self.off_left = True
             elif (self.x + int(self.player_w / 2) - self.vel) >= self.screen_rect.left:
@@ -36,13 +36,11 @@ class Player:
 
         elif keys[pygame.K_RIGHT]:
 
-            if (self.x + self.vel) > self.screen_rect.right and self.map_right:
+            if (self.x + int(self.player_w / 2) + self.vel) > self.screen_rect.right and self.map_right:
                 self.x += self.vel
                 self.off_right = True
-                print(1)
             elif (self.x + int(self.player_w / 2) + self.vel) <= self.screen_rect.right:
                 self.x += self.vel
-                print(self.x)
 
         elif keys[pygame.K_UP] and (self.y - self.vel > 0):
             self.y -= self.vel
