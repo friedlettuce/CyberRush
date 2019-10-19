@@ -1,7 +1,7 @@
 import pygame, os
 
 from settings import GameState
-from mobs import HoveringEnemyX, HoveringEnemyY, Enemy
+from mobs import HoveringEnemyX, HoveringEnemyY, Enemy, Projectile_X
 
 
 class Screen:
@@ -155,10 +155,11 @@ class SettingsScreen(Screen):
 
         # Volume text
         text = "Change Volume"
-        largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface = largeText.render(text, True, (0, 0, 0))
+        self.largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface = self.largeText.render(text, True, (0, 0, 0))
         self.TextRect = self.textSurface.get_rect()
         self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
+        
 
     def check_events(self):
 
@@ -205,7 +206,17 @@ class SettingsScreen(Screen):
         # Volume Buttons
         self.vol_up_button.blitme()
         self.vol_down_button.blitme()
+        
+        # Volume Percentage
+        self.volumeDisplay()
 
+    def volumeDisplay(self):
+    
+        self.volume_display = self.game_settings.music_volume*100
+        
+        volumeDisplay = self.largeText.render((str(round(self.volume_display, 2)) + "%"), True, (0,0,0))
+        self.screen.blit(volumeDisplay, (int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery / 1.7)))
+        
 
 class AboutScreen(Screen):
 
