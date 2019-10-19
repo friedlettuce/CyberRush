@@ -115,8 +115,10 @@ class HoveringEnemyY(Enemy):
         self.movement = self.movement + 1
         
         if not self.y > self.pathY[0] - self.vel:
+            pass
             #Projectile_X(self.x, self.y + 40, 25, 25, -1, screen)
         elif not self.y < self.pathY[1] + self.vel:
+            pass
             #Projectile_X(self.x, self.y + 20, 25, 25, -1, screen)
         
        
