@@ -1,7 +1,7 @@
 import pygame, os
 
 from settings import GameState
-from mobs import HoveringEnemyX, HoveringEnemyY, Enemy, Projectile
+from mobs import Enemy, HoveringEnemy
 
 
 class Screen:
@@ -66,8 +66,10 @@ class TitleScreen(Screen):
 
         self.buttons = [self.play_button, self.settings_button, self.about_button, self.quit_button]
         
-        self.Robot1 = HoveringEnemyX(game_settings, 0, (self.screen_rect.centery*1.25), 150, 150, (self.screen_rect.centerx/1.25))
-        self.Robot2 = HoveringEnemyY(game_settings, self.screen_rect.centerx, 0, 150,150, self.screen_rect.centery)
+        self.Robot1 = HoveringEnemy(screen, game_settings, 0, (self.screen_rect.centery*1.25),
+                    game_settings.hov_size[0], game_settings.hov_size[0], (self.screen_rect.centerx/1.25))
+        self.Robot2 = HoveringEnemy(screen, game_settings, self.screen_rect.centerx, 0,
+                    game_settings.hov_size[0], game_settings.hov_size[0], 0, self.screen_rect.centery)
 
     def screen_start(self):
         # Music
@@ -116,9 +118,8 @@ class TitleScreen(Screen):
         self.about_button.blitme()
         self.quit_button.blitme()
         
-        self.Robot1.blitme(self.screen)
-        self.Robot2.blitme(self.screen)
-        Projectile.blitme()
+        self.Robot1.blitme()
+        self.Robot2.blitme()
 
 
 class Button:
@@ -156,11 +157,10 @@ class SettingsScreen(Screen):
 
         # Volume text
         text = "Change Volume"
-        largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface = largeText.render(text, True, (0, 0, 0))
+        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface = large_text.render(text, True, (0, 0, 0))
         self.TextRect = self.textSurface.get_rect()
         self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
-        
 
     def check_events(self):
 
@@ -209,14 +209,15 @@ class SettingsScreen(Screen):
         self.vol_down_button.blitme()
         
         # Volume Percentage
-        self.volumeDisplay()
+        self.volume_display()
 
-    def volumeDisplay(self):
-        largeText = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.volume_display = self.game_settings.music_volume*100
+    def volume_display(self):
+
+        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        volume_display = self.game_settings.music_volume*100
         
-        volumeDisplay = largeText.render((str(round(self.volume_display, 2)) + "%"), True, (0,0,0))
-        self.screen.blit(volumeDisplay, (int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery / 1.7)))
+        volume_display = large_text.render((str(round(self.volume_display, 2)) + "%"), True, (0, 0, 0))
+        self.screen.blit(volume_display, (int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery / 1.7)))
         
 
 class AboutScreen(Screen):

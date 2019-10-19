@@ -30,7 +30,7 @@ class Settings:
         sprites_folder = os.path.join(resources_folder, "sprites")
 
         self.hov_size = (150, 150)
-        self.hovering_enemy_velocity = 2
+        self.hovering_enemy_vel = 2
         self.rhl1_path = os.path.join(sprites_folder, "RobotHoverLeft1.png")
         self.rhl2_path = os.path.join(sprites_folder, "RobotHoverLeft2.png")
         self.rhr1_path = os.path.join(sprites_folder, "RobotHoverRight1.png")
