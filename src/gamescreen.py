@@ -1,4 +1,4 @@
-import pygame
+import pygame, copy
 
 from settings import GameState
 from player import Player
@@ -18,11 +18,10 @@ class GameScreen(object):
         # Stores maps in map list (Load Map, Store in maps)
         self.city_street = Map(screen, game_settings,
                 game_settings.city_background_path, "City Street")
-        self.mountains = Map(screen, game_settings,
-                             game_settings.mountains_background_path, "Mountains")
 
         # Stores maps and sets first map to city street
-        self.maps = [self.city_street, self.mountains]
+        self.maps = [self.city_street, copy.copy(self.city_street)]
+
         self.map = self.city_street
         self.map_counter = 0
 
