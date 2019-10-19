@@ -22,6 +22,10 @@ class Player:
         # Flags if player has gone to another map
         self.off_left = False
         self.off_right = False
+        
+        # Flags for if player is facing left or right
+        self.facing_left = False
+        self.facing_right = True
 
     def move(self):
         keys = pygame.key.get_pressed()
@@ -33,6 +37,9 @@ class Player:
                 self.off_left = True
             elif (self.x + int(self.player_w / 2) - self.vel) >= self.screen_rect.left:
                 self.x -= self.vel
+                
+            self.facing_left = True
+            self.facing_right = False
 
         elif keys[pygame.K_RIGHT]:
 
@@ -41,6 +48,9 @@ class Player:
                 self.off_right = True
             elif (self.x + int(self.player_w / 2) + self.vel) <= self.screen_rect.right:
                 self.x += self.vel
+            
+            self.facing_left = False
+            self.facin_right = True
 
         elif keys[pygame.K_UP] and (self.y - self.vel > 0):
             self.y -= self.vel
