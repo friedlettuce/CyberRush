@@ -55,9 +55,18 @@ class Settings:
         self.clock_tick_interval = 60
 
         # Player Settings
-        self.player_w = 50
-        self.player_h = 50
+        self.player_size = (58, 100)
         self.player_speed = 3
+
+        player_folder = os.path.join(sprites_folder, "temp_player")
+        self.player_frames = {
+            'idle_path': os.path.join(os.path.join(player_folder, "idle"), '1_police_Idle_'),
+            'walk_path': os.path.join(os.path.join(player_folder, "walk"), '1_police_Walk_'),
+            'file_type': '.png',
+            # Saves frame count for each frame list
+            'idle_fc': 8,
+            'walk_fc': 8
+        }
 
         # Screen Backgrounds
         self.city_background_path = os.path.join(resources_folder, "city_bg.png")

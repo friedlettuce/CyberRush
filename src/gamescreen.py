@@ -24,6 +24,9 @@ class GameScreen(object):
 
         self.map = self.city_street
         self.map_counter = 0
+        # Flags for if there's maps available to the left or right
+        self.map_left = False
+        self.map_right = False
 
     def screen_start(self):
         pygame.mixer.music.stop()
