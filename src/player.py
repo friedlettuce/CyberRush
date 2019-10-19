@@ -32,10 +32,11 @@ class Player:
         
         if keys[pygame.K_LEFT]:
 
-            if (self.x + int(self.player_w / 2) - self.vel) < self.screen_rect.left and self.map_left:
+            if (self.x - self.vel) < self.screen_rect.left and self.map_left:
                 self.x -= self.vel
                 self.off_left = True
-            elif (self.x + int(self.player_w / 2) - self.vel) >= self.screen_rect.left:
+            elif (self.x - self.vel) >= self.screen_rect.left:
+                # Stops player from moving left bound, without left screen
                 self.x -= self.vel
                 
             self.facing_left = True
@@ -43,14 +44,14 @@ class Player:
 
         elif keys[pygame.K_RIGHT]:
 
-            if (self.x + int(self.player_w / 2) + self.vel) > self.screen_rect.right and self.map_right:
+            if (self.x + self.player_w + self.vel) > self.screen_rect.right and self.map_right:
                 self.x += self.vel
                 self.off_right = True
-            elif (self.x + int(self.player_w / 2) + self.vel) <= self.screen_rect.right:
+            elif (self.x + self.player_w + self.vel) <= self.screen_rect.right:
                 self.x += self.vel
             
             self.facing_left = False
-            self.facin_right = True
+            self.facing_right = True
 
         elif keys[pygame.K_UP] and (self.y - self.vel > 0):
             self.y -= self.vel
