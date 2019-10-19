@@ -13,7 +13,7 @@ class Player:
         
         # Initial Player Starting Point
         self.x = x
-        self.y = y
+        self.y = self.screen_ground = int((self.screen_rect.bottom / 1.25))
         self.vel = game_settings.player_speed
 
         # Flags for if there's maps available to the left or right
@@ -53,9 +53,9 @@ class Player:
             self.facing_left = False
             self.facing_right = True
 
-        elif keys[pygame.K_UP] and (self.y - self.vel > 0):
+        if keys[pygame.K_UP] and (self.y - self.vel > 0):
             self.y -= self.vel
-        elif keys[pygame.K_DOWN] and ((self.y + self.player_h) + self.vel < self.screen_rect.height):
+        elif keys[pygame.K_DOWN] and self.y + self.vel < self.screen_ground:
             self.y += self.vel
     
     def blitme(self):
