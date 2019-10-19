@@ -66,7 +66,7 @@ class TitleScreen(Screen):
 
         self.buttons = [self.play_button, self.settings_button, self.about_button, self.quit_button]
         
-        self.Robot1 = HoveringEnemyX(game_settings, 0, 300, 150, 150, self.screen_rect.centerx)
+        self.Robot1 = HoveringEnemyX(game_settings, 0, (self.screen_rect.centery*1.25), 150, 150, (self.screen_rect.centerx/1.25))
         self.Robot2 = HoveringEnemyY(game_settings, self.screen_rect.centerx, 0, 150,150, self.screen_rect.centery)
 
     def screen_start(self):
