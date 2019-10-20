@@ -4,16 +4,16 @@ import sqlite3
 def createTable():
     # Creates a database and connection
     # With c as our cursor
-    
+
     conn = sqlite3.connect('highscores.db')
     c = conn.cursor()
-    
+
     # Creates the table
     # Maybe also add a date for when they achieved the score?
     c.execute("""CREATE TABLE highscores (
-        playerName text,
-        playerScore integer
-        )""")
+              playerName text,
+              playerScore integer
+              )""")
     conn.commit()
     conn.close()
 
@@ -32,11 +32,11 @@ def populateWithPlaceholders():
     playername = "Placeholder 2"
     playerscore = 150
     c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
-            {'playerName': playername, 'playerScore': playerscore})
+              {'playerName': playername, 'playerScore': playerscore})
     playername = "Placeholder 3"
     playerscore = 15
     c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
-            {'playerName': playername, 'playerScore': playerscore})
+              {'playerName': playername, 'playerScore': playerscore})
     conn.commit()
     conn.close()
 
@@ -81,15 +81,15 @@ def displayScores():
     conn = sqlite3.connect('highscores.db')
     c = conn.cursor()
     c.execute("SELECT playerName, playerScore from highscores ORDER BY playerScore DESC")
-    
+
     # do we need to a commit here? Need to test
     conn.commit()
-    
+
     # Rows will contain each sorted entry on every line
     rows = c.fetchall()
     conn.close()
-    
-    
+
+
     # For now we will just print to console
     # Until I can figure out how to display it to the pygame application
     for row in rows:
@@ -103,8 +103,32 @@ def searchScores(playername):
     c.execute("SELECT playerName, playerScore from highscores WHERE playerName =? ORDER BY playerScore DESC", (playername, ))
     entries = c.fetchall()
     conn.close()
-    
+
     # For now will just print to console
     for entry in entries:
         print(entry)
 
+
+def scoreAnalytics():
+    # Function will calculate some analytics for the user, such as the highest score,
+    # Average score, mean score, etc.
+    conn = sqlite3.connect('highscores.db')
+    c = conn.cursor()
+    c.execute("SELECT playerScore from highscores ORDER BY playerScore DESC")
+    entries = c.fetchall()
+    numEntries = 0
+    total = 0
+
+    while numEntries < len(entries)-1:
+        total += int(entries[numEntries][0])
+        numEntries += 1
+    total += int(entries[numEntries][0])
+
+
+    meanScore = total / (numEntries+1)
+    highestScore = entries[0][0]
+    lowScore = entries[numEntries][0]  # The last entry element is the lowest score
+
+    print("Highest Score: ", highestScore)
+    print("Lowest Score: ", lowScore)
+    print("Average Score: ", meanScore)
