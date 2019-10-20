@@ -213,6 +213,24 @@ class SettingsScreen(Screen):
         
         # Volume Percentage
         self.volume_display()
+        
+        self.control_display()
+    
+    def control_display(self):
+        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        
+        right_control = large_text.render((str('Right Control: ') + chr(self.game_settings.input['right'])), True, (0, 0 ,0))
+        self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
+        
+        left_control = large_text.render((str("Left Control: ") + chr(self.game_settings.input['left'])), True, (0, 0 ,0))
+        self.screen.blit(left_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.25)))
+        
+        up_control = large_text.render((str("Up Control: ") + chr(self.game_settings.input['up'])), True, (0, 0 ,0))
+        self.screen.blit(up_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1)))
+        
+        down_control = large_text.render((str("Down Control: ") + chr(self.game_settings.input['down'])), True, (0, 0 ,0))
+        self.screen.blit(down_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.5)))
+        
 
     def volume_display(self):
 
