@@ -26,7 +26,7 @@ class Enemy(object):
         # Flags for direction of / movement
         self.moving_x = (self.x != self.end_x)
         self.moving_y = (self.y != self.end_y)
-        self.facing_right = True
+        self.facing_right = False
 
         self.path_x = [self.x, self.end_x]
         self.path_y = [self.y, self.end_y]
