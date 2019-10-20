@@ -216,7 +216,7 @@ class SettingsScreen(Screen):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
         volume_display = self.game_settings.music_volume*100
         
-        volume_display = large_text.render((str(round(self.volume_display, 2)) + "%"), True, (0, 0, 0))
+        volume_display = large_text.render((str(round(volume_display, 2)) + "%"), True, (0, 0, 0))
         self.screen.blit(volume_display, (int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery / 1.7)))
         
 
