@@ -1,4 +1,4 @@
-import os
+import os, pygame
 from enum import Enum
 
 
@@ -71,6 +71,9 @@ class Settings:
         # Screen Backgrounds
         self.city_background_path = os.path.join(resources_folder, "city_bg.png")
         self.mountains_background_path = os.path.join(resources_folder, "parallax-mountain-bg.png")
+        
+        # Player Controls
+        self.input = {'right': pygame.K_RIGHT, 'left': pygame.K_LEFT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
 
 
 class GameState(Enum):

@@ -56,11 +56,14 @@ class Player:
         # Inits frame
         self.frame_count = 0
         self.current_frame = self.idle_r_frames[self.frame_count]
-
+        
+        # Init Controls
+        self.input = game_settings.input
+        
     def move(self):
         keys = pygame.key.get_pressed()
         
-        if keys[pygame.K_LEFT]:
+        if keys[self.input['left']]:
 
             if (self.x - self.vel) < self.screen_rect.left and self.map_left:
                 self.x -= self.vel
@@ -74,7 +77,7 @@ class Player:
             # For idle frames
             self.facing_right = False
 
-        elif keys[pygame.K_RIGHT]:
+        elif keys[self.input['right']]:
 
             if (self.x + self.player_w + self.vel) > self.screen_rect.right and self.map_right:
                 self.x += self.vel
@@ -93,9 +96,9 @@ class Player:
             else:
                 self.current_frame = self.idle_l_frames[self.frame_count]
 
-        if keys[pygame.K_UP] and (self.y - self.vel > 0):
+        if keys[self.input['up']] and (self.y - self.vel > 0):
             self.y -= self.vel
-        elif keys[pygame.K_DOWN] and self.y + self.vel < self.screen_ground:
+        elif keys[self.input['down']] and self.y + self.vel < self.screen_ground:
             self.y += self.vel
 
         self.frame_count += 1
