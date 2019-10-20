@@ -35,7 +35,10 @@ class TitleScreen(Screen):
 
         # Image display for the background
         self.background_img = pygame.image.load(game_settings.title_background_path)
+        self.background_img = pygame.transform.scale(
+            self.background_img, (game_settings.screen_w, game_settings.screen_h))
         self.background_rect = self.background_img.get_rect()
+        
 
         self.background_rect.centerx = self.screen_rect.centerx
         self.background_rect.centery = self.screen_rect.centery
