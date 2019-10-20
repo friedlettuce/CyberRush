@@ -73,7 +73,7 @@ class Settings:
         self.mountains_background_path = os.path.join(resources_folder, "parallax-mountain-bg.png")
         
         # Player Controls
-        self.input = {'right': pygame.K_RIGHT, 'left': pygame.K_LEFT, 'up': pygame.K_UP, 'down': pygame.K_DOWN}
+        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
 
 
 class GameState(Enum):
