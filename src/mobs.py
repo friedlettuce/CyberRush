@@ -39,6 +39,9 @@ class Enemy(object):
         self.hitbox = 0
         self.hitbox2 = 0
 
+        self.projectiles = []
+        self.projectile_speed = None
+
     # Function For An Enemy To Move Side To Side On The X Axis
     def update_x(self):
         # If Velocity > 0, Enemy Is Moving To The Right
@@ -101,6 +104,10 @@ class Enemy(object):
         self.hitbox = (self.x + 50, self.y + 25, 45, 110)
         self.hitbox2 = (self.x + 40, self.y + 25, 80, 35)
 
+        for projectile in self.projectiles:
+            if projectile.move() == 0:
+                self.projectiles.remove(projectile)
+
     def draw_hitbox(self, screen):
         pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
         pygame.draw.rect(screen, (255, 0, 0), self.hitbox2, 2)
@@ -118,6 +125,9 @@ class Enemy(object):
         self.screen.blit(self.frame, (self.x, self.y))
         # self.draw_hitbox(screen)
 
+        for projectile in self.projectiles:
+            projectile.blitme()
+
         self.movement += 1
 
 
@@ -133,6 +143,7 @@ class HoveringEnemy(Enemy):
                           pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
 
         self.frame = self.right_frames[0]
+        self.projectile_speed = game_settings.hov_proj_speed
 
         # If the enemy moves along a path, sets velocity not to 0
         if self.moving_x:
@@ -140,65 +151,28 @@ class HoveringEnemy(Enemy):
         if self.moving_y:
             self.vel_y = game_settings.hovering_enemy_vel
 
-'''
+
 class Projectile(object):
 
-    def __init__(self, x, y, width, height, direction, screen):
-        self.x = x
-        self.y = y
-        self.width = width
-        self.height = height
+    def __init__(self, screen, x, y, width, height, dir_x, dir_y, speed):
+
         self.screen = screen
 
-    def blitme():
-        if projectiles_X:
-            Projectile_X.blitme()
-        if projectiles_Y:
-            Projectile_Y.blitme()
-    
+        self.x = self.start_x = x
+        self.y = self.start_y = y
+        self.width = width
+        self.height = height
 
-class Projectile_X(Projectile):
+        self.dir_x = dir_x
+        self.dir_y = dir_y
+        self.speed = speed
 
-    def __init__(self, x, y, width, height, direction, screen):
-        super().__init__(x, y, width, height, direction, screen)
-        self.startX = x
-        
-        # Direction Will Either Be -1 For Left or 1 For Right
-        self.direction = direction
-        
-        projectiles_X.append(self)
-    
     def move(self):
-        self.x = self.x + 5*self.direction
-    
-    def blitme():
-        for projectile in projectiles_X:
-            if projectile.x < projectile.startX - 250:
-                projectiles_X.pop(projectiles_X.index(projectile))
-            else:
-                projectile.move()
-                pygame.draw.rect(projectile.screen, (0,255,0), (projectile.x, projectile.y, projectile.width, projectile.height))
+        self.x += self.speed * self.dir_x
+        self.y += self.speed * self.dir_y
 
+        if (self.x < self.start_x - 250) or (self.y < self.start_y - 250):
+            return 0    # Pop self
 
-class ProjectileY(Projectile):
-
-    def __init__(self, x, y, width, height, direction, screen):
-        super().__init__(x, y, width, height, direction, screen)
-        self.startY = y
-        
-        # Direction Will Either Be -1 For Up or 1 For Down
-        self.direction = direction
-        
-        projectiles_Y.append(self)
-    
-    def move(self):
-        self.y = self.y + 5*self.direction
-        
-    def blitme():
-        for projectile in projectiles_Y:
-            if projectile.y < projectile.startY - 250:
-                projectiles_Y.pop(projectiles_Y.index(projectile))
-            else:
-                projectile.move()
-                pygame.draw.rect(projectile.screen, (0,255,0), (projectile.x, projectile.y, projectile.width, projectile.height))
-'''
+    def blitme(self):
+        pygame.draw.rect(self.screen, (0, 255, 0), (self.x, self.y, self.width, self.height))
