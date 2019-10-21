@@ -39,7 +39,6 @@ class TitleScreen(Screen):
             self.background_img, (game_settings.screen_w, game_settings.screen_h))
         self.background_rect = self.background_img.get_rect()
         
-
         self.background_rect.centerx = self.screen_rect.centerx
         self.background_rect.centery = self.screen_rect.centery
 

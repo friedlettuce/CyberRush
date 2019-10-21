@@ -35,12 +35,14 @@ class Enemy(object):
         self.left_frames = []
         self.right_frames = []
         self.frame = None
+        self.frame_rect = None
 
         self.hitbox = 0
         self.hitbox2 = 0
 
         self.projectiles = []
         self.projectile_speed = None
+        self.projectile_num = None
 
     # Function For An Enemy To Move Side To Side On The X Axis
     def update_x(self):
@@ -119,6 +121,22 @@ class Enemy(object):
             pass
             # Projectile(self.x, self.y + 20, 25, 25, -1, screen)
 
+    def add_projectile(self, dir_x=0, dir_y=0):
+        # Sets x travel direction based on enemy facing direction
+        if self.facing_right == 1:
+            dir_x = self.facing_right
+        else:
+            dir_x = -1
+
+        # Adds a projectile if it hasn't shot to many yet
+        if len(self.projectiles) < self.projectile_num:
+            self.projectiles.append(Projectile(self.screen,
+                self.frame_rect.centerx + self.x, self.y + int(self.frame_rect.height * .2), 10,
+                    5, dir_x, dir_y, self.projectile_speed))
+
+    def range_y(self, y):
+        return self.y in range(y - 20, y + 20)
+
     def blitme(self):
 
         self.update()
@@ -143,7 +161,9 @@ class HoveringEnemy(Enemy):
                           pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
 
         self.frame = self.right_frames[0]
+        self.frame_rect = self.right_frames[0].get_rect()
         self.projectile_speed = game_settings.hov_proj_speed
+        self.projectile_num = game_settings.hov_proj_num
 
         # If the enemy moves along a path, sets velocity not to 0
         if self.moving_x:
@@ -157,21 +177,23 @@ class Projectile(object):
     def __init__(self, screen, x, y, width, height, dir_x, dir_y, speed):
 
         self.screen = screen
+        self.screen_rect = self.screen.get_rect()
 
-        self.x = self.start_x = x
-        self.y = self.start_y = y
+        self.x = x
+        self.y = y
         self.width = width
         self.height = height
 
-        self.dir_x = dir_x
-        self.dir_y = dir_y
-        self.speed = speed
+        self.speed_x = dir_x * speed
+        self.speed_y = dir_y * speed
 
     def move(self):
-        self.x += self.speed * self.dir_x
-        self.y += self.speed * self.dir_y
+        self.x += self.speed_x
+        self.y += self.speed_y
 
-        if (self.x < self.start_x - 250) or (self.y < self.start_y - 250):
+        # Activates removal if off screen
+        if (self.x > self.screen_rect.width or self.x < 0) or (
+                self.y > self.screen_rect.height or self.y < 0):
             return 0    # Pop self
 
     def blitme(self):
