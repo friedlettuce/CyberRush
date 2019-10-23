@@ -123,9 +123,13 @@ def scoreAnalytics():
         total += int(entries[numEntries][0])
         numEntries += 1
     total += int(entries[numEntries][0])
+    # In case there exist no entries, wont crash from division of zero
+    try:
+        meanScore = total / (numEntries+1)
+    except(ZeroDivisionError):
+        meanScore = 0
 
 
-    meanScore = total / (numEntries+1)
     highestScore = entries[0][0]
     lowScore = entries[numEntries][0]  # The last entry element is the lowest score
 
