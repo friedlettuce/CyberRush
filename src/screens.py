@@ -1,5 +1,10 @@
 import pygame, os
 
+
+
+
+
+
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
 
@@ -158,6 +163,10 @@ class SettingsScreen(Screen):
             screen, game_settings.vol_down_path, int(self.screen_rect.centerx / 2.5),
             int(self.screen_rect.centery / 1.5))
 
+        self.change_right_control = Button(
+            screen, game_settings.vol_down_path, int(self.screen_rect.centerx*1.2),
+            int(self.screen_rect.centery / 1.5))
+
         # Volume text
         text = "Change Volume"
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
@@ -197,6 +206,8 @@ class SettingsScreen(Screen):
                         self.game_settings.music_volume = 1
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
+                elif self.change_right_control.image_rect.colliderect(mouse_pos):
+                    self.game_settings.input['right'] = self.game_settings.wait_Control()
         return ret_game_state
 
     def blitme(self):
@@ -213,24 +224,37 @@ class SettingsScreen(Screen):
         
         # Volume Percentage
         self.volume_display()
-        
+
+        # Control Settings
         self.control_display()
+        self.change_right_control.blitme()
     
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+
+        key = pygame.key.name(self.game_settings.input['right'])
+        key = key.upper()
         
-        right_control = large_text.render((str('Right Control: ') + chr(self.game_settings.input['right'])), True, (0, 0 ,0))
+        right_control = large_text.render((str('Right Control: ') + str(key)), True, (0, 0 ,0))
         self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
-        
-        left_control = large_text.render((str("Left Control: ") + chr(self.game_settings.input['left'])), True, (0, 0 ,0))
+
+        key = pygame.key.name(self.game_settings.input['left'])
+        key = key.upper()
+
+        left_control = large_text.render((str("Left Control: ") + str(key)), True, (0, 0 ,0))
         self.screen.blit(left_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.25)))
-        
-        up_control = large_text.render((str("Up Control: ") + chr(self.game_settings.input['up'])), True, (0, 0 ,0))
+
+        key = pygame.key.name(self.game_settings.input['up'])
+        key = key.upper()
+
+        up_control = large_text.render((str("Up Control: ") + str(key)), True, (0, 0 ,0))
         self.screen.blit(up_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1)))
-        
-        down_control = large_text.render((str("Down Control: ") + chr(self.game_settings.input['down'])), True, (0, 0 ,0))
+
+        key = pygame.key.name(self.game_settings.input['down'])
+        key = key.upper()
+
+        down_control = large_text.render(str("Down Control: " + str(key)), True, (0, 0 ,0))
         self.screen.blit(down_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.5)))
-        
 
     def volume_display(self):
 
