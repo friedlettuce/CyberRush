@@ -163,9 +163,6 @@ class SettingsScreen(Screen):
             screen, game_settings.vol_down_path, int(self.screen_rect.centerx / 2.5),
             int(self.screen_rect.centery / 1.5))
 
-        self.change_right_control = Button(
-            screen, game_settings.vol_down_path, int(self.screen_rect.centerx*1.2),
-            int(self.screen_rect.centery / 1.5))
 
         # Volume text
         text = "Change Volume"
@@ -206,8 +203,6 @@ class SettingsScreen(Screen):
                         self.game_settings.music_volume = 1
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
-                elif self.change_right_control.image_rect.colliderect(mouse_pos):
-                    self.game_settings.input['right'] = self.game_settings.wait_Control()
         return ret_game_state
 
     def blitme(self):
@@ -227,7 +222,6 @@ class SettingsScreen(Screen):
 
         # Control Settings
         self.control_display()
-        self.change_right_control.blitme()
     
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
