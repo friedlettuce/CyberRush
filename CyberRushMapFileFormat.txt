@@ -83,10 +83,46 @@ in add enemy state
 		sets the position of the enemy
 		x and y are coordinates on the screen, where 0,0 is the top left of the screen
 		
-	keyword 
+	keyword setendx
+		line: "setendx=x"
+		where x is the x coordinate that the enemy should stop moving too
+		for the hovering enemy
+	
+	keyword setendy
+		same as setendx but for y direction
 		
+	keyword endenemy
+		line: "endenemy"
+		stops editing current enemy and returns to zone info state
+		note: make sure you have put in all the info needed, as you cant re-edit an enemy, only add new ones
 		
+in add collidable state
+	note: for now, all collidables(platforms, etc.) will be pygame rects of a single color
+	this is for simplicty while the map loader is being made
+	in the future it will be able to load platforms with actual images
+	possibly moving platforms as well
+	
+	keyword setpos
+		line: "setpos=x,y"
+		sets the position of the collidable
+		x and y are coordinates on the screen, where 0,0 is the top left of the screen
 		
+	keyword setdims
+		line: "setdims=x,y"
+		sets the dimensions of the collidable
+		x  is width and y is height
+		
+	keyword setcolor
+		line: "setcolor=rrrgggbbb"
+		where rrr, ggg, and bbb are the red green and blue color values of the collidable
+		from 000 to 255
+		note: attach leading 0's to numbers that are 1 or 2 digits in order to make the value 3 digits
+		this is for ease of parsing
+		
+	keyword endcollidable
+		line: "endcollidable"
+		stops editing current collidable and returns to zone info state
+		note: make sure you have put in all the info needed, as you cant re-edit a collidable, only add new ones
 		
 		
 		
