@@ -1,0 +1,93 @@
+cyberrush map file format
+
+lines that start with # are comments
+no inline comments
+no whitespace in all other lines
+note: quotation marks here are used to show what line should say
+actual line in map file shouldnt have any quotation marks in it
+
+first 2 lines must be these:
+first line,map size: "x,y" where x is the x size of the map, y is y size of the map, in number of zones
+second line,map name: "mapname" where map name is the game of the map
+after that we are in mapinfo state of map loading
+
+in map info state:
+	keyword setspawn
+		line: "setspawn=x,y"
+		where x and y are the coordinates of the zone that the player should spawn in when the map first loads
+		
+	keyword editzone
+		line: "editzone=x,y"
+		where x and y are the coordinates of the zone that you want to start editing
+		this moves you to the zoneinfo state
+
+
+in zone info state
+	note:zones are a single screen of the map
+	moving to the edge moves you to the next zone in that direction, if there is one
+	keyword setbg
+		line: "setbg=bgname"
+		set the background of zone
+		bgname should be the filename of the background
+		the map loader will automatically look in the backgrounds folder for it
+		bgname filename should include filename extension
+		eg. setbg=city_bg.png
+		
+	keyword setmusic
+		line: "setmusic=musicname"
+		set the music to play in the zone
+		musicname is the filename of the music
+		map loader will automatically look in music folder for it
+		must set this for every zone you want music in, even if the same music is already playing in another zone
+		not including this in a zone will make the zone play no music
+		if you go from 1 zone to another, and they both are playing the same music, the maploader will simply do nothing, so the music keeps playing, instead of restarting the music
+		
+	keyword setleftspawn
+		line: "setleftspawn=x,y"
+		sets the spawn when entering the zone from the left side of the screen
+		x and y are coordinates on the screen, where 0,0 is the top left of the screen
+	
+	keyword setupspawn, setdownspawn, setrightspawn
+		all the same as setleftspawn, except for their respective directions
+	
+	keyword endzone
+		line: "endzone"
+		stops editing current zone, and set map laod state back to map info
+	
+	keyword addenemy
+		line: "addenemy"
+		allows you to add an enemy to the screen
+		changes current map load state to add enemy state
+		note: in the future this may be changed to a different keyword for each type of enenmy
+		for now though, since we only have 1(the hovering robot), just addenemy is fine
+	
+	keyword addcollidable
+		line: "addcollidable"
+		allows you to add a collidable object to the zone
+		changes current map load state to add collidable state
+	
+	keyword addclutter
+		line: "addclutter"
+		allows you too add clutter(non collidable objects that simply add to the background of a map and make it look better) to the zone
+		changes current map load state to add clutter state
+		note: will not be implementing this right now
+		can be implemented later on once we have more detailed maps to make them look a little better
+		
+
+in add enemy state
+	note: for now, this is only for adding the hovering robot enemy, as that is the only one
+	this may change in the future
+	
+	keyword setpos
+		line: "setpos=x,y"
+		sets the position of the enemy
+		x and y are coordinates on the screen, where 0,0 is the top left of the screen
+		
+	keyword 
+		
+		
+		
+		
+		
+		
+	
