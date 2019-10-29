@@ -1,4 +1,4 @@
-import pygame, copy
+import pygame
 
 from settings import GameState
 from player import Player

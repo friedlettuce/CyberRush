@@ -33,15 +33,3 @@ class Map:
 
         for enemy in self.enemies:
             enemy.blitme()
-
-
-'''
-# Fill out class when class by class functionality arises
-
-class CityStreet:
-
-    def __init__(self, screen, game_settings, background_path):
-        super().__init__(screen, game_settings, background_path)
-
-        self.name = "City Street"
-'''

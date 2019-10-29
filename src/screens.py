@@ -1,9 +1,4 @@
-import pygame, os
-
-
-
-
-
+import pygame
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
