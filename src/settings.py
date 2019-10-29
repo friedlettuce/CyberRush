@@ -30,7 +30,10 @@ class Settings:
         sprites_folder = os.path.join(resources_folder, "sprites")
 
         self.hov_size = (150, 150)
-        self.hovering_enemy_vel = 2
+        self.hovering_enemy_vel = 4
+        self.hov_proj_speed = 10
+        self.hov_proj_num = 1
+
         self.rhl1_path = os.path.join(sprites_folder, "RobotHoverLeft1.png")
         self.rhl2_path = os.path.join(sprites_folder, "RobotHoverLeft2.png")
         self.rhr1_path = os.path.join(sprites_folder, "RobotHoverRight1.png")
@@ -52,11 +55,11 @@ class Settings:
         self.vol_down_path = os.path.join(resources_folder, "VolDownButton.bmp")
 
         # FPS
-        self.clock_tick_interval = 60
+        self.clock_tick_interval = 30
 
         # Player Settings
         self.player_size = (70, 120)
-        self.player_speed = 3
+        self.player_speed = 6
 
         player_folder = os.path.join(sprites_folder, "temp_player")
         self.player_frames = {

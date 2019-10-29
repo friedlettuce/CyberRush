@@ -28,9 +28,9 @@ class GameScreen(object):
                 game_settings.city_background_path, "City Street"))
 
         # Tentative space to spawn enemy for demo
-        self.Robot1 = HoveringEnemy(screen, game_settings, int(self.screen_rect.width * .75), (
-                self.screen_rect.centery / 2), game_settings.hov_size[0], game_settings.hov_size[0],
-                    0, self.screen_rect.centery * 1.2)
+        self.Robot1 = HoveringEnemy(screen, game_settings, int(self.screen_rect.width * .75), int(
+                self.screen_rect.centery * .7), game_settings.hov_size[0], game_settings.hov_size[0],
+                    0, int(self.screen_rect.centery * 1.3))
         self.maps[0].add_enemy(self.Robot1)
 
         self.map = self.city_street
@@ -83,6 +83,10 @@ class GameScreen(object):
             self.player.off_right = False
 
         self.player.move()
+
+        # Shoots projectile if enemy in range of player
+        if self.Robot1.range_y(self.player.y):
+            self.Robot1.add_projectile()
 
         return ret_game_state
 
