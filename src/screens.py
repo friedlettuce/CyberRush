@@ -157,13 +157,26 @@ class SettingsScreen(Screen):
             screen, game_settings.vol_down_path, int(self.screen_rect.centerx / 2.5),
             int(self.screen_rect.centery / 1.5))
 
-
         # Volume text
         text = "Change Volume"
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
         self.textSurface = large_text.render(text, True, (0, 0, 0))
         self.TextRect = self.textSurface.get_rect()
         self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
+
+        #  Buttons To Change Controls
+        self.control_up_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.05))
+        self.control_left_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.3))
+        self.control_down_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.5))
+        self.control_right_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.75))
 
     def check_events(self):
 
@@ -197,6 +210,22 @@ class SettingsScreen(Screen):
                         self.game_settings.music_volume = 1
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
+                elif self.control_up_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('up')
+
+                elif self.control_left_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('left')
+
+                elif self.control_down_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('down')
+
+                elif self.control_right_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('right')
+
         return ret_game_state
 
     def blitme(self):
@@ -216,6 +245,11 @@ class SettingsScreen(Screen):
 
         # Control Settings
         self.control_display()
+
+        self.control_up_button.blitme()
+        self.control_left_button.blitme()
+        self.control_down_button.blitme()
+        self.control_right_button.blitme()
     
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)

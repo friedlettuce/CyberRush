@@ -77,6 +77,18 @@ class Settings:
         
         # Player Controls
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
+        self.control_button_path = os.path.join(resources_folder, "Button.bmp")
+
+    # Function Called To Change Player Controls
+    def change_control(self, control):
+        changed_control = False
+        while changed_control is False:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    self.input[control] = event.key
+                    changed_control = True
+
+
 
 
 class GameState(Enum):
