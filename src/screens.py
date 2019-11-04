@@ -167,16 +167,16 @@ class SettingsScreen(Screen):
         #  Buttons To Change Controls
         self.control_up_button = Button(
             screen, game_settings.control_button_path,
-            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.05))
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.05))
         self.control_left_button = Button(
             screen, game_settings.control_button_path,
-            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.3))
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.3))
         self.control_down_button = Button(
             screen, game_settings.control_button_path,
-            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.5))
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.55))
         self.control_right_button = Button(
             screen, game_settings.control_button_path,
-            int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery * 1.75))
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.8))
 
     def check_events(self):
 
