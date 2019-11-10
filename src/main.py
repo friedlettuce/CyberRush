@@ -40,6 +40,7 @@ def run_game():
         
         if new_gamestate is GameState.QUIT:
 
+            game_settings.save_controls()
             pygame.quit()
             sys.exit()
 

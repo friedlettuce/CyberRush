@@ -77,6 +77,8 @@ class Settings:
         
         # Player Controls
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
+        self.controls_path = os.path.join(resources_folder, "Controls.txt")
+        self.initialize_control()
         self.control_button_path = os.path.join(resources_folder, "Button.bmp")
 
     # Function Called To Change Player Controls
@@ -88,8 +90,34 @@ class Settings:
                     self.input[control] = event.key
                     changed_control = True
 
+    # Function That Reads In Controls From Controls.txt In Resources
+    def initialize_control(self):
+        file = open(self.controls_path, "r")
 
+        self.input['right'] = int(file.readline())
+        self.input['left'] = int(file.readline())
+        self.input['up'] = int(file.readline())
+        self.input['down'] = int(file.readline())
 
+        file.close()
+
+    # Function Called When Game Is Closed In Order To Save The Current Controls
+    def save_controls(self):
+        file = open(self.controls_path, "w")
+
+        file.write('%d' % self.input['right'])
+        file.write("\n")
+
+        file.write('%d' % self.input['left'])
+        file.write("\n")
+
+        file.write('%d' % self.input['up'])
+        file.write("\n")
+
+        file.write('%d' % self.input['down'])
+        file.write("\n")
+
+        file.close()
 
 class GameState(Enum):
     TITLE = 0
