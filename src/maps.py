@@ -2,6 +2,7 @@ import pygame
 import os
 from enum import Enum
 from mobs import HoveringEnemy
+import itertools
 
 class MapLoadState(Enum):
     MAPSIZE = 0
@@ -76,7 +77,7 @@ class Map:
                             cur_zone[0] = line[eqpos+1:pos]
                             cur_zone[1] = line[pos+1:]
                             #set used flag to True
-                            zones[cur_zone[0]][cur_zone[1]].used = true
+                            self.zones[cur_zone[0]][cur_zone[1]].used = true
                             #set map loading state to zoneinfo
                             load_state = MapLoadingState.ZONEINFO
 
@@ -109,36 +110,36 @@ class Map:
                             #set background of zone
                             bgname = line[eqpos+1:]
                             bgpath = os.path.join(self.gamesettings.resources_folder, bgname)
-                            zones[curzone[0]][curzone[1]].set_bg(bgpath)
+                            self.zones[curzone[0]][curzone[1]].set_bg(bgpath)
                         elif(line[:eqpos] == "setmusic"):
                             #set music of zone
                             musicname = line[eqpos+1:]
                             musicpath = os.path.join(self.game_settings.music_folder, musicname)
-                            zones[curzone[0]][curzone[1]].set_music(musicpath)
+                            self.zones[curzone[0]][curzone[1]].set_music(musicpath)
                         elif(line[:eqpos] == "setleftspawn"):
                             #set spawn when coming from left
                             pos = line.find(',')
                             x = line[eqpos+1:pos]
                             y = line[pos+1:]
-                            zones[curzone[0]][curzone[1]].set_left_spawn(x,y)
+                            self.zones[curzone[0]][curzone[1]].set_left_spawn(x,y)
                         elif(line[:eqpos] == "setrightspawn"):
                             #set spawn when coming from right
                             pos = line.find(',')
                             x = line[eqpos+1:pos]
                             y = line[pos+1:]
-                            zones[curzone[0]][curzone[1]].set_up_spawn(x,y)
+                            self.zones[curzone[0]][curzone[1]].set_up_spawn(x,y)
                         elif(line[:eqpos] == "setleftspawn"):
                             #set spawn when coming from up
                             pos = line.find(',')
                             x = line[eqpos+1:pos]
                             y = line[pos+1:]
-                            zones[curzone[0]][curzone[1]].set_up_spawn(x,y)
+                            self.zones[curzone[0]][curzone[1]].set_up_spawn(x,y)
                         elif(line[:eqpos] == "setdownspawn"):
                             #set spawn when coming from down
                             pos = line.find(',')
                             x = line[eqpos+1:pos]
                             y = line[pos+1:]
-                            zones[curzone[0]][curzone[1]].set_down_spawn(x,y)
+                            self.zones[curzone[0]][curzone[1]].set_down_spawn(x,y)
 
                 elif(load_stage == MapLoadStage.ENEMY):
                     #get position of equal sign
@@ -164,6 +165,38 @@ class Map:
                             self.enemyendy = line[eqpos+1:]
 
                 #Need to implement collidables loading when collidables class is made
+
+        #when done loading map, build connections
+        build_connections()
+
+
+    def build_connections():
+        #this function builds the connections between the zones of the maps
+        #sets whether going to the edge of a zone should take the player
+        #to the next zone or not
+        for x,y in itertools.product(range(self.sizex), range(self.sizey)):
+            if(self.zones[x][y].used):
+                #only check zones which are used
+                if(y>0):
+                    #if y>0, check the zone above us, which is y-1
+                    if(self.zones[x][y-1]):
+                        #if this zone is used, set up zone used flag in current zone to true
+                        self.zones[x][y].up_used = true
+                if(y<self.sizey-1):
+                    #if y<max size, check the zone below us, which is y+1
+                    if(self.zones[x][y+1]):
+                        #if this zone is used, set up zone used flag in current zone to true
+                        self.zones[x][y].down_used = true
+                if(x>0):
+                    #if y>0, check the zone to our left, which is x-1
+                    if(self.zones[x-1][y]):
+                        #if this zone is used, set left zone used flag in current zone to true
+                        self.zones[x][y].left_used = true
+                if(x<self.sizex-1):
+                    #if x<max size, check the zone to our right, which is x+1
+                    if(self.zones[x+1][y]):
+                        #if this zone is used, set right zone used flag in current zone to true
+                        self.zones[x][y].right_used = true
 
 
 
