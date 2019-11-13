@@ -41,7 +41,7 @@ class Map:
             #check if the line isnt a comment, which is denoted by a #
             if line[0] != '#':
                 #first state, get the size of the map
-                if(load_state == MapLoadstate.MAPSIZE):
+                if(load_state == MapLoadState.MAPSIZE):
                     #size is stored as x,y no spaces
                     pos = line.find(',')
                     self.sizex = line[:pos]
@@ -49,19 +49,19 @@ class Map:
                     #create 2d array of zones with size that we just read in
                     self.zones = [[Zone(self.screen, self.game_settings) for j in range(self.sizex)] for i in range(self.sizey)]
                     #set the next state to get map name
-                    load_state = MapLoadstate.MAPNAME
+                    load_state = MapLoadState.MAPNAME
 
                 #get map name
-                elif(load_state == MapLoadstate.MAPNAME):
+                elif(load_state == MapLoadState.MAPNAME):
                     self.name = line
                     #set the next state to be general map info
-                    load_state = MapLoadstate.MAPINFO
+                    load_state = MapLoadState.MAPINFO
 
                 #map loading state for general info
                 #for now this state is just for going into the ZONEINFO state
                 #also setting spawn
                 #may add more later
-                elif(load_state == MapLoadstate.MAPINFO):
+                elif(load_state == MapLoadState.MAPINFO):
                     #get position of equal sign
                     #if its in cur line, check for keywords that need that
                     #if not, check for keywords without it
@@ -81,7 +81,7 @@ class Map:
                             #set used flag to True
                             self.zones[cur_zone[0]][cur_zone[1]].used = true
                             #set map loading state to zoneinfo
-                            load_state = MapLoadingState.ZONEINFO
+                            load_state = MapLoadState.ZONEINFO
 
                         elif(line[:eqpos] == "setspawn"):
                             #set spawn is keyword for setting initial player spawn to certain zone
@@ -91,7 +91,7 @@ class Map:
                             self.spawnpoint[0] = line[eqpos+1:pos]
                             self.spawnpoint[1] = line[pos+1:]
 
-                elif(load_state == MapLoadstate.ZONEINFO):
+                elif(load_state == MapLoadState.ZONEINFO):
                     #get position of equal sign
                     #if its in cur line, check for keywords that need that
                     #if not, check for keywords without it
@@ -99,13 +99,13 @@ class Map:
                     if(eqpos == -1):
                         if(line == "endzone"):
                             #go back to mapinfo state
-                            load_state = MapLoadingState.MAPINFO
+                            load_state = MapLoadState.MAPINFO
                         elif(line == "addenemy"):
                             #go to add enemy state
-                            load_state = MapLoadingState.ENEMY
+                            load_state = MapLoadState.ENEMY
                         elif(line == "addcollidable"):
                             #go to add collidable state
-                            load_state = MapLoadingState.COLLIDABLE
+                            load_state = MapLoadState.COLLIDABLE
 
                     else:
                         if(line[:eqpos] == "setbg"):
@@ -143,7 +143,7 @@ class Map:
                             y = line[pos+1:]
                             self.zones[curzone[0]][curzone[1]].set_down_spawn(x,y)
 
-                elif(load_state == MapLoadstate.ENEMY):
+                elif(load_state == MapLoadState.ENEMY):
                     #get position of equal sign
                     #if its in cur line, check for keywords that need that
                     #if not, check for keywords without it
@@ -154,7 +154,7 @@ class Map:
                             enemy = HoveringEnemy(self.screen, self.game_settings, self.enemyx, self.enemyy, self.game_settings.hov_size[0], 
                                                     self.game_settings.hov_size[0], self.enemyendx, self.enemyendy)
                             #go back to zoneinfo state
-                            load_state = MapLoadingState.ZONEINFO
+                            load_state = MapLoadState.ZONEINFO
 
                     else:
                         if(line[:eqpos] == "setpos"):
@@ -166,13 +166,40 @@ class Map:
                         elif(line[:eqpos] == "setendy"):
                             self.enemyendy = line[eqpos+1:]
 
-                #Need to implement collidables loading when collidables class is made
+                elif(load_state == MapLoadState.Collidable):
+                    #get position of equal sign
+                    #if its in cur line, check for keywords that need that
+                    #if not, check for keywords without it
+                    eqpos = line.find("=")
+                    if(eqpos == -1):
+                        if(line == "endcollidable"):
+                            #create rect for collidable
+                            r = Rect(self.colx, self.coly, self.colw, self.colh)
+                            #create color tuple 
+                            color = (self.colcolor[0:3], self.colcolor[3:6], self.colcolor[6:])
+                            #create collidable object and add to collidables list for current zone
+                            c = Collidable(self.screen, r, color)
+                            self.zones[curzone[0]][curzone[1]].add_collidable(c)
+                            #go back to zoneinfo state
+                            load_state = MapLoadState.ZONEINFO
+                    
+                    else:
+                        if(line[:eqpos] == "setpos"):
+                            pos = line.find(',')
+                            self.colx = line[eqpos+1:pos]
+                            self.coly = line[pos+1:]
+                        elif(line[:eqpos] == "setdims"):
+                            pos = line.find(',')
+                            self.colw = line[eqpos+1:pos]
+                            self.colh = line[pos+1:]
+                        elif(line[:eqpos] == "setcolor"):
+                            self.colcolor = line[eqpos+1:]
 
         #when done loading map, build connections
         build_connections()
 
 
-    def build_connections():
+    def build_connections(self):
         #this function builds the connections between the zones of the maps
         #sets whether going to the edge of a zone should take the player
         #to the next zone or not
