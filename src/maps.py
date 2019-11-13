@@ -1,8 +1,10 @@
 import pygame
 import os
 from enum import Enum
+import pygame
 from mobs import HoveringEnemy
 import itertools
+from collidable import Collidable
 
 class MapLoadState(Enum):
     MAPSIZE = 0
@@ -16,7 +18,7 @@ class MapLoadState(Enum):
 class Map:
 
     def __init__(self, screen, game_settings):
-        #simple init to get needed objects and initialize a few map variables
+        # simple init to get needed objects and initialize a few map variables
         self.screen = screen
         self.game_settings = game_settings
         self.screen_rect = self.screen.get_rect()
@@ -198,13 +200,13 @@ class Map:
                         #if this zone is used, set right zone used flag in current zone to true
                         self.zones[x][y].right_used = true
 
-
-
-
 class Zone:
+
     def __init__(self, screen, game_settings):
+
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
+
         self.game_settings = game_settings
         self.music = "none"
         #variable to hold if this zone is used in the map
@@ -216,37 +218,47 @@ class Zone:
         self.up_used = false
         self.down_used = false
 
-    def set_left_spawn(x, y):
+        self.bg = None
+        self.bg_rect = self.bg.get_rect()
+
+        self.leftspawn = None
+        self.upspawn = None
+        self.downspawn = None
+        self.rightspawn = None
+
+        self.enemies = None
+        self.collidables = None
+
+    def set_left_spawn(self, x, y):
         self.leftspawn[0] = x
-        self.leftspawn[1] - y
+        self.leftspawn[1] = y
 
-    def set_up_spawn(x, y):
+    def set_up_spawn(self, x, y):
         self.upspawn[0] = x
-        self.upspawn[1] - y
+        self.upspawn[1] = y
 
-    def set_down_spawn(x, y):
+    def set_down_spawn(self, x, y):
         self.downspawn[0] = x
-        self.downspawn[1] - y
+        self.downspawn[1] = y
 
-    def set_right_spawn(x, y):
+    def set_right_spawn(self, x, y):
         self.rightspawn[0] = x
-        self.rightspawn[1] - y
+        self.rightspawn[1] = y
 
-    def add_enemy(e):
+    def add_enemy(self, e):
         self.enemies.apend(e)
 
-    def add_colliadable(c):
+    def add_colliadable(self, c):
         self.collidables.apend(c)
 
-    def set_bg(bg):
+    def set_bg(self, bg):
         self.bg = pygame.image.load(bg)
         self.bg = pygame.transform.scale(
             self.bg, (self.game_settings.screen_w, self.game_settings.screen_h))
 
-        self.bg_rect = self.bg.get_rect()
         self.bg_rect.centerx = self.screen_rect.centerx
         self.bg_rect.centery = self.screen_rect.centery
 
-    def set_music(m):
+    def set_music(self, m):
         self.music = m
 

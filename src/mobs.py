@@ -30,14 +30,23 @@ class Enemy(object):
 
         self.path_x = [self.x, self.end_x]
         self.path_y = [self.y, self.end_y]
-        self.movement = 0
+        self.frame_counter = 0
 
         self.left_frames = []
         self.right_frames = []
         self.frame = None
+        self.frame_rect = None
 
-        self.hitbox = 0
-        self.hitbox2 = 0
+        self.hitbox_x = 0
+        self.hitbox_y = 0
+        self.hitbox_color = (255, 0, 0)
+
+        # Range for how wide enemy can see (range will be 2x this value)
+        self.eye_sight = 0
+
+        self.projectiles = []
+        self.projectile_speed = None
+        self.projectile_num = None
 
     # Function For An Enemy To Move Side To Side On The X Axis
     def update_x(self):
@@ -50,7 +59,7 @@ class Enemy(object):
                 self.facing_right = False
                 self.vel_x *= -1
                 self.x = self.x + self.vel_x
-                self.movement = 0
+                self.frame_counter = 0
                 
         # If Velocity < 0, Enemy Is Moving To The Left
         elif self.vel_x < 0:
@@ -61,7 +70,7 @@ class Enemy(object):
                 self.facing_right = True
                 self.vel_x *= -1
                 self.x = self.x + self.vel_x
-                self.movement = 0
+                self.frame_counter = 0
     
     # Function For An Enemy To Move Side To Side On The Y Axis
     def update_y(self):
@@ -72,7 +81,7 @@ class Enemy(object):
             else:
                 self.vel_y *= -1
                 self.y += self.vel_y
-                self.movement = 0
+                self.frame_counter = 0
                 
         # If Velocity < 0, Enemy Is Moving Up
         elif self.vel_y < 0:
@@ -81,44 +90,65 @@ class Enemy(object):
             else:
                 self.vel_y *= -1
                 self.y += self.vel_y
-                self.movement = 0
+                self.frame_counter = 0
+
+    def update_hitbox(self):
+        # Place holder for enemy object hitbox
+        pass
 
     def update(self):
+
         if self.moving_x:
             self.update_x()
         if self.moving_y:
             self.update_y()
 
-        if self.movement + 1 == 60:
-            self.movement = 0
+        if self.frame_counter + 1 == 60:
+            self.frame_counter = 0
 
         # Changes frames as enemy moves left/right
         if self.vel_x < 0 and self.moving_x or not self.facing_right:
-            self.frame = self.left_frames[self.movement // 30]
+            self.frame = self.left_frames[self.frame_counter // 30]
         elif (self.vel_x >= 0 and self.moving_x) or self.facing_right:
-            self.frame = self.right_frames[self.movement // 30]
+            self.frame = self.right_frames[self.frame_counter // 30]
 
-        self.hitbox = (self.x + 50, self.y + 25, 45, 110)
-        self.hitbox2 = (self.x + 40, self.y + 25, 80, 35)
+        # Sets hitbox vertical and horizontal start/width/height
+        self.update_hitbox()
 
-    def draw_hitbox(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox2, 2)
+        for projectile in self.projectiles:
+            if projectile.move() == 0:
+                self.projectiles.remove(projectile)
 
-        if not self.vel_y > self.path_y[0] - self.vel_y:
-            pass
-            # Projectile(self.x, self.y + 40, 25, 25, -1, screen)
-        elif not self.vel_y < self.path_y[1] + self.vel_y:
-            pass
-            # Projectile(self.x, self.y + 20, 25, 25, -1, screen)
+    def add_projectile(self, dir_x=0, dir_y=0):
+        # Sets x travel direction based on enemy facing direction
+        if self.facing_right == 1:
+            dir_x = self.facing_right
+        else:
+            dir_x = -1
+
+        # Adds a projectile if it hasn't shot to many yet
+        if len(self.projectiles) < self.projectile_num:
+            self.projectiles.append(Projectile(self.screen,
+                self.frame_rect.centerx + self.x, self.y + int(self.frame_rect.height * .2), 10,
+                    5, dir_x, dir_y, self.projectile_speed))
+
+    def range_y(self, y):
+        # Checks if y is in a 40 pixel range of self
+        return self.y in range(y - self.eye_sight, y + self.eye_sight)
 
     def blitme(self):
 
         self.update()
         self.screen.blit(self.frame, (self.x, self.y))
-        # self.draw_hitbox(screen)
 
-        self.movement += 1
+        # Draws vert/horiz hitboxes, hardcoded color for now
+        pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_x, 2)
+        pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_y, 2)
+
+        for projectile in self.projectiles:
+            projectile.blitme()
+
+        self.frame_counter += 1
 
 
 class HoveringEnemy(Enemy):
@@ -133,6 +163,9 @@ class HoveringEnemy(Enemy):
                           pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
 
         self.frame = self.right_frames[0]
+        self.frame_rect = self.right_frames[0].get_rect()
+        self.projectile_speed = game_settings.hov_proj_speed
+        self.projectile_num = game_settings.hov_proj_num
 
         # If the enemy moves along a path, sets velocity not to 0
         if self.moving_x:
@@ -140,65 +173,40 @@ class HoveringEnemy(Enemy):
         if self.moving_y:
             self.vel_y = game_settings.hovering_enemy_vel
 
-'''
+        self.hitbox_x = (self.x + 50, self.y + 25, 45, 110)
+        self.hitbox_y = (self.x + 40, self.y + 25, 80, 35)
+        self.hitbox_color = (255, 0, 0)
+        self.eye_sight = 20
+
+    def update_hitbox(self):
+        self.hitbox_x = (self.x + 50, self.y + 25, 45, 110)
+        self.hitbox_y = (self.x + 40, self.y + 25, 80, 35)
+
+
 class Projectile(object):
 
-    def __init__(self, x, y, width, height, direction, screen):
+    def __init__(self, screen, x, y, width, height, dir_x, dir_y, speed):
+
+        self.screen = screen
+        self.screen_rect = self.screen.get_rect()
+
         self.x = x
         self.y = y
         self.width = width
         self.height = height
-        self.screen = screen
 
-    def blitme():
-        if projectiles_X:
-            Projectile_X.blitme()
-        if projectiles_Y:
-            Projectile_Y.blitme()
-    
+        self.speed_x = dir_x * speed
+        self.speed_y = dir_y * speed
 
-class Projectile_X(Projectile):
-
-    def __init__(self, x, y, width, height, direction, screen):
-        super().__init__(x, y, width, height, direction, screen)
-        self.startX = x
-        
-        # Direction Will Either Be -1 For Left or 1 For Right
-        self.direction = direction
-        
-        projectiles_X.append(self)
-    
     def move(self):
-        self.x = self.x + 5*self.direction
-    
-    def blitme():
-        for projectile in projectiles_X:
-            if projectile.x < projectile.startX - 250:
-                projectiles_X.pop(projectiles_X.index(projectile))
-            else:
-                projectile.move()
-                pygame.draw.rect(projectile.screen, (0,255,0), (projectile.x, projectile.y, projectile.width, projectile.height))
+        self.x += self.speed_x
+        self.y += self.speed_y
 
+        # Activates removal if off screen
+        if (self.x > self.screen_rect.width or self.x < 0) or (
+                self.y > self.screen_rect.height or self.y < 0):
+            return 0    # Pop self
+        return 1
 
-class ProjectileY(Projectile):
-
-    def __init__(self, x, y, width, height, direction, screen):
-        super().__init__(x, y, width, height, direction, screen)
-        self.startY = y
-        
-        # Direction Will Either Be -1 For Up or 1 For Down
-        self.direction = direction
-        
-        projectiles_Y.append(self)
-    
-    def move(self):
-        self.y = self.y + 5*self.direction
-        
-    def blitme():
-        for projectile in projectiles_Y:
-            if projectile.y < projectile.startY - 250:
-                projectiles_Y.pop(projectiles_Y.index(projectile))
-            else:
-                projectile.move()
-                pygame.draw.rect(projectile.screen, (0,255,0), (projectile.x, projectile.y, projectile.width, projectile.height))
-'''
+    def blitme(self):
+        pygame.draw.rect(self.screen, (0, 255, 0), (self.x, self.y, self.width, self.height))
