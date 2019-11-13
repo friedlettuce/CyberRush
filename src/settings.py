@@ -82,6 +82,8 @@ class Settings:
         self.control_button_path = os.path.join(resources_folder, "Button.bmp")
         self.control_flag = False
 
+        self.reset_control_button_path = os.path.join(resources_folder, "ResetButton.bmp")
+
     # Function Called To Change Player Controls
     def change_control(self, control):
         changed_control = False
@@ -91,6 +93,12 @@ class Settings:
                     self.input[control] = event.key
                     changed_control = True
         self.control_flag = True
+
+    # Function Called To Reset Controls To Default
+    def default_settings(self):
+        self.control_flag = True
+        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
+        self.music_volume = .05
 
     # Function That Reads In Controls From Controls.txt In Resources
     def initialize_control(self):
@@ -123,6 +131,7 @@ class Settings:
             file.write("\n")
 
             file.close()
+
 
 class GameState(Enum):
     TITLE = 0

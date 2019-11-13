@@ -178,6 +178,10 @@ class SettingsScreen(Screen):
             screen, game_settings.control_button_path,
             int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.8))
 
+        self.reset_button = Button(
+            screen, game_settings.reset_control_button_path,
+            int(self.screen_rect.centerx * 1.5), int(self.screen_rect.centery * 1.9))
+
     def check_events(self):
 
         ret_game_state = GameState(1)
@@ -226,6 +230,10 @@ class SettingsScreen(Screen):
 
                     self.game_settings.change_control('right')
 
+                elif self.reset_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.default_settings()
+
         return ret_game_state
 
     def blitme(self):
@@ -243,13 +251,13 @@ class SettingsScreen(Screen):
         # Volume Percentage
         self.volume_display()
 
-        # Control Settings
+        # Control Buttons
         self.control_display()
-
         self.control_up_button.blitme()
         self.control_left_button.blitme()
         self.control_down_button.blitme()
         self.control_right_button.blitme()
+        self.reset_button.blitme()
     
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
