@@ -19,7 +19,7 @@ class Map:
         self.screen_rect = self.screen.get_rect()
         self.sizex = self.sizey = 0
         self.name = ""
-        self.spawnpoint = (0,0)
+        self.spawnpoint = [0,0]
 
         #function to load level
         #is given path by gamescreen
@@ -28,7 +28,7 @@ class Map:
             load_stage = MapLoadState(0)
 
             #to hold which zone we are currently working on
-            cur_zone = (0,0)
+            cur_zone = [0,0]
 
             with open(level_path) as f:
                 line = f.readline()
@@ -85,10 +85,99 @@ class Map:
                                 self.spawnpoint[1] = line[pos+1:]
 
                     elif(load_stage == MapLoadStage.ZONEINFO):
-                        pass
+                        #get position of equal sign
+                        #if its in cur line, check for keywords that need that
+                        #if not, check for keywords without it
+                        eqpos = line.find("=")
+                        if(eqpos == -1):
+                            if(line == "endzone"):
+                                #go back to mapinfo state
+                                load_state = MapLoadingState.MAPINFO
+                            elif(line == "addenemy"):
+                                #go to add enemy state
+                                load_state = MapLoadingState.ENEMY
+                            elif(line == "addcollidable"):
+                                #go to add collidable state
+                                load_state = MapLoadingState.COLLIDABLE
+
+                        else:
+                            if(line[:eqpos] == "setbg"):
+                                #set background of zone
+                                bgname = line[eqpos+1:]
+                                bgpath = os.path.join(self.gamesettings.resources_folder, bgname)
+                                zones[curzone[0]][curzone[1]].set_bg(bgpath)
+                            elif(line[:eqpos] == "setmusic"):
+                                #set music of zone
+                                musicname = line[eqpos+1:]
+                                musicpath = os.path.join(self.game_settings.music_folder, musicname)
+                                zones[curzone[0]][curzone[1]].set_music(musicpath)
+                            elif(line[:eqpos] == "setleftspawn"):
+                                #set spawn when coming from left
+                                pos = line.find(',')
+                                x = line[eqpos+1:pos]
+                                y = line[pos+1:]
+                                zones[curzone[0]][curzone[1]].set_left_spawn(x,y)
+                            elif(line[:eqpos] == "setrightspawn"):
+                                #set spawn when coming from right
+                                pos = line.find(',')
+                                x = line[eqpos+1:pos]
+                                y = line[pos+1:]
+                                zones[curzone[0]][curzone[1]].set_up_spawn(x,y)
+                            elif(line[:eqpos] == "setleftspawn"):
+                                #set spawn when coming from up
+                                pos = line.find(',')
+                                x = line[eqpos+1:pos]
+                                y = line[pos+1:]
+                                zones[curzone[0]][curzone[1]].set_up_spawn(x,y)
+                            elif(line[:eqpos] == "setdownspawn"):
+                                #set spawn when coming from down
+                                pos = line.find(',')
+                                x = line[eqpos+1:pos]
+                                y = line[pos+1:]
+                                zones[curzone[0]][curzone[1]].set_down_spawn(x,y)
+
+
 
 
 
 class Zone:
     def __init__(self, screen, game_settings):
-        pass
+        self.screen = screen
+        self.screen_rect = self.screen.get_rect()
+        self.game_settings = game_settings
+        self.music = "none"
+
+    def set_left_spawn(x, y):
+        self.leftspawn[0] = x
+        self.leftspawn[1] - y
+
+    def set_up_spawn(x, y):
+        self.upspawn[0] = x
+        self.upspawn[1] - y
+
+    def set_down_spawn(x, y):
+        self.downspawn[0] = x
+        self.downspawn[1] - y
+
+    def set_right_spawn(x, y):
+        self.rightspawn[0] = x
+        self.rightspawn[1] - y
+
+    def add_enemy(e):
+        self.enemies.apend(e)
+
+    def add_colliadable(c):
+        self.collidables.apend(c)
+
+    def set_bg(bg):
+        self.bg = pygame.image.load(bg)
+        self.bg = pygame.transform.scale(
+            self.bg, (self.game_settings.screen_w, self.game_settings.screen_h))
+
+        self.bg_rect = self.bg.get_rect()
+        self.bg_rect.centerx = self.screen_rect.centerx
+        self.bg_rect.centery = self.screen_rect.centery
+
+    def set_music(m):
+        self.music = m
+
