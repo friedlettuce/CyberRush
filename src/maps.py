@@ -1,8 +1,9 @@
 import pygame
+import os
 from enum import Enum
 from mobs import HoveringEnemy
 
-class MapLoadState(enum):
+class MapLoadState(Enum):
     MAPSIZE = 0
     MAPNAME = 1
     MAPINFO = 2
