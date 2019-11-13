@@ -1,5 +1,6 @@
 import pygame
 from enum import Enum
+from mobs import HoveringEnemy
 
 class MapLoadState(enum):
     MAPSIZE = 0
@@ -135,6 +136,29 @@ class Map:
                                 x = line[eqpos+1:pos]
                                 y = line[pos+1:]
                                 zones[curzone[0]][curzone[1]].set_down_spawn(x,y)
+
+                    elif(load_stage == MapLoadStage.ENEMY):
+                        #get position of equal sign
+                        #if its in cur line, check for keywords that need that
+                        #if not, check for keywords without it
+                        eqpos = line.find("=")
+                        if(eqpos == -1):
+                            if(line == "endenemy"):
+                                #create enemy object and add to enemies list for current zone
+                                enemy = HoveringEnemy(self.screen, self.game_settings, self.enemyx, self.enemyy, self.game_settings.hov_size[0], 
+                                                      self.game_settings.hov_size[0], self.enemyendx, self.enemyendy)
+                                #go back to zoneinfo state
+                                load_state = MapLoadingState.ZONEINFO
+
+                        else:
+                            if(line[:eqpos] == "setpos"):
+                                pos = line.find(',')
+                                self.enemyx = line[eqpos+1:pos]
+                                self.enemyy = line[pos+1:]
+                            elif(line[:eqpos] == "setendx"):
+                                self.enemyendx = line[eqpos+1:]
+                            elif(line[:eqpos] == "setendy"):
+                                self.enemyendy = line[eqpos+1:]
 
 
 
