@@ -28,7 +28,7 @@ class Map:
     #is given path by gamescreen
     def loadMap(self, level_path):
         #to hold which state of maploading we are in
-        load_stage = MapLoadState(0)
+        load_state = MapLoadState(0)
 
         #to hold which zone we are currently working on
         cur_zone = [0,0]
@@ -39,7 +39,7 @@ class Map:
             #check if the line isnt a comment, which is denoted by a #
             if line[0] != '#':
                 #first state, get the size of the map
-                if(load_stage == MapLoadStage.MAPSIZE):
+                if(load_state == MapLoadstate.MAPSIZE):
                     #size is stored as x,y no spaces
                     pos = line.find(',')
                     self.sizex = line[:pos]
@@ -47,19 +47,19 @@ class Map:
                     #create 2d array of zones with size that we just read in
                     self.zones = [[Zone(self.screen, self.game_settings) for j in range(self.sizex)] for i in range(self.sizey)]
                     #set the next state to get map name
-                    load_stage = MapLoadStage.MAPNAME
+                    load_state = MapLoadstate.MAPNAME
 
                 #get map name
-                elif(load_stage == MapLoadStage.MAPNAME):
+                elif(load_state == MapLoadstate.MAPNAME):
                     self.name = line
                     #set the next state to be general map info
-                    load_stage = MapLoadStage.MAPINFO
+                    load_state = MapLoadstate.MAPINFO
 
                 #map loading state for general info
                 #for now this state is just for going into the ZONEINFO state
                 #also setting spawn
                 #may add more later
-                elif(load_stage == MapLoadStage.MAPINFO):
+                elif(load_state == MapLoadstate.MAPINFO):
                     #get position of equal sign
                     #if its in cur line, check for keywords that need that
                     #if not, check for keywords without it
@@ -89,7 +89,7 @@ class Map:
                             self.spawnpoint[0] = line[eqpos+1:pos]
                             self.spawnpoint[1] = line[pos+1:]
 
-                elif(load_stage == MapLoadStage.ZONEINFO):
+                elif(load_state == MapLoadstate.ZONEINFO):
                     #get position of equal sign
                     #if its in cur line, check for keywords that need that
                     #if not, check for keywords without it
@@ -141,7 +141,7 @@ class Map:
                             y = line[pos+1:]
                             self.zones[curzone[0]][curzone[1]].set_down_spawn(x,y)
 
-                elif(load_stage == MapLoadStage.ENEMY):
+                elif(load_state == MapLoadstate.ENEMY):
                     #get position of equal sign
                     #if its in cur line, check for keywords that need that
                     #if not, check for keywords without it
