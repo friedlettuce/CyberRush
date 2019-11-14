@@ -1,8 +1,9 @@
-import pygame, os
+import pygame
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
 
+# NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
 
 class Screen:
 
@@ -39,7 +40,6 @@ class TitleScreen(Screen):
             self.background_img, (game_settings.screen_w, game_settings.screen_h))
         self.background_rect = self.background_img.get_rect()
         
-
         self.background_rect.centerx = self.screen_rect.centerx
         self.background_rect.centery = self.screen_rect.centery
 
@@ -62,12 +62,18 @@ class TitleScreen(Screen):
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
 
         button_num -= 1
+        #ADDED THIS LINE
+        self.highscores_button = Button(
+            screen, game_settings.highscores_path, int(self.screen_rect.centerx * 1.5),
+            int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
+
+        button_num -= 1
 
         self.quit_button = Button(
             screen, game_settings.quit_path, int(self.screen_rect.centerx * 1.5),
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
 
-        self.buttons = [self.play_button, self.settings_button, self.about_button, self.quit_button]
+        self.buttons = [self.play_button, self.settings_button, self.about_button, self.highscores_button, self.quit_button]
         
         self.Robot1 = HoveringEnemy(screen, game_settings, 0, (self.screen_rect.centery*1.25),
                     game_settings.hov_size[0], game_settings.hov_size[0], (self.screen_rect.centerx/1.25))
@@ -104,6 +110,8 @@ class TitleScreen(Screen):
                     ret_game_state = GameState.SETTINGS
                 elif self.about_button.image_rect.colliderect(mouse_pos):
                     ret_game_state = GameState.ABOUT
+                elif self.highscores_button.image_rect.colliderect(mouse_pos):      # ADDED THIS, IF BUTTON IS CLICKED GOES TO THIS EVENT
+                    ret_game_state = GameState.HIGHSCORES
                 elif self.quit_button.image_rect.colliderect(mouse_pos):
                     ret_game_state = GameState.QUIT
 
@@ -119,6 +127,7 @@ class TitleScreen(Screen):
         self.play_button.blitme()
         self.settings_button.blitme()
         self.about_button.blitme()
+        self.highscores_button.blitme()
         self.quit_button.blitme()
         
         self.Robot1.blitme()
@@ -165,6 +174,24 @@ class SettingsScreen(Screen):
         self.TextRect = self.textSurface.get_rect()
         self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
 
+        #  Buttons To Change Controls
+        self.control_up_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.05))
+        self.control_left_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.3))
+        self.control_down_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.55))
+        self.control_right_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.8))
+
+        self.reset_button = Button(
+            screen, game_settings.reset_control_button_path,
+            int(self.screen_rect.centerx * 1.5), int(self.screen_rect.centery * 1.9))
+
     def check_events(self):
 
         ret_game_state = GameState(1)
@@ -197,6 +224,26 @@ class SettingsScreen(Screen):
                         self.game_settings.music_volume = 1
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
+                elif self.control_up_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('up')
+
+                elif self.control_left_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('left')
+
+                elif self.control_down_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('down')
+
+                elif self.control_right_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.change_control('right')
+
+                elif self.reset_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.default_settings()
+
         return ret_game_state
 
     def blitme(self):
@@ -213,24 +260,41 @@ class SettingsScreen(Screen):
         
         # Volume Percentage
         self.volume_display()
-        
+
+        # Control Buttons
         self.control_display()
+        self.control_up_button.blitme()
+        self.control_left_button.blitme()
+        self.control_down_button.blitme()
+        self.control_right_button.blitme()
+        self.reset_button.blitme()
     
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+
+        key = pygame.key.name(self.game_settings.input['right'])
+        key = key.upper()
         
-        right_control = large_text.render((str('Right Control: ') + chr(self.game_settings.input['right'])), True, (0, 0 ,0))
+        right_control = large_text.render((str('Right Control: ') + str(key)), True, (0, 0 ,0))
         self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
-        
-        left_control = large_text.render((str("Left Control: ") + chr(self.game_settings.input['left'])), True, (0, 0 ,0))
+
+        key = pygame.key.name(self.game_settings.input['left'])
+        key = key.upper()
+
+        left_control = large_text.render((str("Left Control: ") + str(key)), True, (0, 0 ,0))
         self.screen.blit(left_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.25)))
-        
-        up_control = large_text.render((str("Up Control: ") + chr(self.game_settings.input['up'])), True, (0, 0 ,0))
+
+        key = pygame.key.name(self.game_settings.input['up'])
+        key = key.upper()
+
+        up_control = large_text.render((str("Up Control: ") + str(key)), True, (0, 0 ,0))
         self.screen.blit(up_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1)))
-        
-        down_control = large_text.render((str("Down Control: ") + chr(self.game_settings.input['down'])), True, (0, 0 ,0))
+
+        key = pygame.key.name(self.game_settings.input['down'])
+        key = key.upper()
+
+        down_control = large_text.render(str("Down Control: " + str(key)), True, (0, 0 ,0))
         self.screen.blit(down_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.5)))
-        
 
     def volume_display(self):
 
@@ -267,6 +331,41 @@ class AboutScreen(Screen):
                     ret_game_state = GameState.TITLE
 
         return ret_game_state
+
+    def blitme(self):
+        self.screen.fill(self.bk_color)
+
+        self.mainmenu_button.blitme()
+
+
+class HighScoresScreen(Screen):
+
+    def __init__(self, screen, game_settings):
+        super().__init__(screen, game_settings)
+
+        self.mainmenu_button = Button(
+            screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
+            int(self.screen_rect.centery * 1.9))
+
+    def check_events(self):
+
+        ret_game_state = GameState(4)
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.QUIT:
+                ret_game_state = GameState.QUIT
+
+            elif event.type == pygame.MOUSEBUTTONUP:
+
+                mouse_pos = pygame.Rect((pygame.mouse.get_pos()), (0, 0))
+
+                if self.mainmenu_button.image_rect.colliderect(mouse_pos):
+                    ret_game_state = GameState.TITLE
+
+        return ret_game_state
+
+
 
     def blitme(self):
         self.screen.fill(self.bk_color)

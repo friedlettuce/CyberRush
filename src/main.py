@@ -3,7 +3,7 @@ import sys
 import pygame
 
 from settings import Settings, GameState
-from screens import TitleScreen, SettingsScreen, AboutScreen
+from screens import TitleScreen, SettingsScreen, AboutScreen, HighScoresScreen
 from gamescreen import GameScreen
 
 
@@ -24,12 +24,14 @@ def run_game():
     settings_screen = SettingsScreen(screen, game_settings)
     about_screen = AboutScreen(screen, game_settings)
     game_screen = GameScreen(screen, game_settings)
+    highscores_screen = HighScoresScreen(screen, game_settings)
 
     screens = {
         GameState.TITLE: title_screen,
         GameState.SETTINGS: settings_screen,
         GameState.ABOUT: about_screen,
-        GameState.PLAYING: game_screen
+        GameState.PLAYING: game_screen,
+        GameState.HIGHSCORES: highscores_screen
     }
 
     screen = title_screen
@@ -40,6 +42,7 @@ def run_game():
         
         if new_gamestate is GameState.QUIT:
 
+            game_settings.save_controls()
             pygame.quit()
             sys.exit()
 
