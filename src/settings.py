@@ -79,7 +79,9 @@ class Settings:
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
         self.controls_path = os.path.join(resources_folder, "Controls.txt")
         self.initialize_settings()
+
         self.control_button_path = os.path.join(resources_folder, "Button.bmp")
+        self.control_button_path2 = os.path.join(resources_folder, "Button2.bmp")
         self.control_flag = False
 
         self.reset_control_button_path = os.path.join(resources_folder, "ResetButton.bmp")
