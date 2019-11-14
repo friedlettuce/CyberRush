@@ -78,7 +78,7 @@ class Settings:
         # Player Controls
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
         self.controls_path = os.path.join(resources_folder, "Controls.txt")
-        self.initialize_control()
+        self.initialize_settings()
         self.control_button_path = os.path.join(resources_folder, "Button.bmp")
         self.control_flag = False
 
@@ -101,18 +101,19 @@ class Settings:
         self.music_volume = .05
 
     # Function That Reads In Controls From Controls.txt In Resources
-    def initialize_control(self):
+    def initialize_settings(self):
         file = open(self.controls_path, "r")
 
         self.input['right'] = int(file.readline())
         self.input['left'] = int(file.readline())
         self.input['up'] = int(file.readline())
         self.input['down'] = int(file.readline())
+        self.music_volume = float(file.readline())
 
         file.close()
 
     # Function Called When Game Is Closed In Order To Save The Current Controls
-    def save_controls(self):
+    def save_settings(self):
         if self.control_flag is False:
             pass
         else:
@@ -128,6 +129,9 @@ class Settings:
             file.write("\n")
 
             file.write('%d' % self.input['down'])
+            file.write("\n")
+
+            file.write('%f' % self.music_volume)
             file.write("\n")
 
             file.close()

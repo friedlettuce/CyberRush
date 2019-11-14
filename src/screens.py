@@ -200,6 +200,9 @@ class SettingsScreen(Screen):
 
                 # Volume buttons
                 elif self.vol_down_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.control_flag = True
+
                     self.game_settings.music_volume -= .025
 
                     if self.game_settings.music_volume < 0:
@@ -207,6 +210,8 @@ class SettingsScreen(Screen):
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
                 elif self.vol_up_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.control_flag = True
 
                     self.game_settings.music_volume += .025
 
