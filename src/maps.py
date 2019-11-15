@@ -28,7 +28,7 @@ class Map:
 
         self.name = ""
         self.zones = None
-        self.spawnpoint = [0,0]
+        self.spawnpoint = [0, 0]
 
         # Map Loading Variables
         self.load_state = MapLoadState(0)
@@ -190,8 +190,8 @@ class Map:
             if self.line == "endenemy":
                 # create enemy object and add to enemies list for current zone
                 enemy = HoveringEnemy(self.screen, self.game_settings, self.enemy_x, self.enemy_y,
-                                      self.game_settings.hov_size[0],
-                                      self.game_settings.hov_size[0], self.enemy_endx, self.enemy_endy)
+                    self.game_settings.hov_size[0], self.game_settings.hov_size[0], self.enemy_endx, self.enemy_endy)
+                self.zones[self.cur_zone[0], self.cur_zone[1]].add_enemy(enemy)
                 # go back to zoneinfo state
                 self.load_state = MapLoadState.ZONEINFO
 
@@ -218,8 +218,8 @@ class Map:
                 # create color tuple
                 color = (self.col_color[0:3], self.col_color[3:6], self.col_color[6:])
                 # create collidable object and add to collidables list for current zone
-                c = Collidable(self.screen, r, color)
-                self.zones[self.cur_zone[0]][self.cur_zone[1]].add_collidable(c)
+                collidable = Collidable(self.screen, r, color)
+                self.zones[self.cur_zone[0]][self.cur_zone[1]].add_collidable(collidable)
                 # go back to zoneinfo state
                 self.load_state = MapLoadState.ZONEINFO
 
@@ -294,8 +294,8 @@ class Zone:
         self.downspawn = None
         self.rightspawn = None
 
-        self.enemies = None
-        self.collidables = None
+        self.enemies = []
+        self.collidables = []
 
     def set_left_spawn(self, x, y):
         self.leftspawn[0] = x
@@ -314,10 +314,10 @@ class Zone:
         self.rightspawn[1] = y
 
     def add_enemy(self, e):
-        self.enemies.apend(e)
+        self.enemies.append(e)
 
     def add_colliadable(self, c):
-        self.collidables.apend(c)
+        self.collidables.append(c)
 
     def set_bg(self, bg):
         self.bg = pygame.image.load(bg)
