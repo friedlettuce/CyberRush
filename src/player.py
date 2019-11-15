@@ -36,55 +36,44 @@ class Player:
         
         # Initial Player Starting Point
         self.x = x
-        self.y = self.screen_ground = int((self.screen_rect.bottom / 1.5))
+        self.y = y
         self.vel = game_settings.player_speed
-
-        # Flags for if there's maps available to the left or right
-        self.map_left = False
-        self.map_right = False
-        # Flags if player has gone to another map
-        self.off_left = False
-        self.off_right = False
         
         # Flags for if player is moving/facing left/right, idle, walking
         self.facing_right = True
         self.moving_left = False
         self.moving_right = False
-        self.idle = True
-        self.walking = False
+        self.jumping = False
 
         # Inits frame
         self.frame_count = 0
         self.current_frame = self.idle_r_frames[self.frame_count]
-        
-        # Init Controls
-        self.input = game_settings.input
+
+    def move_left(self, flip=False):
+
+        self.facing_right = flip
+        self.moving_left = not flip
+        self.moving_right = flip
+
+    def move_right(self):
+        self.move_left(True)
+
+    def jump(self):
+        if not self.jumping:
+            self.jumping = True
         
     def move(self):
-        keys = pygame.key.get_pressed()
         
-        if keys[self.input['left']]:
+        if self.moving_left:
 
-            if (self.x - self.vel) < self.screen_rect.left and self.map_left:
-                self.x -= self.vel
-                self.off_left = True
-            elif (self.x - self.vel) >= self.screen_rect.left:
-                # Stops player from moving left bound, without left screen
-                self.x -= self.vel
-
+            self.x -= self.vel
             self.current_frame = self.walk_l_frames[self.frame_count]
 
-            # For idle frames
             self.facing_right = False
 
-        elif keys[self.input['right']]:
+        elif self.moving_right:
 
-            if (self.x + self.player_w + self.vel) > self.screen_rect.right and self.map_right:
-                self.x += self.vel
-                self.off_right = True
-            elif (self.x + self.player_w + self.vel) <= self.screen_rect.right:
-                self.x += self.vel
-
+            self.x += self.vel
             self.current_frame = self.walk_r_frames[self.frame_count]
 
             self.facing_right = True
@@ -96,10 +85,8 @@ class Player:
             else:
                 self.current_frame = self.idle_l_frames[self.frame_count]
 
-        if keys[self.input['up']] and (self.y - self.vel > 0):
+        if self.jumping:
             self.y -= self.vel
-        elif keys[self.input['down']] and self.y + self.vel < self.screen_ground:
-            self.y += self.vel
 
         self.frame_count += 1
         self.frame_count %= 8

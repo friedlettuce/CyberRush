@@ -48,6 +48,15 @@ class Map:
         self.col_h = None
         self.col_color = None
 
+    def collisions(self, player):
+        return self.zones[self.cur_zone[0]][self.cur_zone[1]].collisions(player)
+
+    def update_enemies(self, player):
+        self.zones[self.cur_zone[0]][self.cur_zone[1]].update_enemies(player)
+
+    def blitme(self):
+        self.zones[self.cur_zone[0]][self.cur_zone[1]].blitme()
+
     # function to load level
     # is given path by gamescreen
     def load_map(self, level_path):
@@ -297,6 +306,28 @@ class Zone:
         self.enemies = []
         self.collidables = []
 
+    def collisions(self, player):
+
+        for collidable in self.collidables:
+            return collidable.check_collision(player)
+
+    def update_enemies(self, player):
+
+        for enemy in self.enemies:
+
+            # Shoots projectile if enemy in range of player
+            if enemy.range_y(player.y):
+                enemy.add_projectile()
+
+    def blitme(self):
+
+        self.screen.blit(self.bg, self.bg_rect)
+
+        for collidable in self.collidables:
+            collidable.blitme()
+        for enemy in self.enemies:
+            enemy.blitme()
+
     def set_left_spawn(self, x, y):
         self.leftspawn[0] = x
         self.leftspawn[1] = y
@@ -329,4 +360,3 @@ class Zone:
 
     def set_music(self, m):
         self.music = m
-

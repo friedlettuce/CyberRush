@@ -9,7 +9,7 @@ class Collidable:
         self.rect = rect
         self.color = color
 
-    def collision(self, obj):
+    def check_collision(self, obj):
 
         if self.rect.colliderect(obj):
             return True
