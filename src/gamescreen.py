@@ -19,7 +19,7 @@ class GameScreen(object):
         level_path = path.dirname(path.realpath("resources"))
         self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
 
-        self.player = Player(self.screen, game_settings, self.map.spawnpoint[0], self.map.spawnpoint[1])
+        self.player = Player(self.screen, game_settings, 0, 0)
 
     def screen_start(self):
         pygame.mixer.music.stop()

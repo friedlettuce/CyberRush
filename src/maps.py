@@ -69,6 +69,7 @@ class Map:
 
                 # check if the self.line isn't a comment, denoted by '#' or empty
                 if self.line[0] != '#' and self.line.strip():
+                    self.line = self.line.strip()
 
                     if self.load_state == MapLoadState.MAPSIZE:
                         self.map_size()
@@ -218,7 +219,7 @@ class Map:
                 self.enemy_endy = int(self.line[eqpos + 1:])
 
     def load_collidable(self):
-
+        print("edit collide")
         # get position of equal sign
         # if its in cur self.line, check for keywords that need that
         # if not, check for keywords without it
@@ -228,7 +229,8 @@ class Map:
                 # create rect for collidable
                 r = pygame.Rect(self.col_x, self.col_y, self.col_w, self.col_h)
                 # create color tuple
-                color = (self.col_color[0:3], self.col_color[3:6], self.col_color[6:])
+                color = (int(self.col_color[0:3]), int(self.col_color[3:6]), int(self.col_color[6:]))
+                print(color)
                 # create collidable object and add to collidables list for current zone
                 collidable = Collidable(self.screen, r, color)
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].add_collidable(collidable)
@@ -245,12 +247,7 @@ class Map:
                 self.col_w = int(self.line[eqpos + 1:pos])
                 self.col_h = int(self.line[pos + 1:])
             elif self.line[:eqpos] == "setcolor":
-                pos = self.line.find(',')
-                r = int(self.line[eqpos + 1:pos])
-                g = int(self.line[pos + 1:])
-                pos = self.line.find(',')
-                b = int(self.line[pos + 1:])
-                self.col_color = (r, g, b)
+                self.col_color = self.line[eqpos + 1:]
 
     def build_connections(self):
 
@@ -368,7 +365,7 @@ class Zone:
     def add_enemy(self, e):
         self.enemies.append(e)
 
-    def add_colliadable(self, c):
+    def add_collidable(self, c):
         self.collidables.append(c)
 
     def set_bg(self, bg):

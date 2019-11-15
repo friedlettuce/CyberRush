@@ -11,10 +11,10 @@ class Collidable:
 
     def check_collision(self, obj):
 
-        if self.rect.colliderect(obj):
+        if self.rect.colliderect(obj.get_rect()):
             return True
         else:
             return False
 
     def blitme(self):
-        self.draw.rect(self.screen, self.color, self.rect)
+        pygame.draw.rect(self.screen, self.color, self.rect)

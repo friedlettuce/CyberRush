@@ -5,13 +5,13 @@
 Level 1
 
 # Sets which zone we're editing
-setspawn=30,300
+setspawn=0,0
 editzone=0,0
 
 setbg=city_bg.png
 setmusic=Title Music.mp3
 
-setleftspawn=100,100
+setleftspawn=30,300
 setrightspawn=100,100
 setupspawn=100,100
 setdownspawn=100,100
@@ -19,7 +19,7 @@ setdownspawn=100,100
 addcollidable
 setpos=30,30
 setdims=100,100
-setcolor=255,255,255
+setcolor=255255255
 endcollidable
 
 endzone

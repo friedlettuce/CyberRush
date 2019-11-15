@@ -117,6 +117,9 @@ class Player:
     def set_pos(self, pos):
         self.x = pos[0]
         self.y = pos[1]
+
+    def get_rect(self):
+        return self.x, self.y, self.width, self.height
     
     def blitme(self):
         self.screen.blit(self.current_frame, (self.x, self.y, self.width, self.height))
