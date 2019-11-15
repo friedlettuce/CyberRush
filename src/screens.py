@@ -157,6 +157,15 @@ class SettingsScreen(Screen):
             screen, game_settings.vol_down_path, int(self.screen_rect.centerx / 2.5),
             int(self.screen_rect.centery / 1.5))
 
+        # Player Settings
+        self.left_change_player_button = Button(
+            screen, game_settings.vol_up_path, int(self.screen_rect.centerx * 1.7),
+            int(self.screen_rect.centery / 1.5))
+
+        self.right_change_player_button = Button(
+            screen, game_settings.vol_down_path, int(self.screen_rect.centerx * 1.3),
+            int(self.screen_rect.centery / 1.5))
+
         # Volume text
         text = "Change Volume"
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
@@ -266,6 +275,14 @@ class SettingsScreen(Screen):
 
                     self.game_settings.default_settings()
 
+                elif self.left_change_player_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.player_skin = 2
+
+                elif self.right_change_player_button.image_rect.colliderect(mouse_pos):
+
+                    self.game_settings.player_skin = 1
+
         return ret_game_state
 
     def blitme(self):
@@ -289,7 +306,17 @@ class SettingsScreen(Screen):
         self.control_left_button.blitme()
         self.control_down_button.blitme()
         self.control_right_button.blitme()
+
+        # Default Settings Button
         self.reset_button.blitme()
+
+        # Change Player Buttons
+        self.left_change_player_button.blitme()
+        self.right_change_player_button.blitme()
+
+        self.player_display()
+
+
     
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
@@ -325,6 +352,19 @@ class SettingsScreen(Screen):
         
         volume_display = large_text.render((str(round(volume_display, 2)) + "%"), True, (0, 0, 0))
         self.screen.blit(volume_display, (int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery / 1.7)))
+
+    def player_display(self):
+        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        player = self.game_settings.player_skin
+
+        volume_display = large_text.render(("Player Skin: " + str(player) ), True, (0, 0, 0))
+        self.screen.blit(volume_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 2.5)))
+
+        if self.game_settings.player_skin == 1:
+            pass
+        elif self.game_settings.player_skin == 2:
+            pass
+
         
 
 class AboutScreen(Screen):

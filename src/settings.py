@@ -60,8 +60,10 @@ class Settings:
         # Player Settings
         self.player_size = (70, 120)
         self.player_speed = 6
+        self.player_skin = 1
 
         player_folder = os.path.join(sprites_folder, "temp_player")
+
         self.player_frames = {
             'idle_path': os.path.join(os.path.join(player_folder, "idle"), '1_police_Idle_'),
             'walk_path': os.path.join(os.path.join(player_folder, "walk"), '1_police_Walk_'),
@@ -101,6 +103,7 @@ class Settings:
         self.control_flag = True
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
         self.music_volume = .05
+        self.player_skin = 1
 
     # Function That Reads In Controls From Controls.txt In Resources
     def initialize_settings(self):
@@ -111,6 +114,8 @@ class Settings:
         self.input['up'] = int(file.readline())
         self.input['down'] = int(file.readline())
         self.music_volume = float(file.readline())
+        self.player_skin = int(file.readline())
+        self.change_player(self.player_skin)
 
         file.close()
 
@@ -136,8 +141,41 @@ class Settings:
             file.write('%f' % self.music_volume)
             file.write("\n")
 
+            file.write('%d' % self.player_skin)
+            file.write("\n")
+
             file.close()
 
+    def change_player(self, number):
+        self.control_flag = True
+
+        resources_folder = os.path.dirname(os.path.realpath("resources"))
+        resources_folder = os.path.join(resources_folder, "resources")
+        sprites_folder = os.path.join(resources_folder, "sprites")
+        player_folder = os.path.join(sprites_folder, "temp_player")
+
+        if number is 1:
+            self.player_skin = 1
+
+            self.player_frames = {
+                'idle_path': os.path.join(os.path.join(player_folder, "idle"), '1_police_Idle_'),
+                'walk_path': os.path.join(os.path.join(player_folder, "walk"), '1_police_Walk_'),
+                'file_type': '.png',
+                # Saves frame count for each frame list
+                'idle_fc': 8,
+                'walk_fc': 8
+            }
+        elif number is 2:
+            self.player_skin = 2
+
+            self.player_frames = {
+                'idle_path': os.path.join(os.path.join(player_folder, "idle"), '2_police_Idle_'),
+                'walk_path': os.path.join(os.path.join(player_folder, "walk"), '2_police_Walk_'),
+                'file_type': '.png',
+                # Saves frame count for each frame list
+                'idle_fc': 8,
+                'walk_fc': 8
+            }
 
 class GameState(Enum):
     TITLE = 0

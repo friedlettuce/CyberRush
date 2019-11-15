@@ -23,6 +23,8 @@ def run_game():
     title_screen = TitleScreen(screen, game_settings)
     settings_screen = SettingsScreen(screen, game_settings)
     about_screen = AboutScreen(screen, game_settings)
+
+    game_settings.initialize_settings()
     game_screen = GameScreen(screen, game_settings)
 
     screens = {
