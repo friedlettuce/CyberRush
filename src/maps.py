@@ -195,7 +195,7 @@ class Map:
                 # create enemy object and add to enemies list for current zone
                 enemy = HoveringEnemy(self.screen, self.game_settings, self.enemy_x, self.enemy_y,
                     self.game_settings.hov_size[0], self.game_settings.hov_size[0], self.enemy_endx, self.enemy_endy)
-                self.zones[self.cur_zone[0], self.cur_zone[1]].add_enemy(enemy)
+                self.zones[self.cur_zone[0]][self.cur_zone[1]].add_enemy(enemy)
                 # go back to zoneinfo state
                 self.load_state = MapLoadState.ZONEINFO
 
@@ -210,7 +210,6 @@ class Map:
                 self.enemy_endy = int(self.line[eqpos + 1:])
 
     def load_collidable(self):
-        print("edit collide")
         # get position of equal sign
         # if its in cur self.line, check for keywords that need that
         # if not, check for keywords without it
@@ -221,7 +220,6 @@ class Map:
                 r = pygame.Rect(self.col_x, self.col_y, self.col_w, self.col_h)
                 # create color tuple
                 color = (int(self.col_color[0:3]), int(self.col_color[3:6]), int(self.col_color[6:]))
-                print(color)
                 # create collidable object and add to collidables list for current zone
                 collidable = Collidable(self.screen, r, color)
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].add_collidable(collidable)

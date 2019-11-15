@@ -16,10 +16,16 @@ setrightspawn=100,100
 setupspawn=100,100
 setdownspawn=100,100
 
+addenemy
+setpos=675,158
+setendx=0
+setendy=315
+endenemy
+
 addcollidable
-setpos=30,30
-setdims=100,100
-setcolor=255255255
+setpos=300,365
+setdims=100,50
+setcolor=000000000
 endcollidable
 
 endzone

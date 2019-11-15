@@ -31,7 +31,7 @@ class Settings:
 
         self.hov_size = (150, 150)
         self.hovering_enemy_vel = 4
-        self.hov_proj_speed = 10
+        self.hov_proj_speed = 15
         self.hov_proj_num = 1
 
         self.rhl1_path = os.path.join(sprites_folder, "RobotHoverLeft1.png")
@@ -60,7 +60,7 @@ class Settings:
         # Player Settings
         self.player_size = (70, 120)
         self.player_speed = 6
-        self.player_jump = 11
+        self.player_jump = 15
         self.player_skin = 1
 
         player_folder = os.path.join(sprites_folder, "temp_player")
