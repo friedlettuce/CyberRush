@@ -6,8 +6,8 @@ class Settings:
 
     def __init__(self):
 
-        resources_folder = os.path.dirname(os.path.realpath("resources"))
-        resources_folder = os.path.join(resources_folder, "resources")
+        self.resources_folder = os.path.dirname(os.path.realpath("resources"))
+        self.resources_folder = os.path.join(self.resources_folder, "resources")
 
         # Main Display Settings
         self.screen_w = 900
@@ -15,19 +15,19 @@ class Settings:
         self.game_name = "Cyber Rush"
 
         # Title Screen Settings
-        self.title_background_path = os.path.join(resources_folder, "title_bg.png")
+        self.title_background_path = os.path.join(self.resources_folder, "title_bg.png")
         self.bk_color = (39, 184, 184)
 
         self.num_buttons = 4
-        self.title_path = os.path.join(resources_folder, "Title.bmp")
-        self.play_path = os.path.join(resources_folder, "PlayButton.bmp")
-        self.quit_path = os.path.join(resources_folder, "QuitButton.bmp")
-        self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
-        self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
-        self.mainmenu_path = os.path.join(resources_folder, "MainMenuButton.bmp")
+        self.title_path = os.path.join(self.resources_folder, "Title.bmp")
+        self.play_path = os.path.join(self.resources_folder, "PlayButton.bmp")
+        self.quit_path = os.path.join(self.resources_folder, "QuitButton.bmp")
+        self.about_path = os.path.join(self.resources_folder, "AboutButton.bmp")
+        self.settings_path = os.path.join(self.resources_folder, "SettingsButton.bmp")
+        self.mainmenu_path = os.path.join(self.resources_folder, "MainMenuButton.bmp")
 
         # Mob Settings
-        sprites_folder = os.path.join(resources_folder, "sprites")
+        sprites_folder = os.path.join(self.resources_folder, "sprites")
 
         self.hov_size = (150, 150)
         self.hovering_enemy_vel = 4
@@ -41,18 +41,18 @@ class Settings:
         self.rhA_path = os.path.join(sprites_folder, "RobotHoverLeftAttack.png")
         
         # Custom font
-        self.cb2_path = os.path.join(resources_folder, "cb2.ttf")
+        self.cb2_path = os.path.join(self.resources_folder, "cb2.ttf")
         
         # Music Settings
-        music_folder = os.path.join(resources_folder, "music")
-        
-        self.titleMusic_path = os.path.join(music_folder, "Title Music.mp3")
+        self.music_folder = os.path.join(self.resources_folder, "music")
+
+        self.titleMusic_path = os.path.join(self.music_folder, "Title Music.mp3")
 
         self.music_volume = .05
 
         # Settings Screen Settings
-        self.vol_up_path = os.path.join(resources_folder, "VolUpButton.bmp")
-        self.vol_down_path = os.path.join(resources_folder, "VolDownButton.bmp")
+        self.vol_up_path = os.path.join(self.resources_folder, "VolUpButton.bmp")
+        self.vol_down_path = os.path.join(self.resources_folder, "VolDownButton.bmp")
 
         # FPS
         self.clock_tick_interval = 30
@@ -60,6 +60,7 @@ class Settings:
         # Player Settings
         self.player_size = (70, 120)
         self.player_speed = 6
+        self.player_jump = 11
         self.player_skin = 1
 
         player_folder = os.path.join(sprites_folder, "temp_player")
@@ -74,19 +75,25 @@ class Settings:
         }
 
         # Screen Backgrounds
-        self.city_background_path = os.path.join(resources_folder, "city_bg.png")
-        self.mountains_background_path = os.path.join(resources_folder, "parallax-mountain-bg.png")
+        self.city_background_path = os.path.join(self.resources_folder, "city_bg.png")
+        self.mountains_background_path = os.path.join(self.resources_folder, "parallax-mountain-bg.png")
         
         # Player Controls
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
-        self.controls_path = os.path.join(resources_folder, "Controls.txt")
-        self.initialize_settings()
+        self.controls_path = os.path.join(self.resources_folder, "Controls.txt")
 
-        self.control_button_path = os.path.join(resources_folder, "Button.bmp")
-        self.control_button_path2 = os.path.join(resources_folder, "Button2.bmp")
+        try:
+            self.initialize_settings()
+        except FileNotFoundError:
+            with open(self.controls_path, "w") as file:
+                file.close()
+            self.default_settings()
+
+        self.control_button_path = os.path.join(self.resources_folder, "Button.bmp")
+        self.control_button_path2 = os.path.join(self.resources_folder, "Button2.bmp")
         self.control_flag = False
 
-        self.reset_control_button_path = os.path.join(resources_folder, "ResetButton.bmp")
+        self.reset_control_button_path = os.path.join(self.resources_folder, "ResetButton.bmp")
 
     # Function Called To Change Player Controls
     def change_control(self, control):
@@ -109,7 +116,11 @@ class Settings:
     def initialize_settings(self):
         file = open(self.controls_path, "r")
 
-        self.input['right'] = int(file.readline())
+        first_line = file.readline()
+        if not first_line.strip():
+            return
+
+        self.input['right'] = int(first_line)
         self.input['left'] = int(file.readline())
         self.input['up'] = int(file.readline())
         self.input['down'] = int(file.readline())
@@ -149,9 +160,9 @@ class Settings:
     def change_player(self, number):
         self.control_flag = True
 
-        resources_folder = os.path.dirname(os.path.realpath("resources"))
-        resources_folder = os.path.join(resources_folder, "resources")
-        sprites_folder = os.path.join(resources_folder, "sprites")
+        self.resources_folder = os.path.dirname(os.path.realpath("resources"))
+        self.resources_folder = os.path.join(self.resources_folder, "resources")
+        sprites_folder = os.path.join(self.resources_folder, "sprites")
         player_folder = os.path.join(sprites_folder, "temp_player")
 
         if number is 1:
@@ -176,6 +187,7 @@ class Settings:
                 'idle_fc': 8,
                 'walk_fc': 8
             }
+
 
 class GameState(Enum):
     TITLE = 0

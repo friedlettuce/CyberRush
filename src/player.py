@@ -9,8 +9,8 @@ class Player:
         self.screen_rect = self.screen.get_rect()
 
         self.player_size = game_settings.player_size
-        self.player_w = self.player_size[0]
-        self.player_h = self.player_size[1]
+        self.width = self.player_size[0]
+        self.height = self.player_size[1]
 
         # Loads frames for player
         self.idle_r_frames = []
@@ -37,7 +37,10 @@ class Player:
         # Initial Player Starting Point
         self.x = x
         self.y = y
+        self.ground = None
         self.vel = game_settings.player_speed
+        self.vel_y = 0
+        self.vel_jump = game_settings.player_jump
         
         # Flags for if player is moving/facing left/right, idle, walking
         self.facing_right = True
@@ -49,19 +52,31 @@ class Player:
         self.frame_count = 0
         self.current_frame = self.idle_r_frames[self.frame_count]
 
-    def move_left(self, flip=False):
+    def move_left(self, move=True):
 
-        self.facing_right = flip
-        self.moving_left = not flip
-        self.moving_right = flip
+        if move:
+            self.moving_left = True
+            self.facing_right = False
+            self.moving_right = False
+        else:
+            self.moving_left = False
 
-    def move_right(self):
-        self.move_left(True)
+    def move_right(self, move=True):
+
+        if move:
+            self.moving_right = True
+            self.facing_right = True
+            self.moving_left = False
+        else:
+            self.moving_right = False
 
     def jump(self):
+
         if not self.jumping:
             self.jumping = True
-        
+            self.ground = self.y
+            self.vel_y = self.vel_jump
+
     def move(self):
         
         if self.moving_left:
@@ -86,10 +101,22 @@ class Player:
                 self.current_frame = self.idle_l_frames[self.frame_count]
 
         if self.jumping:
-            self.y -= self.vel
+
+            self.y = self.y - self.vel_y
+            self.vel_y -= 1
+
+            # Resets variables at ground
+            if self.y > self.ground:
+                self.y = self.ground
+                self.jumping = False
+                self.vel_y = 0
 
         self.frame_count += 1
         self.frame_count %= 8
+
+    def set_pos(self, pos):
+        self.x = pos[0]
+        self.y = pos[1]
     
     def blitme(self):
-        self.screen.blit(self.current_frame, (self.x, self.y, self.player_w, self.player_h))
+        self.screen.blit(self.current_frame, (self.x, self.y, self.width, self.height))

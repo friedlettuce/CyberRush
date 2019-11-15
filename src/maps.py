@@ -18,7 +18,7 @@ class MapLoadState(Enum):
 
 class Map:
 
-    def __init__(self, screen, game_settings):
+    def __init__(self, screen, game_settings, first_level):
 
         # simple init to get needed objects and initialize a few map variables
         self.screen = screen
@@ -48,6 +48,8 @@ class Map:
         self.col_h = None
         self.col_color = None
 
+        self.load_map(first_level)
+
     def collisions(self, player):
         return self.zones[self.cur_zone[0]][self.cur_zone[1]].collisions(player)
 
@@ -62,23 +64,24 @@ class Map:
     def load_map(self, level_path):
 
         with open(level_path) as f:
-            self.line = f.readline()
 
-            # check if the self.line isnt a comment, denoted by '#'
-            if self.line[0] != '#':
+            for self.line in f:
 
-                if self.load_state == MapLoadState.MAPSIZE:
-                    self.map_size()
-                elif self.load_state == MapLoadState.MAPNAME:
-                    self.map_name()
-                elif self.load_state == MapLoadState.MAPINFO:
-                    self.map_info()
-                elif self.load_state == MapLoadState.ZONEINFO:
-                    self.zone_info()
-                elif self.load_state == MapLoadState.ENEMY:
-                    self.load_enemy()
-                elif self.load_state == MapLoadState.COLLIDABLE:
-                    self.load_collidable()
+                # check if the self.line isn't a comment, denoted by '#' or empty
+                if self.line[0] != '#' and self.line.strip():
+
+                    if self.load_state == MapLoadState.MAPSIZE:
+                        self.map_size()
+                    elif self.load_state == MapLoadState.MAPNAME:
+                        self.map_name()
+                    elif self.load_state == MapLoadState.MAPINFO:
+                        self.map_info()
+                    elif self.load_state == MapLoadState.ZONEINFO:
+                        self.zone_info()
+                    elif self.load_state == MapLoadState.ENEMY:
+                        self.load_enemy()
+                    elif self.load_state == MapLoadState.COLLIDABLE:
+                        self.load_collidable()
 
         # when done loading map, build connections
         self.build_connections()
@@ -88,8 +91,8 @@ class Map:
         # first state, get the size of the map
         # size is stored as x,y no spaces
         pos = self.line.find(',')
-        self.sizex = self.line[:pos]
-        self.sizey = self.line[pos + 1:]
+        self.sizex = int(self.line[:pos])
+        self.sizey = int(self.line[pos + 1:])
         # create 2d array of zones with size that we just read in
         self.zones = [[Zone(self.screen, self.game_settings) for j in range(self.sizex)] for i in range(self.sizey)]
         # set the next state to get map name
@@ -121,8 +124,8 @@ class Map:
                 # after the equal sign should be the coords of the zone, as x,y
                 pos = self.line.find(',')
                 # set new current zone
-                self.cur_zone[0] = self.line[eqpos + 1:pos]
-                self.cur_zone[1] = self.line[pos + 1:]
+                self.cur_zone[0] = int(self.line[eqpos + 1:pos])
+                self.cur_zone[1] = int(self.line[pos + 1:])
                 # set used flag to True
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].used = True
                 # set map loading state to zoneinfo
@@ -133,8 +136,8 @@ class Map:
                 # after the equal sign should be the coords of the zone, as x,y
                 pos = self.line.find(',')
                 # set new current zone
-                self.spawnpoint[0] = self.line[eqpos + 1:pos]
-                self.spawnpoint[1] = self.line[pos + 1:]
+                self.spawnpoint[0] = int(self.line[eqpos + 1:pos])
+                self.spawnpoint[1] = int(self.line[pos + 1:])
 
     def zone_info(self):
 
@@ -167,26 +170,26 @@ class Map:
             elif self.line[:eqpos] == "setleftspawn":
                 # set spawn when coming from left
                 pos = self.line.find(',')
-                x = self.line[eqpos + 1:pos]
-                y = self.line[pos + 1:]
+                x = int(self.line[eqpos + 1:pos])
+                y = int(self.line[pos + 1:])
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].set_left_spawn(x, y)
             elif self.line[:eqpos] == "setrightspawn":
                 # set spawn when coming from right
                 pos = self.line.find(',')
-                x = self.line[eqpos + 1:pos]
-                y = self.line[pos + 1:]
+                x = int(self.line[eqpos + 1:pos])
+                y = int(self.line[pos + 1:])
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].set_up_spawn(x, y)
-            elif self.line[:eqpos] == "setleftspawn":
+            elif self.line[:eqpos] == "setupspawn":
                 # set spawn when coming from up
                 pos = self.line.find(',')
-                x = self.line[eqpos + 1:pos]
-                y = self.line[pos + 1:]
+                x = int(self.line[eqpos + 1:pos])
+                y = int(self.line[pos + 1:])
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].set_up_spawn(x, y)
             elif self.line[:eqpos] == "setdownspawn":
                 # set spawn when coming from down
                 pos = self.line.find(',')
-                x = self.line[eqpos + 1:pos]
-                y = self.line[pos + 1:]
+                x = int(self.line[eqpos + 1:pos])
+                y = int(self.line[pos + 1:])
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].set_down_spawn(x, y)
 
     def load_enemy(self):
@@ -207,12 +210,12 @@ class Map:
         else:
             if self.line[:eqpos] == "setpos":
                 pos = self.line.find(',')
-                self.enemy_x = self.line[eqpos + 1:pos]
-                self.enemy_y = self.line[pos + 1:]
+                self.enemy_x = int(self.line[eqpos + 1:pos])
+                self.enemy_y = int(self.line[pos + 1:])
             elif self.line[:eqpos] == "setendx":
-                self.enemy_endx = self.line[eqpos + 1:]
+                self.enemy_endx = int(self.line[eqpos + 1:])
             elif self.line[:eqpos] == "setendy":
-                self.enemy_endy = self.line[eqpos + 1:]
+                self.enemy_endy = int(self.line[eqpos + 1:])
 
     def load_collidable(self):
 
@@ -235,14 +238,19 @@ class Map:
         else:
             if self.line[:eqpos] == "setpos":
                 pos = self.line.find(',')
-                self.col_x = self.line[eqpos + 1:pos]
-                self.col_y = self.line[pos + 1:]
+                self.col_x = int(self.line[eqpos + 1:pos])
+                self.col_y = int(self.line[pos + 1:])
             elif self.line[:eqpos] == "setdims":
                 pos = self.line.find(',')
-                self.col_w = self.line[eqpos + 1:pos]
-                self.col_h = self.line[pos + 1:]
+                self.col_w = int(self.line[eqpos + 1:pos])
+                self.col_h = int(self.line[pos + 1:])
             elif self.line[:eqpos] == "setcolor":
-                self.col_color = self.line[eqpos + 1:]
+                pos = self.line.find(',')
+                r = int(self.line[eqpos + 1:pos])
+                g = int(self.line[pos + 1:])
+                pos = self.line.find(',')
+                b = int(self.line[pos + 1:])
+                self.col_color = (r, g, b)
 
     def build_connections(self):
 
@@ -296,17 +304,30 @@ class Zone:
         self.down_used = False
 
         self.bg = None
-        self.bg_rect = self.bg.get_rect()
+        self.bg_rect = None
 
-        self.leftspawn = None
-        self.upspawn = None
-        self.downspawn = None
-        self.rightspawn = None
+        self.leftspawn = [0, 0]
+        self.upspawn = [0, 0]
+        self.downspawn = [0, 0]
+        self.rightspawn = [0, 0]
 
         self.enemies = []
         self.collidables = []
 
     def collisions(self, player):
+
+        if not self.left_used and player.x <= 0:
+            player.x += player.vel
+            return
+        elif not self.right_used and player.x >= self.screen_rect.width - player.width:
+            player.x -= player.vel
+            return
+        elif not self.up_used and player.y <= 0:
+            player.y += player.vel
+            return
+        elif not self.down_used and player.y >= self.screen_rect.height:
+            player.y -= player.vel
+            return
 
         for collidable in self.collidables:
             return collidable.check_collision(player)
@@ -351,10 +372,11 @@ class Zone:
         self.collidables.append(c)
 
     def set_bg(self, bg):
-        self.bg = pygame.image.load(bg)
+        self.bg = pygame.image.load(str(bg).strip())
         self.bg = pygame.transform.scale(
             self.bg, (self.game_settings.screen_w, self.game_settings.screen_h))
 
+        self.bg_rect = self.bg.get_rect()
         self.bg_rect.centerx = self.screen_rect.centerx
         self.bg_rect.centery = self.screen_rect.centery
 

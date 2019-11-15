@@ -1,8 +1,8 @@
+from os import path
 import pygame
 
 from settings import GameState
 from player import Player
-from mobs import HoveringEnemy
 from maps import Map
 
 
@@ -15,16 +15,16 @@ class GameScreen(object):
         self.game_settings = game_settings
         self.input = game_settings.input
 
-        self.player = Player(self.screen, game_settings, 0, 0)
-
         # Map
-        self.map = Map(self.screen, self.game_settings)
+        level_path = path.dirname(path.realpath("resources"))
+        self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
+
+        self.player = Player(self.screen, game_settings, self.map.spawnpoint[0], self.map.spawnpoint[1])
 
     def screen_start(self):
         pygame.mixer.music.stop()
-        # Spawn player on saved/first map
 
-        # Sets player keys
+        # Sets player keys and spawn
         self.input = self.game_settings.input
 
     def check_events(self):
@@ -40,12 +40,21 @@ class GameScreen(object):
 
                 if event.key == self.input['up']:
                     self.player.jump()
+                    pass
 
-                elif event.key == self.input['left']:
+                if event.key == self.input['left']:
                     self.player.move_left()
 
-                elif event.key == self.input['right']:
+                if event.key == self.input['right']:
                     self.player.move_right()
+
+            elif event.type == pygame.KEYUP:
+
+                if event.key == self.input['left']:
+                    self.player.move_left(False)
+
+                if event.key == self.input['right']:
+                    self.player.move_right(False)
 
         self.player.move()
 
