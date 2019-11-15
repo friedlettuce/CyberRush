@@ -17,6 +17,9 @@ class Screen:
     def screen_start(self):
         pass
 
+    def update(self):
+        pass
+
     def screen_end(self):
         pass
 

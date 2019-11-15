@@ -18,14 +18,32 @@ class GameScreen(object):
         # Map
         level_path = path.dirname(path.realpath("resources"))
         self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
+        self.cur_zone = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
 
-        self.player = Player(self.screen, game_settings, 0, 0)
+        spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
+        self.player = Player(self.screen, game_settings, spawn.leftspawn[0], spawn.leftspawn[1])
 
     def screen_start(self):
         pygame.mixer.music.stop()
 
         # Sets player keys and spawn
         self.input = self.game_settings.input
+
+    def update(self):
+
+        direction = self.cur_zone.collisions(self.player)
+        # Finds direction of any collision
+        if direction == 'left':
+            self.player.x += self.player.vel
+        elif direction == 'right':
+            self.player.x -= self.player.vel
+        elif direction == 'up':
+            self.player.y += self.player.vel
+        elif direction == 'down':
+            self.player.y -= self.player.vel
+
+        self.player.move()
+        self.cur_zone.update_enemies(self.player)
 
     def check_events(self):
 
@@ -56,22 +74,6 @@ class GameScreen(object):
                 if event.key == self.input['right']:
                     self.player.move_right(False)
 
-        self.player.move()
-
-        # Finds direction of any collision
-        direction = self.map.collisions(self.player)
-        if direction == 'left':
-            self.player.x += self.player.vel
-        elif direction == 'right':
-            self.player.x -= self.player.vel
-        elif direction == 'up':
-            self.player.y += self.player.vel
-        elif direction == 'down':
-            self.player.y -= self.player.vel
-
-        # Currently checks if player in shooting range
-        self.map.update_enemies(self.player)
-
         return ret_game_state
 
     def screen_end(self):
@@ -79,5 +81,5 @@ class GameScreen(object):
 
     def blitme(self):
 
-        self.map.blitme()
+        self.cur_zone.blitme()
         self.player.blitme()

@@ -50,15 +50,6 @@ class Map:
 
         self.load_map(first_level)
 
-    def collisions(self, player):
-        return self.zones[self.cur_zone[0]][self.cur_zone[1]].collisions(player)
-
-    def update_enemies(self, player):
-        self.zones[self.cur_zone[0]][self.cur_zone[1]].update_enemies(player)
-
-    def blitme(self):
-        self.zones[self.cur_zone[0]][self.cur_zone[1]].blitme()
-
     # function to load level
     # is given path by gamescreen
     def load_map(self, level_path):
