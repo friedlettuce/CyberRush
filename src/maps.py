@@ -347,7 +347,7 @@ class Zone:
         player.move_by_amount(0, -y_vel)
 
         #if moving the player back changed collision, y wasnt responible
-        return (not is_colliding and was_colliding)
+        return (is_colliding and was_colliding)
 
     #checks if player is out of bounds and corrects it
     def check_oob(self, player):
@@ -360,8 +360,8 @@ class Zone:
         elif not self.up_used and player.y <= 0:
             player.y += player.vel
             return
-        elif not self.down_used and player.y >= self.screen_rect.height:
-            player.y -= player.vel
+        elif not self.down_used and player.y >= player.ground:
+            player.y = player.ground
             return
 
     def update_enemies(self, player):

@@ -29,11 +29,13 @@ class GameScreen(object):
         # Sets player keys and spawn
         self.input = self.game_settings.input
 
+        #sets player ground
+        self.player.ground = self.cur_zone.leftspawn[1]
+
     def update(self):
         self.player.move()
 
         while self.cur_zone.collision_by_x(self.player):
-            print("fix x")
             #if x is causing collision, move x back by 1
             vel = 1
             if self.player.moving_right:
@@ -43,16 +45,18 @@ class GameScreen(object):
             self.player.move_by_amount(vel, 0)
 
         while self.cur_zone.collision_by_y(self.player):
-            print("fix y")
+            vel = 1
+            if self.player.vel_y < 0:
+                vel = -1
 
             #if y is causing collision, move y back by 1
-            vel = self.player.vel_y / abs(self.player.vel_y)
-
             self.player.move_by_amount(0, vel)
 
-        self.cur_zone.check_oob(self.player.get_rect())
+        self.cur_zone.check_oob(self.player)
 
         self.cur_zone.update_enemies(self.player)
+
+        print(self.player.vel_y)
 
     def check_events(self):
 
