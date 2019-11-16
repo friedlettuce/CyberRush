@@ -102,4 +102,3 @@ class GameScreen(object):
 
         self.cur_zone.blitme()
         self.player.blitme()
-        pygame.draw.rect(self.screen,(111,111,111),self.player.get_rect())
