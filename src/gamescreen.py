@@ -36,7 +36,6 @@ class GameScreen(object):
         self.player.move()
 
         while self.cur_zone.collision_by_x(self.player):
-            print("xcolliding")
             #if x is causing collision, move x back by 1
             vel = 1
             if self.player.facing_right:
