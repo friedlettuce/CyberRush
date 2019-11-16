@@ -52,6 +52,10 @@ class GameScreen(object):
             #if y is causing collision, move y back by 1
             self.player.move_by_amount(0, vel)
 
+            #check if player is jumping, if they are set y_vel to 0
+            if self.player.jumping:
+                self.player.vel_y = 0
+
         self.cur_zone.check_oob(self.player)
 
         self.cur_zone.update_enemies(self.player)
