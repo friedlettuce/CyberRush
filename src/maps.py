@@ -300,8 +300,57 @@ class Zone:
         self.enemies = []
         self.collidables = []
 
-    def collisions(self, player):
+    #checks if collision is caused by y movement
+    #does this by moving y in the opposite direction of movement
+    #and checking for collision again
+    def collision_by_x(self, player):
 
+        is_colliding = False
+        was_colliding = False
+        x_vel = player.vel
+        if player.moving_left:
+            x_vel *= -1
+
+        for collidable in self.collidables:
+            if collidable.check_collision(player.get_rect()):
+                is_colliding = True
+
+        player.move_by_amount(x_vel, 0)
+
+        for collidable in self.collidables:
+            if collidable.check_collision(player.get_rect()):
+                was_colliding = True
+
+        player.move_by_amount(-x_vel, 0)
+
+        #if moving the player back changed collision, x wasnt responible
+        return (not is_colliding and was_colliding)
+
+    #checks if collision is caused by y movement
+    #does this by moving y in the opposite direction of movement
+    #and checking for collision again
+    def collision_by_y(self, player):
+        is_colliding = False
+        was_colliding = False
+        y_vel = -player.vel_y
+
+        for collidable in self.collidables:
+            if collidable.check_collision(player.get_rect()):
+                is_colliding = True
+
+        player.move_by_amount(0, y_vel)
+
+        for collidable in self.collidables:
+            if collidable.check_collision(player.get_rect()):
+                was_colliding = True
+
+        player.move_by_amount(0, -y_vel)
+
+        #if moving the player back changed collision, y wasnt responible
+        return (not is_colliding and was_colliding)
+
+    #checks if player is out of bounds and corrects it
+    def check_oob(self, player):
         if not self.left_used and player.x <= 0:
             player.x += player.vel
             return
@@ -314,9 +363,6 @@ class Zone:
         elif not self.down_used and player.y >= self.screen_rect.height:
             player.y -= player.vel
             return
-
-        for collidable in self.collidables:
-            return collidable.check_collision(player)
 
     def update_enemies(self, player):
 

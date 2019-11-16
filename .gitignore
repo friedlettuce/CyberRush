@@ -2,4 +2,4 @@ src/__pycache__/
 *.xcf
 .idea
 .vs/
-
+resources/Controls.txt

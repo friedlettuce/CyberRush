@@ -30,19 +30,28 @@ class GameScreen(object):
         self.input = self.game_settings.input
 
     def update(self):
-
-        direction = self.cur_zone.collisions(self.player.get_rect())
-        # Finds direction of any collision
-        if direction == 'left':
-            self.player.x += self.player.vel
-        elif direction == 'right':
-            self.player.x -= self.player.vel
-        elif direction == 'up':
-            self.player.y += self.player.vel
-        elif direction == 'down':
-            self.player.y -= self.player.vel
-
         self.player.move()
+
+        while self.cur_zone.collision_by_x(self.player):
+            print("fix x")
+            #if x is causing collision, move x back by 1
+            vel = 1
+            if self.player.moving_right:
+                #if moving left, vel is negative
+                vel = -1
+
+            self.player.move_by_amount(vel, 0)
+
+        while self.cur_zone.collision_by_y(self.player):
+            print("fix y")
+
+            #if y is causing collision, move y back by 1
+            vel = self.player.vel_y / abs(self.player.vel_y)
+
+            self.player.move_by_amount(0, vel)
+
+        self.cur_zone.check_oob(self.player.get_rect())
+
         self.cur_zone.update_enemies(self.player)
 
     def check_events(self):

@@ -53,8 +53,8 @@ def run_game():
             screen = screens[cur_gamestate]
             screen.screen_start()
 
-        screen.update()
         new_gamestate = screen.check_events()
+        screen.update()
         screen.blitme()
 
         if cur_gamestate != new_gamestate:

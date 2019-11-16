@@ -114,6 +114,12 @@ class Player:
         self.frame_count += 1
         self.frame_count %= 8
 
+    def move_by_amount(self, x, y):
+        #moves player by specified x and y number of pixels
+        #used for collision testing
+        self.x += x
+        self.y += y
+
     def blitme(self):
         self.screen.blit(self.current_frame, (self.x, self.y, self.width, self.height))
 
