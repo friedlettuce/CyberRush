@@ -74,7 +74,6 @@ class Player:
 
         if not self.jumping:
             self.jumping = True
-            self.ground = self.y
             self.vel_y = self.vel_jump
 
     def move(self):
@@ -99,17 +98,16 @@ class Player:
                 self.current_frame = self.idle_r_frames[self.frame_count]
             else:
                 self.current_frame = self.idle_l_frames[self.frame_count]
+        
 
-        if self.jumping:
+        self.y = self.y - self.vel_y
+        self.vel_y -= 1
 
-            self.y = self.y - self.vel_y
-            self.vel_y -= 1
-
-            # Resets variables at ground
-            if self.y > self.ground:
-                self.y = self.ground
-                self.jumping = False
-                self.vel_y = 0
+        # Resets variables at ground
+        if self.y > self.ground:
+            self.y = self.ground
+            self.jumping = False
+            self.vel_y = 0
 
         self.frame_count += 1
         self.frame_count %= 8

@@ -44,7 +44,9 @@ class GameScreen(object):
 
             self.player.move_by_amount(vel, 0)
 
+        yfixed = False
         while self.cur_zone.collision_by_y(self.player):
+            yfixed = True
             vel = 1
             if self.player.vel_y < 0:
                 vel = -1
@@ -52,15 +54,14 @@ class GameScreen(object):
             #if y is causing collision, move y back by 1
             self.player.move_by_amount(0, vel)
 
-            #check if player is jumping, if they are set y_vel to 0
-            if self.player.jumping:
-                self.player.vel_y = 0
+        #reset player jump
+        if(yfixed):
+            self.player.jumping = False
+            self.player.vel_y = 0 
 
         self.cur_zone.check_oob(self.player)
 
         self.cur_zone.update_enemies(self.player)
-
-        print(self.player.vel_y)
 
     def check_events(self):
 
