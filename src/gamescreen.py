@@ -31,7 +31,7 @@ class GameScreen(object):
 
     def update(self):
 
-        direction = self.cur_zone.collisions(self.player)
+        direction = self.cur_zone.collisions(self.player.get_rect())
         # Finds direction of any collision
         if direction == 'left':
             self.player.x += self.player.vel

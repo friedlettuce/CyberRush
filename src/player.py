@@ -114,12 +114,36 @@ class Player:
         self.frame_count += 1
         self.frame_count %= 8
 
+    def blitme(self):
+        self.screen.blit(self.current_frame, (self.x, self.y, self.width, self.height))
+
     def set_pos(self, pos):
         self.x = pos[0]
         self.y = pos[1]
 
     def get_rect(self):
-        return self.x, self.y, self.width, self.height
-    
-    def blitme(self):
-        self.screen.blit(self.current_frame, (self.x, self.y, self.width, self.height))
+        return pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def collide_tleft(self):
+        pass
+
+    def collide_mleft(self):
+        pass
+
+    def collide_bleft(self):
+        pass
+
+    def collide_tright(self):
+        pass
+
+    def collide_mright(self):
+        pass
+
+    def collide_bright(self):
+        pass
+
+    def collide_tmid(self):
+        pass
+
+    def collide_bmid(self):
+        pass
