@@ -25,7 +25,13 @@ endenemy
 addcollidable
 setpos=300,365
 setdims=100,50
-setcolor=000000000
+setcolor=255255255
+endcollidable
+
+addcollidable
+setpos=440,245
+setdims=100,50
+setcolor=255255255
 endcollidable
 
 endzone

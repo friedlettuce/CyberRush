@@ -36,9 +36,10 @@ class GameScreen(object):
         self.player.move()
 
         while self.cur_zone.collision_by_x(self.player):
+            print("xcolliding")
             #if x is causing collision, move x back by 1
             vel = 1
-            if self.player.moving_right:
+            if self.player.facing_right:
                 #if moving left, vel is negative
                 vel = -1
 
@@ -101,3 +102,4 @@ class GameScreen(object):
 
         self.cur_zone.blitme()
         self.player.blitme()
+        pygame.draw.rect(self.screen,(111,111,111),self.player.get_rect())

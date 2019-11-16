@@ -308,23 +308,28 @@ class Zone:
         is_colliding = False
         was_colliding = False
         x_vel = player.vel
-        if player.moving_left:
+        if player.facing_right:
             x_vel *= -1
 
         for collidable in self.collidables:
             if collidable.check_collision(player.get_rect()):
                 is_colliding = True
 
-        player.move_by_amount(x_vel, 0)
+            player.move_by_amount(x_vel, 0)
 
-        for collidable in self.collidables:
             if collidable.check_collision(player.get_rect()):
                 was_colliding = True
 
-        player.move_by_amount(-x_vel, 0)
+            player.move_by_amount(-x_vel, 0)
+
+            if (is_colliding and not was_colliding):
+                return True
+            #reset checks
+            is_colliding = False
+            was_colliding = False
 
         #if moving the player back changed collision, x wasnt responible
-        return (not is_colliding and was_colliding)
+        return (is_colliding and not was_colliding)
 
     #checks if collision is caused by y movement
     #does this by moving y in the opposite direction of movement
@@ -332,22 +337,26 @@ class Zone:
     def collision_by_y(self, player):
         is_colliding = False
         was_colliding = False
-        y_vel = -player.vel_y
+        y_vel = player.vel_y
 
         for collidable in self.collidables:
             if collidable.check_collision(player.get_rect()):
                 is_colliding = True
 
-        player.move_by_amount(0, y_vel)
+            player.move_by_amount(0, y_vel)
 
-        for collidable in self.collidables:
             if collidable.check_collision(player.get_rect()):
                 was_colliding = True
 
-        player.move_by_amount(0, -y_vel)
+            player.move_by_amount(0, -y_vel)
 
+            if (is_colliding and not was_colliding):
+                return True
+            #reset checks
+            is_colliding = False
+            was_colliding = False
         #if moving the player back changed collision, y wasnt responible
-        return (is_colliding and was_colliding)
+        return (is_colliding and not was_colliding)
 
     #checks if player is out of bounds and corrects it
     def check_oob(self, player):

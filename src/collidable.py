@@ -10,7 +10,6 @@ class Collidable:
         self.color = color
 
     def check_collision(self, obj_rect):
-
         if self.rect.colliderect(obj_rect):
             return True
 
