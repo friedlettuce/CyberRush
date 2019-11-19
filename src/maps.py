@@ -86,7 +86,7 @@ class Map:
         self.sizex = int(self.line[:pos])
         self.sizey = int(self.line[pos + 1:])
         # create 2d array of zones with size that we just read in
-        self.zones = [[Zone(self.screen, self.game_settings) for j in range(self.sizex)] for i in range(self.sizey)]
+        self.zones = [[Zone(self.screen, self.game_settings) for j in range(self.sizey)] for i in range(self.sizex)]
         # set the next state to get map name
         self.load_state = MapLoadState.MAPNAME
 
