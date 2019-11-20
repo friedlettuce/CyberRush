@@ -52,6 +52,9 @@ class Player:
         self.frame_count = 0
         self.current_frame = self.idle_r_frames[self.frame_count]
 
+        # Player health
+        self.health = 15
+
     def move_left(self, move=True):
 
         if move:

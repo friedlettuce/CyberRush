@@ -48,9 +48,9 @@ class Enemy(object):
         self.projectile_speed = None
         self.projectile_num = None
 
-        #flag for if enemy moves
-        #default false
-        #should be set to true for each enemy type that moves
+        # flag for if enemy moves
+        # default false
+        # should be set to true for each enemy type that moves
         self.moving = False
 
     # Function For An Enemy To Move Side To Side On The X Axis
@@ -146,23 +146,29 @@ class Enemy(object):
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
     def check_collision(self, obj_rect):
-        if self.get_rect().colliderect(obj_rect):
-            return True
+        return self.get_rect().colliderect(obj_rect)
 
-        return False
+    def collide_projectiles(self, obj):
+
+        # Checks if projectiles collide with object
+        # Lowers health and removes if true
+        for projectile in self.projectiles:
+            if projectile.check_collision(obj.get_rect()):
+                obj.health -= projectile.damage
+                self.projectiles.remove(projectile)
 
     def move_by_amount(self, x, y):
-        #moves mob by specified x and y number of pixels
-        #used for collision testing
+        # moves mob by specified x and y number of pixels
+        # used for collision testing
         self.x += x
         self.y += y
 
     def blitme(self):
         self.screen.blit(self.frame, (self.x, self.y, self.width, self.height))
 
-        #Draws vert/horiz hitboxes, hardcoded color for now
-        #pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_x, 2)
-        #pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_y, 2)
+        # Draws vert/horiz hitboxes, hardcoded color for now
+        # pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_x, 2)
+        # pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_y, 2)
 
         for projectile in self.projectiles:
             projectile.blitme()
@@ -176,7 +182,7 @@ class HoveringEnemy(Enemy):
     def __init__(self, screen, game_settings, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
-        #this enemy moves
+        # this enemy moves
         self.moving = True
 
         self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), game_settings.hov_size),
@@ -220,6 +226,8 @@ class Projectile(object):
         self.speed_x = dir_x * speed
         self.speed_y = dir_y * speed
 
+        self.damage = 2
+
     def move(self):
         self.x += self.speed_x
         self.y += self.speed_y
@@ -229,6 +237,9 @@ class Projectile(object):
                 self.y > self.screen_rect.height or self.y < 0):
             return 0    # Pop self
         return 1
+
+    def check_collision(self, rect):
+        return pygame.Rect(self.x, self.y, self.width, self.height).colliderect(rect)
 
     def blitme(self):
         pygame.draw.rect(self.screen, (0, 255, 0), (self.x, self.y, self.width, self.height))
