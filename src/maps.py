@@ -194,7 +194,7 @@ class Map:
             if self.line == "endenemy":
                 # create enemy object and add to enemies list for current zone
                 enemy = HoveringEnemy(self.screen, self.game_settings, self.enemy_x, self.enemy_y,
-                    self.game_settings.hov_size[0], self.game_settings.hov_size[0], self.enemy_endx, self.enemy_endy)
+                    self.game_settings.hov_size[0], self.game_settings.hov_size[1], self.enemy_endx, self.enemy_endy)
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].add_enemy(enemy)
                 # go back to zoneinfo state
                 self.load_state = MapLoadState.ZONEINFO

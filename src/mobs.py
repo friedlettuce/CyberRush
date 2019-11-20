@@ -140,11 +140,12 @@ class Enemy(object):
     def blitme(self):
 
         self.update()
+        pygame.draw.rect(self.screen,(100,100,100),pygame.Rect(self.x, self.y, self.width, self.height))
         self.screen.blit(self.frame, (self.x, self.y))
 
-        # Draws vert/horiz hitboxes, hardcoded color for now
-        # pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_x, 2)
-        # pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_y, 2)
+        #Draws vert/horiz hitboxes, hardcoded color for now
+        #pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_x, 2)
+        #pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_y, 2)
 
         for projectile in self.projectiles:
             projectile.blitme()

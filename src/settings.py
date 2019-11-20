@@ -29,7 +29,7 @@ class Settings:
         # Mob Settings
         sprites_folder = os.path.join(self.resources_folder, "sprites")
 
-        self.hov_size = (150, 150)
+        self.hov_size = (105, 144)
         self.hovering_enemy_vel = 4
         self.hov_proj_speed = 15
         self.hov_proj_num = 1
