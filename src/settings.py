@@ -60,7 +60,7 @@ class Settings:
         # Player Settings
         self.player_size = (70, 120)
         self.player_speed = 6
-        self.player_jump = 15
+        self.player_jump = 17
         self.player_skin = 1
 
         player_folder = os.path.join(sprites_folder, "temp_player")

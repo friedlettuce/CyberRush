@@ -158,8 +158,6 @@ class Enemy(object):
         self.y += y
 
     def blitme(self):
-
-        #self.update()
         self.screen.blit(self.frame, (self.x, self.y, self.width, self.height))
 
         #Draws vert/horiz hitboxes, hardcoded color for now

@@ -123,6 +123,8 @@ class TitleScreen(Screen):
         self.about_button.blitme()
         self.quit_button.blitme()
         
+        self.Robot1.update()
+        self.Robot2.update()
         self.Robot1.blitme()
         self.Robot2.blitme()
 

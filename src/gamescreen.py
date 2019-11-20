@@ -54,7 +54,7 @@ class GameScreen(object):
         yfixed = False
         while self.cur_zone.collision_by_y(self.player, collidable):
             yfixed = True
-            if collidable.moving and self.player.vel_y == 0 or self.player.vel_y == -1:
+            if collidable.moving and (self.player.vel_y == 0 or self.player.vel_y == -1):
             #if the player is colliding with a moving object
             #and the player isnt moving, then move the player the same direction
             #the object they are colliding with is moving
@@ -96,6 +96,7 @@ class GameScreen(object):
             if ret_vals[1] is not None:
                 moving_collidable = ret_vals[1]
 
+        print(yfixed)
         #reset player jump
         if(yfixed):
             self.player.jumping = False
@@ -105,8 +106,15 @@ class GameScreen(object):
         #if we are moving down on top of a collidable
         #then snap the player to the top of the collidable
         #and match vel_y
+        #also add collidables vel_x, so collidable carries player
             self.player.get_rect().bottom = moving_collidable.get_rect().top
             self.player.vel_y = -moving_collidable.vel_y
+            self.player.x += moving_collidable.vel_x
+
+        if moving_collidable is not None and moving_collidable.vel_y <= 0 and self.player.y < moving_collidable.y:
+        #if we are moving up on top of a collidable
+        #the add collidables vel_x, so collidable carries player
+            self.player.x += moving_collidable.vel_x
 
         self.cur_zone.check_oob(self.player)
 
