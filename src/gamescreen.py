@@ -96,11 +96,15 @@ class GameScreen(object):
             if ret_vals[1] is not None:
                 moving_collidable = ret_vals[1]
 
-        print(yfixed)
         #reset player jump
         if(yfixed):
             self.player.jumping = False
-            self.player.vel_y = 0
+            if moving_collidable is not None and self.player.y > moving_collidable.y and self.player.vel_y < 0:
+                #if we collide with an object moving downwards while we are under it, dont reset player vel_y
+                #this stops us from "sticking" to the bottom of the object
+                pass
+            else:
+                self.player.vel_y = 0
             
         if moving_collidable is not None and moving_collidable.vel_y > 0 and self.player.y < moving_collidable.y:
         #if we are moving down on top of a collidable
@@ -115,6 +119,8 @@ class GameScreen(object):
         #if we are moving up on top of a collidable
         #the add collidables vel_x, so collidable carries player
             self.player.x += moving_collidable.vel_x
+
+        print(self.player.vel_y)
 
         self.cur_zone.check_oob(self.player)
 
