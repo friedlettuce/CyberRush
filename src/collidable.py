@@ -8,7 +8,8 @@ class Collidable:
         self.screen = screen
         self.rect = obj_rect
         self.color = color
-        #flag for if object moves
+
+        # flag for if object moves
         self.moving = False
 
     def check_collision(self, obj_rect):
@@ -16,6 +17,9 @@ class Collidable:
             return True
 
         return False
+
+    def get_rect(self):
+        return self.rect
 
     def blitme(self):
         draw.rect(self.screen, self.color, self.rect)

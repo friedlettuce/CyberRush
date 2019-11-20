@@ -62,6 +62,7 @@ class Settings:
         self.player_speed = 6
         self.player_jump = 30
         self.player_skin = 1
+        self.player_health = 15
 
         player_folder = os.path.join(sprites_folder, "temp_player")
 

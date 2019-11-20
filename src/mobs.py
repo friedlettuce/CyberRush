@@ -150,12 +150,16 @@ class Enemy(object):
 
     def collide_projectiles(self, obj):
 
+        damage = 0
         # Checks if projectiles collide with object
-        # Lowers health and removes if true
         for projectile in self.projectiles:
+
+            # Lowers health and removes if true
             if projectile.check_collision(obj.get_rect()):
-                obj.health -= projectile.damage
                 self.projectiles.remove(projectile)
+                damage += projectile.damage
+
+        return damage
 
     def move_by_amount(self, x, y):
         # moves mob by specified x and y number of pixels

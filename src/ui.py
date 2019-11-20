@@ -14,7 +14,7 @@ class UI:
         self.health_bar = HealthBar(self.screen, self.screen_rect, player.health)
 
     def update(self, player):
-        self.health_bar.health = player.health
+        self.health_bar.player_health = player.health
 
     def blitme(self):
         self.health_bar.blitme()

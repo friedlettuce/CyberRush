@@ -20,9 +20,9 @@ class GameScreen(object):
         level_path = path.dirname(path.realpath("resources"))
         self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
         self.cur_zone = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
-        spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
+        self.spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
 
-        self.player = Player(self.screen, game_settings, spawn.leftspawn[0], spawn.leftspawn[1])
+        self.player = Player(self.screen, game_settings, self.spawn.leftspawn[0], self.spawn.leftspawn[1])
         self.ui = UI(self.screen, self.player)
 
     def screen_start(self):
@@ -95,7 +95,18 @@ class GameScreen(object):
                 moving_collidable = ret_vals[1]
 
         for collidable in self.cur_zone.enemies:
-            collidable.collide_projectiles(self.player)
+
+            # Deals with projectiles colldining into collidables
+            for projcollide in self.cur_zone.collidables:
+                collidable.collide_projectiles(projcollide)
+
+            # Deals damage to player when collides with projectiles
+            damage_dealt = collidable.collide_projectiles(self.player)
+            if damage_dealt > self.player.health:
+                self.player.health = 0
+            else:
+                self.player.health -= damage_dealt
+
             ret_vals = self.check_collisions(collidable)
             if ret_vals[0]:
                 yfixed = True
@@ -131,6 +142,8 @@ class GameScreen(object):
 
     def check_events(self):
 
+        if self.player.health <= 0:
+            return GameState(5)     # Go to leaderboard when integrated
         ret_game_state = GameState(3)
 
         for event in pygame.event.get():

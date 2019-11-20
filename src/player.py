@@ -53,7 +53,7 @@ class Player:
         self.current_frame = self.idle_r_frames[self.frame_count]
 
         # Player health
-        self.health = 15
+        self.health = game_settings.player_health
 
     def move_left(self, move=True):
 
@@ -135,3 +135,9 @@ class Player:
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def reset(self, game_settings, x_spawn, y_spawn):
+        self.health = game_settings.player_health
+        self.x = x_spawn
+        self.y = y_spawn
+        self.moving_right = self.moving_left = self.jumping = False
