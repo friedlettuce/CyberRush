@@ -48,6 +48,11 @@ class Enemy(object):
         self.projectile_speed = None
         self.projectile_num = None
 
+        #flag for if enemy moves
+        #default false
+        #should be set to true for each enemy type that moves
+        self.moving = False
+
     # Function For An Enemy To Move Side To Side On The X Axis
     def update_x(self):
         # If Velocity > 0, Enemy Is Moving To The Right
@@ -137,11 +142,25 @@ class Enemy(object):
         # Checks if y is in a 40 pixel range of self
         return self.y in range(y - self.eye_sight, y + self.eye_sight)
 
+    def get_rect(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def check_collision(self, obj_rect):
+        if self.get_rect().colliderect(obj_rect):
+            return True
+
+        return False
+
+    def move_by_amount(self, x, y):
+        #moves mob by specified x and y number of pixels
+        #used for collision testing
+        self.x += x
+        self.y += y
+
     def blitme(self):
 
-        self.update()
-        pygame.draw.rect(self.screen,(100,100,100),pygame.Rect(self.x, self.y, self.width, self.height))
-        self.screen.blit(self.frame, (self.x, self.y))
+        #self.update()
+        self.screen.blit(self.frame, (self.x, self.y, self.width, self.height))
 
         #Draws vert/horiz hitboxes, hardcoded color for now
         #pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_x, 2)
@@ -158,6 +177,9 @@ class HoveringEnemy(Enemy):
 
     def __init__(self, screen, game_settings, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
+
+        #this enemy moves
+        self.moving = True
 
         self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), game_settings.hov_size),
                          pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]

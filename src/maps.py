@@ -307,7 +307,7 @@ class Zone:
 
         is_colliding = False
         was_colliding = False
-        x_vel = player.vel
+        x_vel = player.vel_x
         if player.facing_right:
             x_vel *= -1
 
@@ -316,11 +316,15 @@ class Zone:
             is_colliding = True
 
         player.move_by_amount(x_vel, 0)
+        if collidable.moving:
+            collidable.move_by_amount(-collidable.vel_x,0)
 
         if collidable.check_collision(player.get_rect()):
             was_colliding = True
 
         player.move_by_amount(-x_vel, 0)
+        if collidable.moving:
+            collidable.move_by_amount(collidable.vel_x,0)
 
         if (is_colliding and not was_colliding):
             return True
@@ -343,11 +347,15 @@ class Zone:
             is_colliding = True
 
         player.move_by_amount(0, y_vel)
+        if collidable.moving:
+            collidable.move_by_amount(0,-collidable.vel_y)
 
         if collidable.check_collision(player.get_rect()):
             was_colliding = True
 
         player.move_by_amount(0, -y_vel)
+        if collidable.moving:
+            collidable.move_by_amount(0,collidable.vel_y)
 
         if (is_colliding and not was_colliding):
             return True
@@ -360,13 +368,13 @@ class Zone:
     #checks if player is out of bounds and corrects it
     def check_oob(self, player):
         if not self.left_used and player.x <= 0:
-            player.x += player.vel
+            player.x += player.vel_x
             return
         elif not self.right_used and player.x >= self.screen_rect.width - player.width:
-            player.x -= player.vel
+            player.x -= player.vel_x
             return
         elif not self.up_used and player.y <= 0:
-            player.y += player.vel
+            player.y -= player.vel_y
             return
         elif not self.down_used and player.y >= player.ground:
             player.y = player.ground
@@ -375,7 +383,7 @@ class Zone:
     def update_enemies(self, player):
 
         for enemy in self.enemies:
-
+            enemy.update()
             # Shoots projectile if enemy in range of player
             if enemy.range_y(player.y):
                 enemy.add_projectile()

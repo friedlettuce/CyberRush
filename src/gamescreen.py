@@ -32,44 +32,84 @@ class GameScreen(object):
         #sets player ground
         self.player.ground = self.cur_zone.leftspawn[1]
 
-    def update(self):
-        self.player.move()
-
-        yfixed = False
-        for collidable in self.cur_zone.collidables:
-            if check_collisions(collidable):
-                yfixed = True
-
-        #reset player jump
-        if(yfixed):
-            self.player.jumping = False
-            self.player.vel_y = 0 
-
-        self.cur_zone.check_oob(self.player)
-
-        self.cur_zone.update_enemies(self.player)
-
     def check_collisions(self, collidable):
-        yfixed = False
         while self.cur_zone.collision_by_x(self.player, collidable):
-            #if x is causing collision, move x back by 1
-            vel = 1
-            if self.player.facing_right:
-                #if moving left, vel is negative
-                vel = -1
+            if collidable.moving and self.player.vel_x == 0:
+                #if the player is colliding with a moving object
+                #and the player isnt moving, then move the player the same direction
+                #the object they are colliding with is moving
+                vel = 1
+                if not collidable.facing_right:
+                    vel = -1
+            else:
+                #otherwise, move them normally to fix collision
+                #if x is causing collision, move x back by 1
+                vel = 1
+                if self.player.facing_right:
+                    #if moving left, vel is negative
+                    vel = -1
 
             self.player.move_by_amount(vel, 0)
-
+        
+        yfixed = False
         while self.cur_zone.collision_by_y(self.player, collidable):
             yfixed = True
-            vel = 1
-            if self.player.vel_y < 0:
-                vel = -1
+            if collidable.moving and self.player.vel_y == 0 or self.player.vel_y == -1:
+            #if the player is colliding with a moving object
+            #and the player isnt moving, then move the player the same direction
+            #the object they are colliding with is moving
+                vel = 1
+                if collidable.vel_y <= 0:
+                    vel = -1
+            else:
+                vel = 1
+                if self.player.vel_y < 0:
+                    vel = -1
 
             #if y is causing collision, move y back by 1
             self.player.move_by_amount(0, vel)
 
-        return yfixed;
+        moving_collidable = None
+        if yfixed and collidable.moving:
+        #if the player is colliding with a moving object
+        #then return the collidable to do things with later
+            moving_collidable = collidable
+        return (yfixed, moving_collidable)
+
+    def update(self):
+        self.player.move()
+        self.cur_zone.update_enemies(self.player)
+
+        yfixed = False
+        moving_collidable = None
+        for collidable in self.cur_zone.collidables:
+            ret_vals = self.check_collisions(collidable)
+            if ret_vals[0]:
+                yfixed = True
+            if ret_vals[1] is not None:
+                moving_collidable = ret_vals[1]
+
+        for collidable in self.cur_zone.enemies:
+            ret_vals = self.check_collisions(collidable)
+            if ret_vals[0]:
+                yfixed = True
+            if ret_vals[1] is not None:
+                moving_collidable = ret_vals[1]
+
+        #reset player jump
+        if(yfixed):
+            self.player.jumping = False
+            self.player.vel_y = 0
+            
+        if moving_collidable is not None and moving_collidable.vel_y > 0 and self.player.y < moving_collidable.y:
+        #if we are moving down on top of a collidable
+        #then snap the player to the top of the collidable
+        #and match vel_y
+            self.player.get_rect().bottom = moving_collidable.get_rect().top
+            self.player.vel_y = -moving_collidable.vel_y
+
+        self.cur_zone.check_oob(self.player)
+
 
     def check_events(self):
 
@@ -108,5 +148,5 @@ class GameScreen(object):
     def blitme(self):
 
         self.cur_zone.blitme()
-        pygame.draw.rect(self.screen,(111,111,111),self.player.get_rect())
+        #pygame.draw.rect(self.screen,(111,111,111),self.player.get_rect())
         self.player.blitme()

@@ -17,22 +17,10 @@ setupspawn=100,100
 setdownspawn=100,100
 
 addenemy
-setpos=675,158
+setpos=300,100
 setendx=0
-setendy=315
+setendy=400
 endenemy
-
-addcollidable
-setpos=300,365
-setdims=100,50
-setcolor=255255255
-endcollidable
-
-addcollidable
-setpos=440,245
-setdims=100,50
-setcolor=255255255
-endcollidable
 
 endzone
 

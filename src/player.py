@@ -38,7 +38,7 @@ class Player:
         self.x = x
         self.y = y
         self.ground = None
-        self.vel = game_settings.player_speed
+        self.vel_x = game_settings.player_speed
         self.vel_y = 0
         self.vel_jump = game_settings.player_jump
         
@@ -80,14 +80,14 @@ class Player:
         
         if self.moving_left:
 
-            self.x -= self.vel
+            self.x -= self.vel_x
             self.current_frame = self.walk_l_frames[self.frame_count]
 
             self.facing_right = False
 
         elif self.moving_right:
 
-            self.x += self.vel
+            self.x += self.vel_x
             self.current_frame = self.walk_r_frames[self.frame_count]
 
             self.facing_right = True
@@ -125,29 +125,11 @@ class Player:
         self.x = pos[0]
         self.y = pos[1]
 
+    def check_collision(self, obj_rect):
+        if self.get_rect().colliderect(obj_rect):
+            return True
+
+        return False
+
     def get_rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
-
-    def collide_tleft(self):
-        pass
-
-    def collide_mleft(self):
-        pass
-
-    def collide_bleft(self):
-        pass
-
-    def collide_tright(self):
-        pass
-
-    def collide_mright(self):
-        pass
-
-    def collide_bright(self):
-        pass
-
-    def collide_tmid(self):
-        pass
-
-    def collide_bmid(self):
-        pass
