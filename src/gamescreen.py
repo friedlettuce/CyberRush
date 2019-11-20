@@ -35,24 +35,10 @@ class GameScreen(object):
     def update(self):
         self.player.move()
 
-        while self.cur_zone.collision_by_x(self.player):
-            #if x is causing collision, move x back by 1
-            vel = 1
-            if self.player.facing_right:
-                #if moving left, vel is negative
-                vel = -1
-
-            self.player.move_by_amount(vel, 0)
-
         yfixed = False
-        while self.cur_zone.collision_by_y(self.player):
-            yfixed = True
-            vel = 1
-            if self.player.vel_y < 0:
-                vel = -1
-
-            #if y is causing collision, move y back by 1
-            self.player.move_by_amount(0, vel)
+        for collidable in self.cur_zone.collidables:
+            if check_collisions(collidable):
+                yfixed = True
 
         #reset player jump
         if(yfixed):
@@ -62,6 +48,28 @@ class GameScreen(object):
         self.cur_zone.check_oob(self.player)
 
         self.cur_zone.update_enemies(self.player)
+
+    def check_collisions(self, collidable):
+        yfixed = False
+        while self.cur_zone.collision_by_x(self.player, collidable):
+            #if x is causing collision, move x back by 1
+            vel = 1
+            if self.player.facing_right:
+                #if moving left, vel is negative
+                vel = -1
+
+            self.player.move_by_amount(vel, 0)
+
+        while self.cur_zone.collision_by_y(self.player, collidable):
+            yfixed = True
+            vel = 1
+            if self.player.vel_y < 0:
+                vel = -1
+
+            #if y is causing collision, move y back by 1
+            self.player.move_by_amount(0, vel)
+
+        return yfixed;
 
     def check_events(self):
 

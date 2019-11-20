@@ -8,6 +8,8 @@ class Collidable:
         self.screen = screen
         self.rect = obj_rect
         self.color = color
+        #flag for if object moves
+        self.moving = False
 
     def check_collision(self, obj_rect):
         if self.rect.colliderect(obj_rect):

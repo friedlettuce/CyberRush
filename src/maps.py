@@ -303,7 +303,7 @@ class Zone:
     #checks if collision is caused by y movement
     #does this by moving y in the opposite direction of movement
     #and checking for collision again
-    def collision_by_x(self, player):
+    def collision_by_x(self, player, collidable):
 
         is_colliding = False
         was_colliding = False
@@ -311,22 +311,22 @@ class Zone:
         if player.facing_right:
             x_vel *= -1
 
-        for collidable in self.collidables:
-            if collidable.check_collision(player.get_rect()):
-                is_colliding = True
+        
+        if collidable.check_collision(player.get_rect()):
+            is_colliding = True
 
-            player.move_by_amount(x_vel, 0)
+        player.move_by_amount(x_vel, 0)
 
-            if collidable.check_collision(player.get_rect()):
-                was_colliding = True
+        if collidable.check_collision(player.get_rect()):
+            was_colliding = True
 
-            player.move_by_amount(-x_vel, 0)
+        player.move_by_amount(-x_vel, 0)
 
-            if (is_colliding and not was_colliding):
-                return True
-            #reset checks
-            is_colliding = False
-            was_colliding = False
+        if (is_colliding and not was_colliding):
+            return True
+        #reset checks
+        is_colliding = False
+        was_colliding = False
 
         #if moving the player back changed collision, x wasnt responible
         return (is_colliding and not was_colliding)
@@ -334,27 +334,26 @@ class Zone:
     #checks if collision is caused by y movement
     #does this by moving y in the opposite direction of movement
     #and checking for collision again
-    def collision_by_y(self, player):
+    def collision_by_y(self, player, collidable):
         is_colliding = False
         was_colliding = False
         y_vel = player.vel_y
 
-        for collidable in self.collidables:
-            if collidable.check_collision(player.get_rect()):
-                is_colliding = True
+        if collidable.check_collision(player.get_rect()):
+            is_colliding = True
 
-            player.move_by_amount(0, y_vel)
+        player.move_by_amount(0, y_vel)
 
-            if collidable.check_collision(player.get_rect()):
-                was_colliding = True
+        if collidable.check_collision(player.get_rect()):
+            was_colliding = True
 
-            player.move_by_amount(0, -y_vel)
+        player.move_by_amount(0, -y_vel)
 
-            if (is_colliding and not was_colliding):
-                return True
-            #reset checks
-            is_colliding = False
-            was_colliding = False
+        if (is_colliding and not was_colliding):
+            return True
+        #reset checks
+        is_colliding = False
+        was_colliding = False
         #if moving the player back changed collision, y wasnt responible
         return (is_colliding and not was_colliding)
 
