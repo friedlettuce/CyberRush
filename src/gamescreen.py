@@ -120,8 +120,6 @@ class GameScreen(object):
         #the add collidables vel_x, so collidable carries player
             self.player.x += moving_collidable.vel_x
 
-        print(self.player.vel_y)
-
         self.cur_zone.check_oob(self.player)
 
 

@@ -99,7 +99,7 @@ class Player:
             else:
                 self.current_frame = self.idle_l_frames[self.frame_count]
         
-        self.vel_y -= 1
+        self.vel_y -= 3
         self.y = self.y - self.vel_y
 
         # Resets variables at ground

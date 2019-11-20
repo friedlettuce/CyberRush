@@ -17,8 +17,8 @@ setupspawn=100,100
 setdownspawn=100,100
 
 addenemy
-setpos=300,150
-setendx=0
+setpos=150,150
+setendx=400
 setendy=400
 endenemy
 
