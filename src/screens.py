@@ -321,8 +321,6 @@ class SettingsScreen(Screen):
 
         self.player_display()
 
-
-    
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
 
@@ -362,15 +360,14 @@ class SettingsScreen(Screen):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
         player = self.game_settings.player_skin
 
-        volume_display = large_text.render(("Player Skin: " + str(player) ), True, (0, 0, 0))
+        volume_display = large_text.render(("Player Skin: " + str(player)), True, (0, 0, 0))
         self.screen.blit(volume_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 2.5)))
 
         if self.game_settings.player_skin == 1:
-            pass
+            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_1_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.5)))
         elif self.game_settings.player_skin == 2:
-            pass
+            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_2_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.5)))
 
-        
 
 class AboutScreen(Screen):
 

@@ -75,6 +75,10 @@ class Settings:
             'walk_fc': 8
         }
 
+        player_idle_folder = os.path.join(player_folder, "idle")
+        self.Player_Preview_1_path = os.path.join(player_idle_folder, "1_police_Idle_0.png")
+        self.Player_Preview_2_path = os.path.join(player_idle_folder, "2_police_Idle_0.png")
+
         # Screen Backgrounds
         self.city_background_path = os.path.join(self.resources_folder, "city_bg.png")
         self.mountains_background_path = os.path.join(self.resources_folder, "parallax-mountain-bg.png")
