@@ -36,14 +36,14 @@ class GameScreen(object):
 
     def check_collisions(self, collidable):
 
-        for collidable in self.cur_zone.enemies:
+        for enemy in self.cur_zone.enemies:
 
             # Deals with projectiles colldining into collidables
             for projcollide in self.cur_zone.collidables:
-                collidable.collide_projectiles(projcollide)
+                enemy.collide_projectiles(projcollide)
 
             # Deals damage to player when collides with projectiles
-            damage_dealt = collidable.collide_projectiles(self.player)
+            damage_dealt = enemy.collide_projectiles(self.player)
             if damage_dealt > self.player.health:
                 self.player.health = 0
             else:
