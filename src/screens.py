@@ -358,15 +358,19 @@ class SettingsScreen(Screen):
 
     def player_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        small_text = pygame.font.Font(self.game_settings.cb2_path, 15)
         player = self.game_settings.player_skin
 
-        volume_display = large_text.render(("Player Skin: " + str(player)), True, (0, 0, 0))
-        self.screen.blit(volume_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 2.5)))
+        player_display = large_text.render(("Player Skin: " + str(player)), True, (0, 0, 0))
+        self.screen.blit(player_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 3)))
+
+        warning_display = small_text.render("Requires Restart", True, (0, 0, 0))
+        self.screen.blit(warning_display, (int(self.screen_rect.centerx * 1.26), int(self.screen_rect.centery / 2.25)))
 
         if self.game_settings.player_skin == 1:
-            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_1_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.5)))
+            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_1_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
         elif self.game_settings.player_skin == 2:
-            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_2_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.5)))
+            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_2_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
 
 
 class AboutScreen(Screen):
