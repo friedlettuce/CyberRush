@@ -341,7 +341,7 @@ class SettingsScreen(Screen):
         key = pygame.key.name(self.game_settings.input['up'])
         key = key.upper()
 
-        up_control = large_text.render((str("Up Control: ") + str(key)), True, (0, 0 ,0))
+        up_control = large_text.render((str("Jump Control: ") + str(key)), True, (0, 0 ,0))
         self.screen.blit(up_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1)))
 
         key = pygame.key.name(self.game_settings.input['down'])
