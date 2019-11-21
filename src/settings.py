@@ -86,7 +86,7 @@ class Settings:
         try:
             self.initialize_settings()
         except FileNotFoundError:
-            with open(self.controls_path, "w") as file:
+            with open(self.controls_path) as file:
                 file.close()
             self.default_settings()
 

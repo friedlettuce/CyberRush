@@ -36,6 +36,19 @@ class GameScreen(object):
 
     def check_collisions(self, collidable):
 
+        for collidable in self.cur_zone.enemies:
+
+            # Deals with projectiles colldining into collidables
+            for projcollide in self.cur_zone.collidables:
+                collidable.collide_projectiles(projcollide)
+
+            # Deals damage to player when collides with projectiles
+            damage_dealt = collidable.collide_projectiles(self.player)
+            if damage_dealt > self.player.health:
+                self.player.health = 0
+            else:
+                self.player.health -= damage_dealt
+
         while self.cur_zone.collision_by_x(self.player, collidable):
             if collidable.moving and self.player.vel_x == 0:
                 # if the player is colliding with a moving object
@@ -95,17 +108,6 @@ class GameScreen(object):
                 moving_collidable = ret_vals[1]
 
         for collidable in self.cur_zone.enemies:
-
-            # Deals with projectiles colldining into collidables
-            for projcollide in self.cur_zone.collidables:
-                collidable.collide_projectiles(projcollide)
-
-            # Deals damage to player when collides with projectiles
-            damage_dealt = collidable.collide_projectiles(self.player)
-            if damage_dealt > self.player.health:
-                self.player.health = 0
-            else:
-                self.player.health -= damage_dealt
 
             ret_vals = self.check_collisions(collidable)
             if ret_vals[0]:
