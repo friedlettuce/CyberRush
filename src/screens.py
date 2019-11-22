@@ -368,9 +368,11 @@ class SettingsScreen(Screen):
         self.screen.blit(warning_display, (int(self.screen_rect.centerx * 1.26), int(self.screen_rect.centery / 2.25)))
 
         if self.game_settings.player_skin == 1:
-            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_1_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
+            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_1_path),
+                             (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
         elif self.game_settings.player_skin == 2:
-            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_2_path), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
+            self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_2_path),
+                             (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
 
 
 class AboutScreen(Screen):
@@ -404,3 +406,4 @@ class AboutScreen(Screen):
         self.screen.fill(self.bk_color)
 
         self.mainmenu_button.blitme()
+        self.Robot3.blitme()
