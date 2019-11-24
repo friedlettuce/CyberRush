@@ -406,4 +406,3 @@ class AboutScreen(Screen):
         self.screen.fill(self.bk_color)
 
         self.mainmenu_button.blitme()
-        self.Robot3.blitme()
