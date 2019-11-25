@@ -40,6 +40,7 @@ class Map:
         self.enemy_y = None
         self.enemy_endx = None
         self.enemy_endy = None
+        self.enemy_facing = None
 
         # Collidable Attributes
         self.col_x = None
@@ -200,8 +201,9 @@ class Map:
                 self.load_state = MapLoadState.ZONEINFO
 
             elif self.line == "endturretenemy":
-                enemy = TurretEnemy(self.screen, self.game_settings, self.enemy_x, self.enemy_y,
-                    self.game_settings.turret_size[0], self.game_settings.turret_size[1], self.enemy_x, self.enemy_y)
+                enemy = TurretEnemy(self.screen, self.game_settings, self.enemy_facing, self.enemy_x, self.enemy_y,
+                    self.game_settings.turret_size[0], self.game_settings.turret_size[1],
+                    self.enemy_endx, self.enemy_endy)
 
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].add_enemy(enemy)
                 # go back to zoneinfo state
@@ -217,6 +219,11 @@ class Map:
                 self.enemy_endx = int(self.line[eqpos + 1:])
             elif self.line[:eqpos] == "setendy":
                 self.enemy_endy = int(self.line[eqpos + 1:])
+            elif self.line[:eqpos] == "setfacing":
+                if self.line.find("right") != -1:
+                    self.enemy_facing = "right"
+                elif self.line.find("left") != -1:
+                    self.enemy_facing = "left"
 
     def load_collidable(self):
         # get position of equal sign

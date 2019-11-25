@@ -217,7 +217,7 @@ class HoveringEnemy(Enemy):
 
 class TurretEnemy(Enemy):
 
-    def __init__(self, screen, game_settings, x, y, width, height, end_x=0, end_y=0):
+    def __init__(self, screen, game_settings, facing, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
         self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size),
@@ -238,6 +238,10 @@ class TurretEnemy(Enemy):
         self.frame = self.right_frames[0]
         self.frame_rect = self.right_frames[0].get_rect()
 
+        if facing.lower() == "right":
+            self.facing_right = True
+        elif facing.lower() == "left":
+            self.facing_right = False
 
 class Projectile(object):
 
