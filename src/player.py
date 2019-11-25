@@ -122,8 +122,10 @@ class Player:
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
     def load_frames(self, load_frames):
-        self.idle_l_frames = self.idle_r_frames = []
-        self.walk_l_frames = self.walk_r_frames = []
+        self.idle_l_frames = []
+        self.idle_r_frames = []
+        self.walk_l_frames = []
+        self.walk_r_frames = []
 
         for frame in range(load_frames['idle_fc']):
 
