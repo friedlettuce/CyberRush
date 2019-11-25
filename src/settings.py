@@ -29,6 +29,7 @@ class Settings:
         # Mob Settings
         sprites_folder = os.path.join(self.resources_folder, "sprites")
 
+        # Hovering Enemy Settings
         self.hov_size = (105, 144)
         self.hovering_enemy_vel = 4
         self.hov_proj_speed = 15
@@ -40,7 +41,11 @@ class Settings:
         self.rhr2_path = os.path.join(sprites_folder, "RobotHoverRight2.png")
         self.rhA_path = os.path.join(sprites_folder, "RobotHoverLeftAttack.png")
 
+        # Turret Enemy Settings
         self.turret_size = (80, 80)
+        self.turret_proj_speed = 15
+        self.turret_proj_num = 2
+
         self.l_turret_path = os.path.join(sprites_folder, "Turret.png")
         
         # Custom font
