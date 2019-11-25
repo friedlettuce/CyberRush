@@ -217,10 +217,13 @@ class HoveringEnemy(Enemy):
 
 class TurretEnemy(Enemy):
 
-    def __init__(self, screen, game_settings, facing, x, y, width, height, end_x=0, end_y=0):
+    def __init__(self, screen, game_settings, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
-        self.frame = pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size)
+        self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size),
+                            pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size)]
+        self.right_frames = [pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size),
+                             pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size)]
 
         self.projectile_speed = game_settings.turret_proj_speed
         self.projectile_num = game_settings.turret_proj_num
@@ -229,10 +232,11 @@ class TurretEnemy(Enemy):
         self.hitbox_color = (255, 0, 0)
         self.eye_sight = 20
 
-        if facing == "right":
-            pass
-        elif facing == "left":
-            self.frame = pygame.transform.flip(self.frame, True, False)
+        self.vel_x = 0
+        self.vel_y = 0
+
+        self.frame = self.right_frames[0]
+        self.frame_rect = self.right_frames[0].get_rect()
 
 
 class Projectile(object):
