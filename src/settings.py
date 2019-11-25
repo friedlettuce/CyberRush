@@ -44,9 +44,10 @@ class Settings:
         # Turret Enemy Settings
         self.turret_size = (80, 80)
         self.turret_proj_speed = 15
-        self.turret_proj_num = 2
+        self.turret_proj_num = 1
 
-        self.l_turret_path = os.path.join(sprites_folder, "Turret.png")
+        self.l_turret_path = os.path.join(sprites_folder, "LeftTurret.png")
+        self.r_turret_path = os.path.join(sprites_folder, "RightTurret.png")
         
         # Custom font
         self.cb2_path = os.path.join(self.resources_folder, "cb2.ttf")
@@ -168,7 +169,7 @@ class Settings:
 
         if number is None:
             number = self.player_skin
-        elif number is 1 or number is 2:
+        elif number == 1 or number == 2:
             self.player_skin = number
 
         self.control_flag = True
