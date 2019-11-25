@@ -282,11 +282,11 @@ class SettingsScreen(Screen):
 
                 elif self.left_change_player_button.image_rect.colliderect(mouse_pos):
 
-                    self.game_settings.player_skin = 2
+                    self.game_settings.change_player(2)
 
                 elif self.right_change_player_button.image_rect.colliderect(mouse_pos):
 
-                    self.game_settings.player_skin = 1
+                    self.game_settings.change_player(1)
 
         return ret_game_state
 

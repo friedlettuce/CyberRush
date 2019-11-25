@@ -17,22 +17,7 @@ class Player:
         self.idle_l_frames = []
         self.walk_r_frames = []
         self.walk_l_frames = []
-
-        load_frames = game_settings.player_frames
-
-        for frame in range(load_frames['idle_fc']):
-
-            self.idle_r_frames.append(pygame.transform.scale(
-                pygame.image.load(load_frames['idle_path'] + str(
-                    frame) + load_frames['file_type']), self.player_size))
-            self.idle_l_frames.append(pygame.transform.flip(self.idle_r_frames[frame], True, False))
-
-        for frame in range(load_frames['walk_fc']):
-
-            self.walk_r_frames.append(pygame.transform.scale(
-                pygame.image.load(load_frames['walk_path'] + str(
-                    frame) + load_frames['file_type']), self.player_size))
-            self.walk_l_frames.append(pygame.transform.flip(self.walk_r_frames[frame], True, False))
+        self.load_frames(game_settings.player_frames)
         
         # Initial Player Starting Point
         self.x = x
@@ -135,6 +120,24 @@ class Player:
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def load_frames(self, load_frames):
+        self.idle_l_frames = self.idle_r_frames = []
+        self.walk_l_frames = self.walk_r_frames = []
+
+        for frame in range(load_frames['idle_fc']):
+
+            self.idle_r_frames.append(pygame.transform.scale(
+                pygame.image.load(load_frames['idle_path'] + str(
+                    frame) + load_frames['file_type']), self.player_size))
+            self.idle_l_frames.append(pygame.transform.flip(self.idle_r_frames[frame], True, False))
+
+        for frame in range(load_frames['walk_fc']):
+
+            self.walk_r_frames.append(pygame.transform.scale(
+                pygame.image.load(load_frames['walk_path'] + str(
+                    frame) + load_frames['file_type']), self.player_size))
+            self.walk_l_frames.append(pygame.transform.flip(self.walk_r_frames[frame], True, False))
 
     def reset(self, game_settings, x_spawn, y_spawn):
         self.health = game_settings.player_health

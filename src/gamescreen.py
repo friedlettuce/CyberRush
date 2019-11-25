@@ -31,6 +31,8 @@ class GameScreen(object):
         # Sets player keys and spawn
         self.input = self.game_settings.input
 
+        self.player.load_frames(self.game_settings.player_frames)
+
         # sets player ground
         self.player.ground = self.cur_zone.leftspawn[1]
 

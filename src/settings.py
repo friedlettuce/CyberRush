@@ -69,14 +69,8 @@ class Settings:
 
         player_folder = os.path.join(sprites_folder, "temp_player")
 
-        self.player_frames = {
-            'idle_path': os.path.join(os.path.join(player_folder, "idle"), '1_police_Idle_'),
-            'walk_path': os.path.join(os.path.join(player_folder, "walk"), '1_police_Walk_'),
-            'file_type': '.png',
-            # Saves frame count for each frame list
-            'idle_fc': 8,
-            'walk_fc': 8
-        }
+        self.player_frames = None
+        # self.change_player(self.player_skin)
 
         player_idle_folder = os.path.join(player_folder, "idle")
         self.Player_Preview_1_path = os.path.join(player_idle_folder, "1_police_Idle_0.png")
@@ -165,7 +159,13 @@ class Settings:
 
             file.close()
 
-    def change_player(self, number):
+    def change_player(self, number=None):
+
+        if number is None:
+            number = self.player_skin
+        elif number is 1 or number is 2:
+            self.player_skin = number
+
         self.control_flag = True
 
         self.resources_folder = os.path.dirname(os.path.realpath("resources"))
@@ -173,28 +173,17 @@ class Settings:
         sprites_folder = os.path.join(self.resources_folder, "sprites")
         player_folder = os.path.join(sprites_folder, "temp_player")
 
-        if number is 1:
-            self.player_skin = 1
-
-            self.player_frames = {
-                'idle_path': os.path.join(os.path.join(player_folder, "idle"), '1_police_Idle_'),
-                'walk_path': os.path.join(os.path.join(player_folder, "walk"), '1_police_Walk_'),
-                'file_type': '.png',
-                # Saves frame count for each frame list
-                'idle_fc': 8,
-                'walk_fc': 8
-            }
-        elif number is 2:
-            self.player_skin = 2
-
-            self.player_frames = {
-                'idle_path': os.path.join(os.path.join(player_folder, "idle"), '2_police_Idle_'),
-                'walk_path': os.path.join(os.path.join(player_folder, "walk"), '2_police_Walk_'),
-                'file_type': '.png',
-                # Saves frame count for each frame list
-                'idle_fc': 8,
-                'walk_fc': 8
-            }
+        self.player_frames = {
+            'idle_path': os.path.join(os.path.join(player_folder, "idle"), str(number) + '_police_Idle_'),
+            'walk_path': os.path.join(os.path.join(player_folder, "walk"), str(number) + '_police_Walk_'),
+            'file_type': '.png',
+            # Saves frame count for each frame list
+            'idle_fc': 8,
+            'walk_fc': 8
+        }
+        print(self.player_frames['idle_path'])
+        print(self.player_frames['walk_path'])
+        print('**************')
 
 
 class GameState(Enum):
