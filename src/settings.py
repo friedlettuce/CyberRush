@@ -181,9 +181,6 @@ class Settings:
             'idle_fc': 8,
             'walk_fc': 8
         }
-        print(self.player_frames['idle_path'])
-        print(self.player_frames['walk_path'])
-        print('**************')
 
 
 class GameState(Enum):
