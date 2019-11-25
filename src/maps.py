@@ -2,7 +2,7 @@ import pygame
 import os
 from enum import Enum
 import pygame
-from mobs import HoveringEnemy
+from mobs import HoveringEnemy, TurretEnemy
 import itertools
 from collidable import Collidable
 
@@ -191,13 +191,22 @@ class Map:
         # if not, check for keywords without it
         eqpos = self.line.find("=")
         if eqpos == -1:
-            if self.line == "endenemy":
+            if self.line == "endhoverenemy":
                 # create enemy object and add to enemies list for current zone
                 enemy = HoveringEnemy(self.screen, self.game_settings, self.enemy_x, self.enemy_y,
                     self.game_settings.hov_size[0], self.game_settings.hov_size[1], self.enemy_endx, self.enemy_endy)
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].add_enemy(enemy)
                 # go back to zoneinfo state
                 self.load_state = MapLoadState.ZONEINFO
+
+            elif self.line == "endturretenemy":
+                enemy = TurretEnemy(self.screen, self.game_settings, self.enemy_x, self.enemy_y,
+                    self.game_settings.turret_size[0], self.game_settings.turret_size[1], self.enemy_x, self.enemy_y)
+
+                self.zones[self.cur_zone[0]][self.cur_zone[1]].add_enemy(enemy)
+                # go back to zoneinfo state
+                self.load_state = MapLoadState.ZONEINFO
+
 
         else:
             if self.line[:eqpos] == "setpos":

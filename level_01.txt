@@ -20,7 +20,7 @@ addenemy
 setpos=150,150
 setendx=400
 setendy=400
-endenemy
+endhoverenemy
 
 addcollidable
 setpos=600,250
