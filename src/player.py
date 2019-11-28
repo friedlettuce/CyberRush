@@ -35,6 +35,7 @@ class Player:
 
         # Inits frame
         self.frame_count = 0
+        self.frame_wait = 0
         self.current_frame = self.idle_r_frames[self.frame_count]
 
         # Player health
@@ -97,7 +98,7 @@ class Player:
             self.vel_y = 0
 
         self.frame_count += 1
-        self.frame_count %= 8
+        self.frame_count %= 3
 
     def move_by_amount(self, x, y):
         #moves player by specified x and y number of pixels
