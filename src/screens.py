@@ -410,7 +410,7 @@ class AboutScreen(Screen):
     def display_about(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
 
-        line_1 = large_text.render(("A Software Enginnering Project Made By: ") , True, (0, 0, 0))
+        line_1 = large_text.render(("A Software Enginering Project Made By: ") , True, (0, 0, 0))
         self.screen.blit(line_1, (int(self.screen_rect.centerx/3), int(self.screen_rect.centery / 3)))
 
         line_2 = large_text.render(("-Garett Anderson"), True, (0, 0, 0))
