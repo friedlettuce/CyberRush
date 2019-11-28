@@ -41,6 +41,9 @@ class Player:
         # Player health
         self.health = game_settings.player_health
 
+        # Sounds
+        self.player_jump_sound = game_settings.player_jump_sound
+
     def move_left(self, move=True):
 
         if move:
@@ -62,6 +65,7 @@ class Player:
     def jump(self):
 
         if not self.jumping:
+            pygame.mixer.Sound.play(self.player_jump_sound)
             self.jumping = True
             self.vel_y = self.vel_jump
 
