@@ -97,8 +97,16 @@ class Player:
             self.jumping = False
             self.vel_y = 0
 
-        self.frame_count += 1
-        self.frame_count %= 3
+        self.frame_wait += 1
+        if self.frame_wait < 31:
+            self.frame_count = 0
+        elif self.frame_wait < 61:
+            self.frame_count = 1
+        elif self.frame_wait < 91:
+            self.frame_count = 2
+        else:
+            self.frame_wait = 0
+            self.frame_count = 0
 
     def move_by_amount(self, x, y):
         #moves player by specified x and y number of pixels
