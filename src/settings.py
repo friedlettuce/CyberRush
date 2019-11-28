@@ -76,11 +76,9 @@ class Settings:
         player_folder = os.path.join(sprites_folder, "player")
 
         self.player_frames = None
-        # self.change_player(self.player_skin)
 
-        player_idle_folder = os.path.join(player_folder, "idle")
-        self.Player_Preview_1_path = os.path.join(player_idle_folder, "0_idle_0.png")
-        self.Player_Preview_2_path = os.path.join(player_idle_folder, "1_idle_0.png")
+        self.Player_Preview_1_path = os.path.join(player_folder, "0_preview.png")
+        self.Player_Preview_2_path = os.path.join(player_folder, "1_preview.png")
 
         # Screen Backgrounds
         self.city_background_path = os.path.join(self.resources_folder, "city_bg.png")
