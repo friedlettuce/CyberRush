@@ -25,6 +25,8 @@ class GameScreen(object):
         self.player = Player(self.screen, game_settings, self.spawn.leftspawn[0], self.spawn.leftspawn[1])
         self.ui = UI(self.screen, self.player)
 
+        pygame.mixer.set_num_channels(8)
+
     def screen_start(self):
         pygame.mixer.music.stop()
 
@@ -46,6 +48,9 @@ class GameScreen(object):
 
             # Deals damage to player when collides with projectiles
             damage_dealt = enemy.collide_projectiles(self.player)
+            if damage_dealt > 0:
+                pygame.mixer.Sound.play(self.game_settings.player_damage_sound)
+
             if damage_dealt > self.player.health:
                 self.player.health = 0
             else:
