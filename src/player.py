@@ -98,11 +98,11 @@ class Player:
             self.vel_y = 0
 
         self.frame_wait += 1
-        if self.frame_wait < 31:
+        if self.frame_wait < 11:
             self.frame_count = 0
-        elif self.frame_wait < 61:
+        elif self.frame_wait < 21:
             self.frame_count = 1
-        elif self.frame_wait < 91:
+        elif self.frame_wait < 31:
             self.frame_count = 2
         else:
             self.frame_wait = 0
