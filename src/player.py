@@ -35,7 +35,12 @@ class Player:
 
         # Inits frame
         self.frame_count = 0
+        self.counter = 0
+        self.fps = 3
         self.current_frame = self.idle_r_frames[self.frame_count]
+        self.max_fc = game_settings.player_frames['idle_fc']
+        self.walk_fc = game_settings.player_frames['walk_fc']
+        self.idle_fc = game_settings.player_frames['idle_fc']
 
         # Player health
         self.health = game_settings.player_health
@@ -46,8 +51,12 @@ class Player:
             self.moving_left = True
             self.facing_right = False
             self.moving_right = False
+            self.frame_count = 0
+            self.max_fc = self.walk_fc
         else:
             self.moving_left = False
+            self.frame_count = 0
+            self.max_fc = self.idle_fc
 
     def move_right(self, move=True):
 
@@ -55,8 +64,12 @@ class Player:
             self.moving_right = True
             self.facing_right = True
             self.moving_left = False
+            self.frame_count = self.counter = 0
+            self.max_fc = self.walk_fc
         else:
             self.moving_right = False
+            self.frame_count = self.counter = 0
+            self.max_fc = self.idle_fc
 
     def jump(self):
 
@@ -65,7 +78,7 @@ class Player:
             self.vel_y = self.vel_jump
 
     def move(self):
-        
+
         if self.moving_left:
 
             self.x -= self.vel_x
@@ -82,6 +95,7 @@ class Player:
 
         else:
 
+            print(self.frame_count)
             if self.facing_right:
                 self.current_frame = self.idle_r_frames[self.frame_count]
             else:
@@ -96,8 +110,9 @@ class Player:
             self.jumping = False
             self.vel_y = 0
 
-        self.frame_count += 1
-        self.frame_count %= 8
+        self.counter += 1
+        self.frame_count = self.counter // self.fps
+        self.frame_count %= self.max_fc
 
     def move_by_amount(self, x, y):
         #moves player by specified x and y number of pixels
@@ -129,14 +144,14 @@ class Player:
 
         for frame in range(load_frames['idle_fc']):
 
-            self.idle_r_frames.append(pygame.transform.scale(
+            self.idle_r_frames.append(pygame.transform.smoothscale(
                 pygame.image.load(load_frames['idle_path'] + str(
                     frame) + load_frames['file_type']), self.player_size))
             self.idle_l_frames.append(pygame.transform.flip(self.idle_r_frames[frame], True, False))
 
         for frame in range(load_frames['walk_fc']):
 
-            self.walk_r_frames.append(pygame.transform.scale(
+            self.walk_r_frames.append(pygame.transform.smoothscale(
                 pygame.image.load(load_frames['walk_path'] + str(
                     frame) + load_frames['file_type']), self.player_size))
             self.walk_l_frames.append(pygame.transform.flip(self.walk_r_frames[frame], True, False))

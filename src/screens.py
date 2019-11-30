@@ -282,11 +282,11 @@ class SettingsScreen(Screen):
 
                 elif self.left_change_player_button.image_rect.colliderect(mouse_pos):
 
-                    self.game_settings.change_player(2)
+                    self.game_settings.change_player(1)
 
                 elif self.right_change_player_button.image_rect.colliderect(mouse_pos):
 
-                    self.game_settings.change_player(1)
+                    self.game_settings.change_player(0)
 
         return ret_game_state
 
@@ -364,10 +364,10 @@ class SettingsScreen(Screen):
         player_display = large_text.render(("Player Skin: " + str(player)), True, (0, 0, 0))
         self.screen.blit(player_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 3)))
 
-        if self.game_settings.player_skin == 1:
+        if self.game_settings.player_skin == 0:
             self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_1_path),
                              (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
-        elif self.game_settings.player_skin == 2:
+        elif self.game_settings.player_skin == 1:
             self.screen.blit(pygame.image.load(self.game_settings.Player_Preview_2_path),
                              (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery / 1.7)))
 
