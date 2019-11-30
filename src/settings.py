@@ -66,6 +66,8 @@ class Settings:
 
         self.player_jump_sound = pygame.mixer.Sound(os.path.join(self.sound_effect_folder, "Jump.wav"))
 
+        self.button_click_sound = pygame.mixer.Sound(os.path.join(self.sound_effect_folder, "Button.wav"))
+
         # Settings Screen Settings
         self.vol_up_path = os.path.join(self.resources_folder, "VolUpButton.bmp")
         self.vol_down_path = os.path.join(self.resources_folder, "VolDownButton.bmp")

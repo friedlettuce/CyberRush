@@ -101,12 +101,16 @@ class TitleScreen(Screen):
                 mouse_pos = pygame.Rect((pygame.mouse.get_pos()), (0, 0))
 
                 if self.play_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.PLAYING
                 elif self.settings_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.SETTINGS
                 elif self.about_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.ABOUT
                 elif self.quit_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.QUIT
 
         return ret_game_state
@@ -225,6 +229,7 @@ class SettingsScreen(Screen):
                 mouse_pos = pygame.Rect((pygame.mouse.get_pos()), (0, 0))
 
                 if self.mainmenu_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.TITLE
 
                 # Volume buttons
@@ -324,28 +329,28 @@ class SettingsScreen(Screen):
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
 
-        key = pygame.key.name(self.game_settings.input['right'])
+        key = pygame.key.name(self.game_settings.input['down'])
         key = key.upper()
         
-        right_control = large_text.render((str('Right Control: ') + str(key)), True, (0, 0 ,0))
+        right_control = large_text.render((str('Down Control: ') + str(key)), True, (0, 0, 0))
         self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
 
         key = pygame.key.name(self.game_settings.input['left'])
         key = key.upper()
 
-        left_control = large_text.render((str("Left Control: ") + str(key)), True, (0, 0 ,0))
+        left_control = large_text.render((str("Left Control: ") + str(key)), True, (0, 0, 0))
         self.screen.blit(left_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.25)))
 
         key = pygame.key.name(self.game_settings.input['up'])
         key = key.upper()
 
-        up_control = large_text.render((str("Jump Control: ") + str(key)), True, (0, 0 ,0))
+        up_control = large_text.render((str("Jump Control: ") + str(key)), True, (0, 0, 0))
         self.screen.blit(up_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1)))
 
-        key = pygame.key.name(self.game_settings.input['down'])
+        key = pygame.key.name(self.game_settings.input['right'])
         key = key.upper()
 
-        down_control = large_text.render(str("Down Control: " + str(key)), True, (0, 0 ,0))
+        down_control = large_text.render(str("Right Control: " + str(key)), True, (0, 0, 0))
         self.screen.blit(down_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.5)))
 
     def volume_display(self):
@@ -397,6 +402,7 @@ class AboutScreen(Screen):
                 mouse_pos = pygame.Rect((pygame.mouse.get_pos()), (0, 0))
 
                 if self.mainmenu_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.TITLE
 
         return ret_game_state
