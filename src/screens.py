@@ -234,6 +234,7 @@ class SettingsScreen(Screen):
 
                 # Volume buttons
                 elif self.vol_down_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.game_settings.control_flag = True
 
@@ -244,6 +245,7 @@ class SettingsScreen(Screen):
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
                 elif self.vol_up_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.game_settings.control_flag = True
 
@@ -254,6 +256,7 @@ class SettingsScreen(Screen):
                     pygame.mixer.music.set_volume(self.game_settings.music_volume)
 
                 elif self.control_up_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.control_up_button_2.blitme()
                     pygame.display.update()
@@ -261,6 +264,7 @@ class SettingsScreen(Screen):
                     self.game_settings.change_control('up')
 
                 elif self.control_left_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.control_left_button_2.blitme()
                     pygame.display.update()
@@ -268,6 +272,7 @@ class SettingsScreen(Screen):
                     self.game_settings.change_control('left')
 
                 elif self.control_down_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.control_down_button_2.blitme()
                     pygame.display.update()
@@ -275,6 +280,7 @@ class SettingsScreen(Screen):
                     self.game_settings.change_control('down')
 
                 elif self.control_right_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.control_right_button_2.blitme()
                     pygame.display.update()
@@ -282,14 +288,17 @@ class SettingsScreen(Screen):
                     self.game_settings.change_control('right')
 
                 elif self.reset_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.game_settings.default_settings()
 
                 elif self.left_change_player_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.game_settings.change_player(1)
 
                 elif self.right_change_player_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.game_settings.change_player(0)
 
