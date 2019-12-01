@@ -11,8 +11,8 @@ editzone=0,0
 setbg=city_bg.png
 setmusic=Title Music.mp3
 
-setleftspawn=30,300
-setrightspawn=100,100
+setleftspawn=30,330
+setrightspawn=330,330
 setupspawn=100,100
 setdownspawn=100,100
 

@@ -95,7 +95,6 @@ class Player:
 
         else:
 
-            print(self.frame_count)
             if self.facing_right:
                 self.current_frame = self.idle_r_frames[self.frame_count]
             else:
