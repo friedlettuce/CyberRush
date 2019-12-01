@@ -33,6 +33,7 @@ class GameScreen(object):
         # Sets player keys and spawn
         self.input = self.game_settings.input
 
+        self.player.clear_frames()
         self.player.load_frames(self.game_settings.player_frames)
 
         # sets player ground
@@ -164,21 +165,20 @@ class GameScreen(object):
 
                 if event.key == self.input['up']:
                     self.player.jump()
-                    pass
 
                 if event.key == self.input['left']:
-                    self.player.move_left()
+                    self.player.set_movement(False)
 
                 if event.key == self.input['right']:
-                    self.player.move_right()
+                    self.player.set_movement(True)
 
             elif event.type == pygame.KEYUP:
 
                 if event.key == self.input['left']:
-                    self.player.move_left(False)
+                    self.player.set_movement(False, False)
 
                 if event.key == self.input['right']:
-                    self.player.move_right(False)
+                    self.player.set_movement(True, False)
 
         return ret_game_state
 
