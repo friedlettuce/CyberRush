@@ -379,10 +379,12 @@ class SettingsScreen(Screen):
         self.screen.blit(player_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 3)))
 
         if self.game_settings.player_skin == 0:
+
             self.screen.blit(pygame.transform.scale(pygame.image.load(self.game_settings.Player_Preview_1_path),
                 self.game_settings.player_size), (int(self.screen_rect.centerx * 1.42),
                 int(self.screen_rect.centery / 1.7)))
         elif self.game_settings.player_skin == 1:
+
             self.screen.blit(pygame.transform.scale(pygame.image.load(self.game_settings.Player_Preview_2_path),
                 self.game_settings.player_size), (int(self.screen_rect.centerx * 1.42),
                 int(self.screen_rect.centery / 1.7)))

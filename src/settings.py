@@ -78,10 +78,10 @@ class Settings:
         self.clock_tick_interval = 30
 
         # Player Settings
-        self.player_size = (70, 120)
+        self.player_size = (56, 85)
         self.player_speed = 6
         self.player_jump = 30
-        self.player_skin = 1
+        self.player_skin = 0
         self.player_health = 15
 
         player_folder = os.path.join(sprites_folder, "player")
@@ -180,6 +180,8 @@ class Settings:
             number = self.player_skin
         elif number == 0 or number == 1:
             self.player_skin = number
+        else:
+            self.player_skin = number = 0
 
         self.control_flag = True
 
@@ -190,11 +192,11 @@ class Settings:
 
         self.player_frames = {
             'idle_path': os.path.join(os.path.join(player_folder, "idle"), str(number) + '_idle_'),
-            'walk_path': os.path.join(os.path.join(player_folder, "walk"), str(number) + '_walking_'),
+            'walk_path': os.path.join(os.path.join(player_folder, "walk"), str(number) + '_walk_'),
             'file_type': '.png',
             # Saves frame count for each frame list
             'idle_fc': 3,
-            'walk_fc': 3
+            'walk_fc': 4
         }
 
 
