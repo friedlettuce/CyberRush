@@ -67,7 +67,7 @@ class Settings:
         self.clock_tick_interval = 30
 
         # Player Settings
-        self.player_size = (102, 102)
+        self.player_size = (56, 85)
         self.player_speed = 6
         self.player_jump = 30
         self.player_skin = 0
