@@ -277,15 +277,16 @@ class SettingsScreen(Screen):
                     self.control_down_button_2.blitme()
                     pygame.display.update()
 
-                    self.game_settings.change_control('down')
+                    self.game_settings.change_control('right')
 
                 elif self.control_right_button.image_rect.colliderect(mouse_pos):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.control_right_button_2.blitme()
+
                     pygame.display.update()
 
-                    self.game_settings.change_control('right')
+                    self.game_settings.change_control('down')
 
                 elif self.reset_button.image_rect.colliderect(mouse_pos):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
