@@ -33,6 +33,7 @@ class GameScreen(object):
         # Sets player keys and spawn
         self.input = self.game_settings.input
 
+        self.player.clear_frames()
         self.player.load_frames(self.game_settings.player_frames)
 
         # sets player ground
@@ -124,7 +125,7 @@ class GameScreen(object):
 
         # reset player jump
         if yfixed:
-            self.player.jumping = False
+            self.player.land()
             if moving_collidable is not None and self.player.y > moving_collidable.y and self.player.vel_y < 0:
                 # if we collide with an object moving downwards while we are under it, dont reset player vel_y
                 # this stops us from "sticking" to the bottom of the object
@@ -155,6 +156,8 @@ class GameScreen(object):
             return GameState(5)     # Go to leaderboard when integrated
         ret_game_state = GameState(3)
 
+        u_pressed = d_pressed = l_pressed = r_pressed = False
+
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -163,22 +166,24 @@ class GameScreen(object):
             elif event.type == pygame.KEYDOWN:
 
                 if event.key == self.input['up']:
+                    u_pressed = True
                     self.player.jump()
-                    pass
 
                 if event.key == self.input['left']:
-                    self.player.move_left()
+                    l_pressed = True
+                    self.player.set_movement(False)
 
                 if event.key == self.input['right']:
-                    self.player.move_right()
+                    r_pressed = True
+                    self.player.set_movement(True)
 
             elif event.type == pygame.KEYUP:
 
                 if event.key == self.input['left']:
-                    self.player.move_left(False)
+                    self.player.set_movement(False, False)
 
                 if event.key == self.input['right']:
-                    self.player.move_right(False)
+                    self.player.set_movement(True, False)
 
         return ret_game_state
 

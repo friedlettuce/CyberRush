@@ -1,3 +1,5 @@
+from enum import Enum
+
 import pygame
 
 
@@ -8,15 +10,14 @@ class Player:
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
-        self.player_size = game_settings.player_size
-        self.width = self.player_size[0]
-        self.height = self.player_size[1]
+        self.size = game_settings.player_size
+        self.width = self.size[0]
+        self.height = self.size[1]
 
         # Loads frames for player
-        self.idle_r_frames = []
-        self.idle_l_frames = []
-        self.walk_r_frames = []
-        self.walk_l_frames = []
+        self.idle_f = Frames(self.size)
+        self.walking_f = Frames(self.size)
+        self.jumping_f = Frames(self.size)
         self.load_frames(game_settings.player_frames)
         
         # Initial Player Starting Point
@@ -27,7 +28,7 @@ class Player:
         self.vel_y = 0
         self.vel_jump = game_settings.player_jump
         
-        # Flags for if player is moving/facing left/right, idle, walking
+        # Flags for if player is moving/facing left/right, idle, walking_f
         self.facing_right = True
         self.moving_left = False
         self.moving_right = False
@@ -36,14 +37,11 @@ class Player:
         # Inits frame
         self.frame_count = 0
         self.frame_wait = 0
+        self.fps_div = game_settings.player_counter_divisor
+        self.fps_max = game_settings.player_counter_max
 
-        # self.counter = 0
-        # self.fps = 3
-
-        self.current_frame = self.idle_r_frames[self.frame_count]
-        self.max_fc = game_settings.player_frames['idle_fc']
-        self.walk_fc = game_settings.player_frames['walk_fc']
-        self.idle_fc = game_settings.player_frames['idle_fc']
+        self.current_frame = self.idle_f.frame(self.frame_count, self.facing_right)
+        self.max_fc = self.idle_f.fc
 
         # Player health
         self.health = game_settings.player_health
@@ -51,31 +49,27 @@ class Player:
         # Sounds
         self.player_jump_sound = game_settings.player_jump_sound
 
-    def move_left(self, move=True):
+    def set_movement(self, direction, move=True):
+
+        self.frame_count = 0
+        self.frame_wait = 0
 
         if move:
-            self.moving_left = True
-            self.facing_right = False
-            self.moving_right = False
-            self.frame_count = 0
-            self.max_fc = self.walk_fc
-        else:
-            self.moving_left = False
-            self.frame_count = 0
-            self.max_fc = self.idle_fc
+            self.facing_right = direction
 
-    def move_right(self, move=True):
-
-        if move:
-            self.moving_right = True
-            self.facing_right = True
-            self.moving_left = False
-            self.frame_count = self.counter = 0
-            self.max_fc = self.walk_fc
+            if direction:
+                self.moving_right = True
+            else:
+                self.moving_left = True
+            self.max_fc = self.walking_f.fc
         else:
-            self.moving_right = False
-            self.frame_count = self.counter = 0
-            self.max_fc = self.idle_fc
+            if not direction:
+                self.moving_left = False
+            else:
+                self.moving_right = False
+
+            if not self.moving_right and not self.moving_left:
+                self.max_fc = self.idle_f.fc
 
     def jump(self):
 
@@ -84,28 +78,37 @@ class Player:
             self.jumping = True
             self.vel_y = self.vel_jump
 
+    def land(self):
+
+        self.jumping = False
+
+        if self.moving_left or self.moving_right:
+            self.max_fc = self.walking_f.fc
+        else:
+            self.max_fc = self.idle_f.fc
+
+        if self.frame_count >= self.max_fc:
+            self.frame_count = 0
+            self.frame_wait = 0
+
     def move(self):
 
-        if self.moving_left:
+        if self.moving_left or self.moving_right:
 
-            self.x -= self.vel_x
-            self.current_frame = self.walk_l_frames[self.frame_count]
-
-            self.facing_right = False
-
-        elif self.moving_right:
-
-            self.x += self.vel_x
-            self.current_frame = self.walk_r_frames[self.frame_count]
-
-            self.facing_right = True
-
-        else:
-
-            if self.facing_right:
-                self.current_frame = self.idle_r_frames[self.frame_count]
+            if self.moving_right:
+                self.x += self.vel_x
             else:
-                self.current_frame = self.idle_l_frames[self.frame_count]
+                self.x -= self.vel_x
+
+            if not self.jumping:
+                self.current_frame = self.walking_f.frame(self.frame_count, self.facing_right)
+
+        elif not self.jumping:
+            self.land()
+            self.current_frame = self.idle_f.frame(self.frame_count, self.facing_right)
+
+        if self.jumping:
+            self.current_frame = self.jumping_f.frame(self.frame_count, self.facing_right)
         
         self.vel_y -= 3
         self.y = self.y - self.vel_y
@@ -117,24 +120,15 @@ class Player:
             self.vel_y = 0
 
         self.frame_wait += 1
-        if self.frame_wait < 11:
-            self.frame_count = 0
-        elif self.frame_wait < 21:
-            self.frame_count = 1
-        elif self.frame_wait < 31:
-            self.frame_count = 2
-        else:
+        self.frame_count = self.frame_wait // self.fps_div
+
+        if self.frame_wait >= self.fps_max:
             self.frame_wait = 0
             self.frame_count = 0
 
-        # self.counter += 1
-        # self.frame_count = self.counter // self.fps
-        # self.frame_count %= self.max_fc
-
-
     def move_by_amount(self, x, y):
-        #moves player by specified x and y number of pixels
-        #used for collision testing
+        # moves player by specified x and y number of pixels
+        # used for collision testing
         self.x += x
         self.y += y
 
@@ -148,34 +142,60 @@ class Player:
     def check_collision(self, obj_rect):
         if self.get_rect().colliderect(obj_rect):
             return True
-
         return False
 
     def get_rect(self):
         return pygame.Rect(self.x, self.y, self.width, self.height)
 
-    def load_frames(self, load_frames):
-        self.idle_l_frames = []
-        self.idle_r_frames = []
-        self.walk_l_frames = []
-        self.walk_r_frames = []
-
-        for frame in range(load_frames['idle_fc']):
-
-            self.idle_r_frames.append(pygame.transform.smoothscale(
-                pygame.image.load(load_frames['idle_path'] + str(
-                    frame) + load_frames['file_type']), self.player_size))
-            self.idle_l_frames.append(pygame.transform.flip(self.idle_r_frames[frame], True, False))
-
-        for frame in range(load_frames['walk_fc']):
-
-            self.walk_r_frames.append(pygame.transform.smoothscale(
-                pygame.image.load(load_frames['walk_path'] + str(
-                    frame) + load_frames['file_type']), self.player_size))
-            self.walk_l_frames.append(pygame.transform.flip(self.walk_r_frames[frame], True, False))
-
     def reset(self, game_settings, x_spawn, y_spawn):
         self.health = game_settings.player_health
         self.x = x_spawn
         self.y = y_spawn
-        self.moving_right = self.moving_left = self.jumping = False
+        self.moving = self.jumping = False
+        self.frame_wait = 0
+        self.frame_count = 0
+
+    def load_frames(self, player_frames):
+        self.idle_f.load_frames(player_frames['idle'], player_frames['file_type'])
+        self.walking_f.load_frames(player_frames['walking'], player_frames['file_type'])
+        self.jumping_f.load_frames(player_frames['jumping'], player_frames['file_type'])
+
+    def clear_frames(self):
+        self.idle_f.clear()
+        self.walking_f.clear()
+        self.jumping_f.clear()
+
+
+class Frames:
+
+    def __init__(self, size):
+
+        self.r_frames = []
+        self.l_frames = []
+
+        self.size = size
+        self.fc = None
+
+    def load_frames(self, load, f_type):
+
+        path = load['path']
+        fc = load['fc']
+
+        for frame in range(fc):
+
+            self.r_frames.append(pygame.transform.smoothscale(
+                pygame.image.load(path + str(frame) + f_type), self.size))
+            self.l_frames.append(pygame.transform.flip(self.r_frames[frame], True, False))
+
+        self.fc = len(self.r_frames)
+
+    def frame(self, frame, direction):
+        print(frame)
+        if direction:
+            return self.r_frames[frame]
+        else:
+            return self.l_frames[frame]
+
+    def clear(self):
+        self.r_frames.clear()
+        self.l_frames.clear()

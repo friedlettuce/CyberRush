@@ -63,8 +63,10 @@ class Settings:
         self.sound_effect_folder = os.path.join(self.resources_folder, "sound_effects")
 
         self.player_damage_sound = pygame.mixer.Sound(os.path.join(self.sound_effect_folder, "Player_Damage.wav"))
+        self.player_damage_sound.set_volume(self.music_volume * 200)
 
         self.player_jump_sound = pygame.mixer.Sound(os.path.join(self.sound_effect_folder, "Jump.wav"))
+        self.player_jump_sound.set_volume(self.music_volume * 2)
 
         self.button_click_sound = pygame.mixer.Sound(os.path.join(self.sound_effect_folder, "Button.wav"))
 
@@ -85,6 +87,8 @@ class Settings:
         self.player_jump = 30
         self.player_skin = 0
         self.player_health = 15
+        self.player_counter_divisor = 5
+        self.player_counter_max = 16
 
         player_folder = os.path.join(sprites_folder, "player")
 
@@ -193,12 +197,19 @@ class Settings:
         player_folder = os.path.join(sprites_folder, "player")
 
         self.player_frames = {
-            'idle_path': os.path.join(os.path.join(player_folder, "idle"), str(number) + '_idle_'),
-            'walk_path': os.path.join(os.path.join(player_folder, "walk"), str(number) + '_walk_'),
-            'file_type': '.png',
-            # Saves frame count for each frame list
-            'idle_fc': 3,
-            'walk_fc': 4
+            'idle': {
+                'path': os.path.join(os.path.join(player_folder, "idle"), str(number) + '_idle_'),
+                'fc': 3
+            },
+            'walking': {
+                'path': os.path.join(os.path.join(player_folder, "walk"), str(number) + '_walk_'),
+                'fc': 4
+            },
+            'jumping': {
+                'path': os.path.join(os.path.join(player_folder, "jump"), str(number) + '_jumping_'),
+                'fc': 8
+            },
+            'file_type': '.png'
         }
 
 
