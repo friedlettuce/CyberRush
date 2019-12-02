@@ -399,6 +399,8 @@ class Zone:
     def update_enemies(self, player):
 
         for enemy in self.enemies:
+            if enemy.health is 0:
+                self.enemies.remove(enemy)
             enemy.update()
             # Shoots projectile if enemy in range of player
             if enemy.range_y(player.y):

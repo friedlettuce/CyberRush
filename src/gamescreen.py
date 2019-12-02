@@ -46,16 +46,23 @@ class GameScreen(object):
             # Deals with projectiles colldining into collidables
             for projcollide in self.cur_zone.collidables:
                 enemy.collide_projectiles(projcollide)
+                self.player.collide_projectiles(projcollide)
 
             # Deals damage to player when collides with projectiles
-            damage_dealt = enemy.collide_projectiles(self.player)
-            if damage_dealt > 0:
+            damage_player = enemy.collide_projectiles(self.player)
+            damage_enemy = self.player.collide_projectiles(enemy)
+
+            if damage_player > 0 or damage_enemy > 0:
                 pygame.mixer.Sound.play(self.game_settings.player_damage_sound)
 
-            if damage_dealt > self.player.health:
+            if damage_player > self.player.health:
                 self.player.health = 0
             else:
-                self.player.health -= damage_dealt
+                self.player.health -= damage_player
+            if damage_enemy > enemy.health:
+                enemy.health = 0
+            else:
+                enemy.health -= damage_enemy
 
         while self.cur_zone.collision_by_x(self.player, collidable):
             if collidable.moving and self.player.vel_x == 0:
