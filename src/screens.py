@@ -286,7 +286,7 @@ class SettingsScreen(Screen):
 
                     pygame.display.update()
 
-                    self.game_settings.change_control('down')
+                    self.game_settings.change_control('melee')
 
                 elif self.reset_button.image_rect.colliderect(mouse_pos):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
@@ -339,10 +339,10 @@ class SettingsScreen(Screen):
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
 
-        key = pygame.key.name(self.game_settings.input['down'])
+        key = pygame.key.name(self.game_settings.input['melee'])
         key = key.upper()
         
-        right_control = large_text.render((str('Down Control: ') + str(key)), True, (0, 0, 0))
+        right_control = large_text.render((str('Attack Control: ') + str(key)), True, (0, 0, 0))
         self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
 
         key = pygame.key.name(self.game_settings.input['left'])
