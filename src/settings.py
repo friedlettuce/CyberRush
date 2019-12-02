@@ -102,7 +102,8 @@ class Settings:
         self.mountains_background_path = os.path.join(self.resources_folder, "parallax-mountain-bg.png")
         
         # Player Controls
-        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
+        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s,
+                      'melee': pygame.K_e}
         self.controls_path = os.path.join(self.resources_folder, "Controls.txt")
 
         try:
@@ -131,7 +132,8 @@ class Settings:
     # Function Called To Reset Controls To Default
     def default_settings(self):
         self.control_flag = True
-        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
+        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s,
+                      'melee': pygame.K_e}
         self.music_volume = .05
         self.player_skin = 0
 
@@ -213,6 +215,17 @@ class Settings:
                 'path': os.path.join(os.path.join(os.path.join(
                     player_folder, "attack"), "melee"), str(number) + '_melee_0_'),
                 'fc': 5
+            },
+            'shooting': {
+                'path': os.path.join(os.path.join(os.path.join(
+                    player_folder, "attack"), "projectile"), str(number) + '_shoot_'),
+                'fc': 5
+            },
+            'projectile': {
+                'path': os.path.join(os.path.join(os.path.join(
+                    player_folder, "attack"), "projectile"), str(number) + '_projectile_'),
+                'fc': 4,
+                'size': (33, 11)
             },
             'file_type': '.png'
         }

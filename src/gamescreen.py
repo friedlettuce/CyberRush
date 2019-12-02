@@ -156,8 +156,6 @@ class GameScreen(object):
             return GameState(5)     # Go to leaderboard when integrated
         ret_game_state = GameState(3)
 
-        u_pressed = d_pressed = l_pressed = r_pressed = False
-
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -166,16 +164,16 @@ class GameScreen(object):
             elif event.type == pygame.KEYDOWN:
 
                 if event.key == self.input['up']:
-                    u_pressed = True
                     self.player.jump()
 
                 if event.key == self.input['left']:
-                    l_pressed = True
                     self.player.set_movement(False)
 
                 if event.key == self.input['right']:
-                    r_pressed = True
                     self.player.set_movement(True)
+
+                if event.key == self.input['melee']:
+                    self.player.hit()
 
             elif event.type == pygame.KEYUP:
 
