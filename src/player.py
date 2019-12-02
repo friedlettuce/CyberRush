@@ -19,6 +19,7 @@ class Player:
         self.walking_f = Frames(self.size)
         self.jumping_f = Frames(self.size)
         self.shooting_f = Frames(self.size)
+        self.melee_f = Frames(self.size)
 
         self.proj_f = Frames(game_settings.player_frames['projectile']['size'])
 
@@ -42,6 +43,7 @@ class Player:
         self.moving_right = False
         self.jumping = False
         self.shooting = False
+        self.hitting = False
 
         # Inits frame
         self.frame_count = 0
@@ -77,7 +79,7 @@ class Player:
             else:
                 self.moving_right = False
 
-            if not self.moving_right and not self.moving_left and not self.jumping and not self.shooting:
+            if not (self.moving_right or self.moving_left) and not (self.jumping or self.shooting):
                 self.max_fc = self.idle_f.fc
 
     def jump(self):
@@ -100,10 +102,21 @@ class Player:
             self.frame_count = 0
             self.frame_wait = 0
 
-    def hit(self):
+    def shoot(self):
+        if self.hitting:
+            return
 
         self.shooting = True
         self.max_fc = self.shooting_f.fc
+        self.frame_count = 0
+        self.frame_wait = 0
+
+    def melee(self):
+        if self.shooting:
+            return
+
+        self.hitting = True
+        self.max_fc = self.melee_f.fc
         self.frame_count = 0
         self.frame_wait = 0
 
@@ -116,20 +129,22 @@ class Player:
             else:
                 self.x -= self.vel_x
 
-            if not self.jumping and not self.shooting:
+            if not (self.jumping or self.shooting or self.hitting):
                 self.current_frame = self.walking_f.frame(self.frame_count, self.facing_right)
 
-        elif not self.jumping and not self.shooting:
+        elif not (self.jumping or self.shooting or self.hitting):
             self.land()
             self.current_frame = self.idle_f.frame(self.frame_count, self.facing_right)
 
-        if self.jumping and not self.shooting:
+        if self.jumping and not (self.shooting or self.hitting):
             self.current_frame = self.jumping_f.frame(self.frame_count, self.facing_right)
 
         if self.shooting:
             self.current_frame = self.shooting_f.frame(self.frame_count, self.facing_right)
             if self.frame_count is self.max_fc - 2:
                 self.add_projectile()
+        elif self.hitting:
+            self.current_frame = self.melee_f.frame(self.frame_count, self.facing_right)
         
         self.vel_y -= 3
         self.y = self.y - self.vel_y
@@ -146,22 +161,23 @@ class Player:
                 self.projectiles.remove(projectile)
 
         self.frame_wait += 1
-        self.frame_count = self.frame_wait // self.max_fc
+        self.frame_count = self.frame_wait // 5
 
-        if self.frame_wait > self.max_fc * 10 or self.frame_count >= self.max_fc:
+        if self.frame_count >= self.max_fc:
             self.frame_wait = 0
             self.frame_count = 0
 
-        if self.shooting and self.frame_count is (self.max_fc - 1):
+        if (self.shooting or self.hitting) and self.frame_count >= (self.max_fc - 1):
             self.frame_count = 0
             self.frame_wait = 0
             if self.moving_left or self.moving_right:
                 self.max_fc = self.walking_f.fc
             elif self.jumping:
-                self.max_fc = self.jumping.fc
+                self.max_fc = self.jumping_f.fc
             else:
                 self.max_fc = self.idle_f.fc
             self.shooting = False
+            self.hitting = False
 
     def move_by_amount(self, x, y):
         # moves player by specified x and y number of pixels
@@ -202,6 +218,7 @@ class Player:
         self.walking_f.load_frames(player_frames['walking'], player_frames['file_type'])
         self.jumping_f.load_frames(player_frames['jumping'], player_frames['file_type'])
         self.shooting_f.load_frames(player_frames['shooting'], player_frames['file_type'])
+        self.melee_f.load_frames(player_frames['melee'], player_frames['file_type'])
         self.proj_f.load_frames(player_frames['projectile'], player_frames['file_type'])
 
     def clear_frames(self):

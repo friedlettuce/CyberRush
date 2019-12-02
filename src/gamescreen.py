@@ -180,7 +180,9 @@ class GameScreen(object):
                     self.player.set_movement(True)
 
                 if event.key == self.input['melee']:
-                    self.player.hit()
+                    self.player.melee()
+                elif event.key == self.input['shoot']:
+                    self.player.shoot()
 
             elif event.type == pygame.KEYUP:
 
