@@ -151,7 +151,7 @@ class Player:
         if self.frame_wait > self.max_fc * 10 or self.frame_count >= self.max_fc:
             self.frame_wait = 0
             self.frame_count = 0
-        # print(self.frame_count, self.max_fc)
+
         if self.shooting and self.frame_count is (self.max_fc - 1):
             self.frame_count = 0
             self.frame_wait = 0
@@ -206,7 +206,6 @@ class Player:
 
     def add_projectile(self):
         if len(self.projectiles) >= self.proj_max:
-            print(len(self.projectiles))
             return
 
         if self.facing_right:
