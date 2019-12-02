@@ -26,7 +26,7 @@ class Player:
 
         # Stores projectiles for the player
         self.projectiles = []
-        self.proj_max = 3
+        self.proj_max = 1
         
         # Initial Player Starting Point
         self.x = x
@@ -140,6 +140,11 @@ class Player:
             self.jumping = False
             self.vel_y = 0
 
+        for projectile in self.projectiles:
+            projectile.set_frame(self.facing_right)
+            if not projectile.move():
+                self.projectiles.remove(projectile)
+
         self.frame_wait += 1
         self.frame_count = self.frame_wait // self.max_fc
 
@@ -160,6 +165,8 @@ class Player:
 
     def blitme(self):
         self.screen.blit(self.current_frame, (self.x, self.y, self.width, self.height))
+        for projectile in self.projectiles:
+            projectile.blitme()
 
     def set_pos(self, pos):
         self.x = pos[0]
@@ -199,6 +206,7 @@ class Player:
 
     def add_projectile(self):
         if len(self.projectiles) >= self.proj_max:
+            print(len(self.projectiles))
             return
 
         if self.facing_right:
@@ -207,7 +215,7 @@ class Player:
             dir_x = -1
 
         self.projectiles.append(Projectile(
-            self.screen, self.proj_f.copy(), self.x, self.y, dir_x, 0, 5))
+            self.screen, self.proj_f.copy(), self.x, self.y, dir_x, 0, 20))
 
 
 class Frames:
@@ -259,14 +267,14 @@ class Projectile:
         self.screen_rect = self.screen.get_rect()
 
         self.x = x
-        self.y = y
-
+        self.y = y + 33
         self.speed_x = dir_x * speed
         self.speed_y = dir_y * speed
 
         self.damage = 2
 
         self.frames = frames
+        self.frame_count = 0
         self.current_frame = None
 
     def move(self):
@@ -280,10 +288,18 @@ class Projectile:
         return 1
 
     def check_collision(self, rect):
-        return pygame.Rect(self.x, self.y, self.width, self.height).colliderect(rect)
+        return pygame.Rect(self.x, self.y, self.frames.size).colliderect(rect)
 
-    def set_frame(self):
-        self.current_frame = self.idle_f.frame(self.frame_count, self.facing_right)
+    def set_frame(self, direction):
+        if self.frame_count >= 4:
+            self.frame_count = 0
+
+        if direction:
+            self.current_frame = self.frames.frame(self.frame_count, direction)
+        else:
+            self.current_frame = self.frames.frame(self.frame_count, direction)
+
+        self.frame_count += 1
 
     def blitme(self):
-        self.screen.blit(self.current_frame, (self.x, self.y, self.frames.size))
+        self.screen.blit(self.current_frame, (self.x, self.y, self.frames.size[0], self.frames.size[1]))
