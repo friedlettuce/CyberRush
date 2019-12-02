@@ -137,6 +137,10 @@ class Enemy(object):
                 self.frame_rect.centerx + self.x, self.y + int(self.frame_rect.height * .2), 10,
                     5, dir_x, dir_y, self.projectile_speed))
 
+            return 1
+
+        return 0
+
     def range_y(self, y):
         y = int(y)
         # Checks if y is in a 40 pixel range of self

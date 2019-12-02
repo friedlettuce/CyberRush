@@ -402,7 +402,8 @@ class Zone:
             enemy.update()
             # Shoots projectile if enemy in range of player
             if enemy.range_y(player.y):
-                enemy.add_projectile()
+                if enemy.add_projectile() == 1:
+                    pygame.mixer.Sound.play(self.game_settings.enemy_attack_sound)
 
     def blitme(self):
 
