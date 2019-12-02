@@ -209,6 +209,11 @@ class Settings:
                 'path': os.path.join(os.path.join(player_folder, "jump"), str(number) + '_jumping_'),
                 'fc': 8
             },
+            'melee': {
+                'path': os.path.join(os.path.join(os.path.join(
+                    player_folder, "attack"), "melee"), str(number) + '_melee_0_'),
+                'fc': 5
+            },
             'file_type': '.png'
         }
 

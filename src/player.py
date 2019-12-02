@@ -18,6 +18,7 @@ class Player:
         self.idle_f = Frames(self.size)
         self.walking_f = Frames(self.size)
         self.jumping_f = Frames(self.size)
+        self.melee_0_f = Frames(self.size)
         self.load_frames(game_settings.player_frames)
         
         # Initial Player Starting Point
@@ -190,7 +191,7 @@ class Frames:
         self.fc = len(self.r_frames)
 
     def frame(self, frame, direction):
-        print(frame)
+
         if direction:
             return self.r_frames[frame]
         else:
