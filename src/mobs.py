@@ -231,23 +231,27 @@ class TurretEnemy(Enemy):
         self.right_frames = [pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size),
                              pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size)]
 
+        self.moving = False
+
         self.projectile_speed = game_settings.turret_proj_speed
         self.projectile_num = game_settings.turret_proj_num
         self.hitbox_x = (self.x, self.y, 80, 80)
         self.hitbox_y = (self.x, self.y, 80, 80)
         self.hitbox_color = (255, 0, 0)
-        self.eye_sight = 20
+        self.eye_sight = 40
 
         self.vel_x = 0
         self.vel_y = 0
 
-        self.frame = self.right_frames[0]
-        self.frame_rect = self.right_frames[0].get_rect()
-
-        if facing.lower() == "right":
+        if facing == "right":
             self.facing_right = True
-        elif facing.lower() == "left":
+            self.frame = self.right_frames[0]
+            self.frame_rect = self.right_frames[0].get_rect()
+        elif facing == "left":
             self.facing_right = False
+            self.frame = self.left_frames[0]
+            self.frame_rect = self.left_frames[0].get_rect()
+
 
 class Projectile(object):
 
@@ -281,3 +285,4 @@ class Projectile(object):
 
     def blitme(self):
         pygame.draw.rect(self.screen, (0, 255, 0), (self.x, self.y, self.width, self.height))
+
