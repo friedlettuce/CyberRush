@@ -12,6 +12,8 @@ class Enemy(object):
         self.width = width
         self.height = height
 
+        self.health = 4
+
         self.vel_x = 0
         self.vel_y = 0
 

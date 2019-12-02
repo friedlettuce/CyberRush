@@ -155,6 +155,12 @@ class Player:
         if self.shooting and self.frame_count is (self.max_fc - 1):
             self.frame_count = 0
             self.frame_wait = 0
+            if self.moving_left or self.moving_right:
+                self.max_fc = self.walking_f.fc
+            elif self.jumping:
+                self.max_fc = self.jumping.fc
+            else:
+                self.max_fc = self.idle_f.fc
             self.shooting = False
 
     def move_by_amount(self, x, y):
@@ -215,6 +221,19 @@ class Player:
 
         self.projectiles.append(Projectile(
             self.screen, self.proj_f.copy(), self.x, self.y, dir_x, 0, 20))
+
+    def collide_projectiles(self, obj):
+
+        damage = 0
+        # Checks if projectiles collide with object
+        for projectile in self.projectiles:
+
+            # Lowers health and removes if true
+            if projectile.check_collision(obj.get_rect()):
+                self.projectiles.remove(projectile)
+                damage += projectile.damage
+
+        return damage
 
 
 class Frames:
@@ -287,7 +306,7 @@ class Projectile:
         return 1
 
     def check_collision(self, rect):
-        return pygame.Rect(self.x, self.y, self.frames.size).colliderect(rect)
+        return pygame.Rect(self.x, self.y, self.frames.size[0], self.frames.size[1]).colliderect(rect)
 
     def set_frame(self, direction):
         if self.frame_count >= 4:
