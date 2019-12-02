@@ -30,7 +30,8 @@ class Player:
         
         # Flags for if player is moving/facing left/right, idle, walking_f
         self.facing_right = True
-        self.moving = False
+        self.moving_left = False
+        self.moving_right = False
         self.jumping = False
 
         # Inits frame
@@ -51,14 +52,24 @@ class Player:
     def set_movement(self, direction, move=True):
 
         self.frame_count = 0
-        self.facing_right = direction
+        self.frame_wait = 0
 
         if move:
-            self.moving = True
+            self.facing_right = direction
+
+            if direction:
+                self.moving_right = True
+            else:
+                self.moving_left = True
             self.max_fc = self.walking_f.fc
         else:
-            self.moving = False
-            self.max_fc = self.idle_f.fc
+            if not direction:
+                self.moving_left = False
+            else:
+                self.moving_right = False
+
+            if not self.moving_right and not self.moving_left:
+                self.max_fc = self.idle_f.fc
 
     def jump(self):
 
@@ -67,11 +78,24 @@ class Player:
             self.jumping = True
             self.vel_y = self.vel_jump
 
+    def land(self):
+
+        self.jumping = False
+
+        if self.moving_left or self.moving_right:
+            self.max_fc = self.walking_f.fc
+        else:
+            self.max_fc = self.idle_f.fc
+
+        if self.frame_count >= self.max_fc:
+            self.frame_count = 0
+            self.frame_wait = 0
+
     def move(self):
 
-        if self.moving:
+        if self.moving_left or self.moving_right:
 
-            if self.facing_right:
+            if self.moving_right:
                 self.x += self.vel_x
             else:
                 self.x -= self.vel_x
@@ -80,6 +104,7 @@ class Player:
                 self.current_frame = self.walking_f.frame(self.frame_count, self.facing_right)
 
         elif not self.jumping:
+            self.land()
             self.current_frame = self.idle_f.frame(self.frame_count, self.facing_right)
 
         if self.jumping:
@@ -101,13 +126,9 @@ class Player:
             self.frame_wait = 0
             self.frame_count = 0
 
-        # self.counter += 1
-        # self.frame_count = self.counter // self.fps
-        # self.frame_count %= self.max_fc
-
     def move_by_amount(self, x, y):
-        #moves player by specified x and y number of pixels
-        #used for collision testing
+        # moves player by specified x and y number of pixels
+        # used for collision testing
         self.x += x
         self.y += y
 
@@ -131,6 +152,8 @@ class Player:
         self.x = x_spawn
         self.y = y_spawn
         self.moving = self.jumping = False
+        self.frame_wait = 0
+        self.frame_count = 0
 
     def load_frames(self, player_frames):
         self.idle_f.load_frames(player_frames['idle'], player_frames['file_type'])
@@ -167,7 +190,7 @@ class Frames:
         self.fc = len(self.r_frames)
 
     def frame(self, frame, direction):
-
+        print(frame)
         if direction:
             return self.r_frames[frame]
         else:

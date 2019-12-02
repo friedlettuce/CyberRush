@@ -125,7 +125,7 @@ class GameScreen(object):
 
         # reset player jump
         if yfixed:
-            self.player.jumping = False
+            self.player.land()
             if moving_collidable is not None and self.player.y > moving_collidable.y and self.player.vel_y < 0:
                 # if we collide with an object moving downwards while we are under it, dont reset player vel_y
                 # this stops us from "sticking" to the bottom of the object
@@ -156,6 +156,8 @@ class GameScreen(object):
             return GameState(5)     # Go to leaderboard when integrated
         ret_game_state = GameState(3)
 
+        u_pressed = d_pressed = l_pressed = r_pressed = False
+
         for event in pygame.event.get():
 
             if event.type == pygame.QUIT:
@@ -164,12 +166,15 @@ class GameScreen(object):
             elif event.type == pygame.KEYDOWN:
 
                 if event.key == self.input['up']:
+                    u_pressed = True
                     self.player.jump()
 
                 if event.key == self.input['left']:
+                    l_pressed = True
                     self.player.set_movement(False)
 
                 if event.key == self.input['right']:
+                    r_pressed = True
                     self.player.set_movement(True)
 
             elif event.type == pygame.KEYUP:
