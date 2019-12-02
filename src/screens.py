@@ -2,6 +2,8 @@ import pygame
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
+import highscores
+from highscores import populateWithPlaceholders, initialDatabaseCreation, displayScores, returnAScore
 
 # NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
 
@@ -338,14 +340,60 @@ class AboutScreen(Screen):
         self.mainmenu_button.blitme()
 
 
-class HighScoresScreen(Screen):
+
+
+class HighScoresScreen(Screen): # Need to find a way to display the scores
 
     def __init__(self, screen, game_settings):
         super().__init__(screen, game_settings)
+        initialDatabaseCreation()
 
         self.mainmenu_button = Button(
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
             int(self.screen_rect.centery * 1.9))
+        # Button will add placeholders to the high scores list for demo purposes
+        self.addplaceholders_button = Button(
+            screen, game_settings.placeholder_path, int(self.screen_rect.centerx * .3),
+            int(self.screen_rect.centery * 1.9))
+        '''
+        # Volume text
+        text = "Change Volume"
+        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface = large_text.render(text, True, (0, 0, 0))
+        self.TextRect = self.textSurface.get_rect()
+        self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
+        '''
+        firstscore = returnAScore()     # First score contains a tuple, [0] is the entry name [1] is the score
+        entry = firstscore[0] +" " + str(firstscore[1])  #Converts the entry to a string to be displayed
+        text = entry
+        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface1 = score1.render(text, True, (0, 0, 0))
+        self.TextRect1 = self.textSurface1.get_rect()
+        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
+
+        text = "Score 2 3000"
+        score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface2 = score2.render(text, True, (0, 0, 0))
+        self.TextRect2 = self.textSurface2.get_rect()
+        self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
+
+        text = "Score 3 2000"
+        score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface3 = score3.render(text, True, (0, 0, 0))
+        self.TextRect3 = self.textSurface3.get_rect()
+        self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
+
+        text = "Score 4 2000"
+        score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface4 = score4.render(text, True, (0, 0, 0))
+        self.TextRect4 = self.textSurface4.get_rect()
+        self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
+
+        text = "Score 5 2000"
+        score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface5 = score5.render(text, True, (0, 0, 0))
+        self.TextRect5 = self.textSurface5.get_rect()
+        self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
 
     def check_events(self):
 
@@ -363,11 +411,37 @@ class HighScoresScreen(Screen):
                 if self.mainmenu_button.image_rect.colliderect(mouse_pos):
                     ret_game_state = GameState.TITLE
 
+                elif self.addplaceholders_button.image_rect.colliderect(mouse_pos):
+                    # Call the populate with placeholders function inside highscores.py
+                    populateWithPlaceholders()
+
+
         return ret_game_state
+    ''''
+    def displayHighScores(self):
+        firstscore = returnAScore()
+        text = firstscore
+        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface1 = score1.render(text, True, (0, 0, 0))
+        self.TextRect1 = self.textSurface1.get_rect()
+        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
+        '''
+       # large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        #firstScore = returnAScore()
+        #self.textSurface = large_text.render(firstScore, True, (0, 0, 0))
+
 
 
 
     def blitme(self):
         self.screen.fill(self.bk_color)
+        self.screen.blit(self.textSurface1, self.TextRect1)
+        self.screen.blit(self.textSurface2, self.TextRect2)
+        self.screen.blit(self.textSurface3, self.TextRect3)
+        self.screen.blit(self.textSurface4, self.TextRect4)
+        self.screen.blit(self.textSurface5, self.TextRect5)
+
+
 
         self.mainmenu_button.blitme()
+        self.addplaceholders_button.blitme()

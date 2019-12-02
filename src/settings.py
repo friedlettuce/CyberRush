@@ -23,7 +23,8 @@ class Settings:
         self.play_path = os.path.join(resources_folder, "PlayButton.bmp")
         self.quit_path = os.path.join(resources_folder, "QuitButton.bmp")
         self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
-        self.highscores_path = os.path.join(resources_folder, "HighScoresButton.bmp")   #Added this
+        self.highscores_path = os.path.join(resources_folder, "HighScoresButton.bmp")   # Added button to go to highscores screen
+        self.placeholder_path = os.path.join(resources_folder, "PlaceholdersButton.bmp")    # Added button to add placeholders in highscores
         self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
         self.mainmenu_path = os.path.join(resources_folder, "MainMenuButton.bmp")
 
