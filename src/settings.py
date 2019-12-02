@@ -149,6 +149,7 @@ class Settings:
         self.input['left'] = int(file.readline())
         self.input['up'] = int(file.readline())
         self.input['down'] = int(file.readline())
+        self.input['melee'] = int(file.readline())
         self.music_volume = float(file.readline())
         self.player_skin = int(file.readline())
         self.change_player(self.player_skin)
@@ -172,6 +173,9 @@ class Settings:
             file.write("\n")
 
             file.write('%d' % self.input['down'])
+            file.write("\n")
+
+            file.write('%d' % self.input['melee'])
             file.write("\n")
 
             file.write('%f' % self.music_volume)
