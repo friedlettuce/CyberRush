@@ -158,7 +158,7 @@ class Player:
             if self.moving_left or self.moving_right:
                 self.max_fc = self.walking_f.fc
             elif self.jumping:
-                self.max_fc = self.jumping.fc
+                self.max_fc = self.jumping_f.fc
             else:
                 self.max_fc = self.idle_f.fc
             self.shooting = False
