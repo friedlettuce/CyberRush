@@ -84,7 +84,6 @@ class Settings:
 
         # Player Settings
         self.player_size = (56, 85)
-        self.proj_size = (33, 11)
         self.player_speed = 6
         self.player_jump = 30
         self.player_skin = 0
@@ -248,6 +247,7 @@ class Settings:
                 'path': os.path.join(os.path.join(os.path.join(
                     player_folder, "attack"), "projectile"), str(number2) + '_projectile_'),
                 'fc': 4,
+                'size': (33, 11)
             },
             'file_type': '.png'
         }

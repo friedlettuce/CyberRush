@@ -11,7 +11,6 @@ class Player:
         self.screen_rect = self.screen.get_rect()
 
         self.size = game_settings.player_size
-        self.proj_size = game_settings.proj_size
         self.width = self.size[0]
         self.height = self.size[1]
 
@@ -20,7 +19,6 @@ class Player:
         self.walking_f = Frames(self.size)
         self.jumping_f = Frames(self.size)
         self.shooting_f = Frames(self.size)
-
         self.melee_f = Frames(self.size)
 
         self.proj_f = Frames(game_settings.player_frames['projectile']['size'])
