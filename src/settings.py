@@ -31,7 +31,7 @@ class Settings:
         sprites_folder = os.path.join(self.resources_folder, "sprites")
 
         # Hovering Enemy Settings
-        self.hov_size = (105, 144)
+        self.hov_size = (87, 120)
         self.hovering_enemy_vel = 4
         self.hov_proj_speed = 15
         self.hov_proj_num = 1

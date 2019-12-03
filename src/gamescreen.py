@@ -173,7 +173,6 @@ class GameScreen(object):
             self.player.x = self.cur_zone.upspawn[0]
             self.player.y = self.cur_zone.upspawn[1]
         self.ui.update(self.player)
-        print(self.player.y)
 
     def check_events(self):
 

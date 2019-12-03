@@ -210,7 +210,6 @@ class Map:
                 # go back to zoneinfo state
                 self.load_state = MapLoadState.ZONEINFO
 
-
         else:
             if self.line[:eqpos] == "setpos":
                 pos = self.line.find(',')
@@ -399,12 +398,11 @@ class Zone:
                 cur_zone_coords[1] -= 1
                 return cur_zone_coords, "up"
             player.y -= player.vel_y
-        if player.y >= 365:
-            print("fixing")
+        if player.y >= 330:
             if self.down_used:
                 cur_zone_coords[1] += 1
                 return cur_zone_coords, "down"
-            player.y = 365
+            player.y = 330
         return cur_zone_coords, "none"
 
     def update_enemies(self, player):
