@@ -154,23 +154,23 @@ setdownspawn=100,100
 
 # Left 1 enemy
 addenemy
-setpos=400,200
+setpos=400,225
 setendx=600
-setendy=300
+setendy=325
 endhoverenemy
 
 # Left Middle enemy
 addenemy
-setpos=450,300
+setpos=450,325
 setendx=650
-setendy=400
+setendy=425
 endhoverenemy
 
 # Left 2 enemy
 addenemy
-setpos=500,200
+setpos=500,225
 setendx=700
-setendy=300
+setendy=325
 endhoverenemy
 
 endzone
