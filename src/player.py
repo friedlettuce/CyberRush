@@ -18,8 +18,8 @@ class Player:
         self.idle_f = Frames(self.size)
         self.walking_f = Frames(self.size)
         self.jumping_f = Frames(self.size)
-        self.shooting_f = Frames(self.size)
-        self.melee_f = Frames(self.size)
+        self.shooting_f = Frames()
+        self.melee_f = Frames()
 
         self.proj_f = Frames(game_settings.player_frames['projectile']['size'])
 
@@ -92,11 +92,12 @@ class Player:
             self.vel_y = self.vel_jump
 
     def land(self):
-
         self.jumping = False
 
         if self.moving_left or self.moving_right:
             self.max_fc = self.walking_f.fc
+        elif self.hitting or self.shooting:
+            pass
         else:
             self.max_fc = self.idle_f.fc
 
@@ -189,9 +190,15 @@ class Player:
         self.y += y
 
     def blitme(self):
+        w = self.width
+        h = self.height
+        self.width = self.current_frame.get_rect().width
+        self.height = self.current_frame.get_rect().height
         self.screen.blit(self.current_frame, (self.x, self.y, self.width, self.height))
         for projectile in self.projectiles:
             projectile.blitme()
+        self.width = w
+        self.height = h
 
     def set_pos(self, pos):
         self.x = pos[0]
@@ -262,7 +269,7 @@ class Player:
 
 class Frames:
 
-    def __init__(self, size):
+    def __init__(self, size=None):
 
         self.r_frames = []
         self.l_frames = []
@@ -276,10 +283,15 @@ class Frames:
         fc = load['fc']
 
         for frame in range(fc):
-
-            self.r_frames.append(pygame.transform.smoothscale(
-                pygame.image.load(path + str(frame) + f_type), self.size))
-            self.l_frames.append(pygame.transform.flip(self.r_frames[frame], True, False))
+            if self.size:
+                self.r_frames.append(pygame.transform.smoothscale(
+                    pygame.image.load(path + str(frame) + f_type), self.size))
+                self.l_frames.append(pygame.transform.flip(self.r_frames[frame], True, False))
+            else:
+                img = pygame.image.load(path + str(frame) + f_type)
+                img = pygame.transform.smoothscale(img, (int(img.get_rect().width * 1.333), int(img.get_rect().height * 1.333)))
+                self.r_frames.append(img)
+                self.l_frames.append(pygame.transform.flip(self.r_frames[frame], True, False))
 
         self.fc = len(self.r_frames)
 
