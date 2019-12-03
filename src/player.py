@@ -36,6 +36,7 @@ class Player:
         self.vel_x = game_settings.player_speed
         self.vel_y = 0
         self.vel_jump = game_settings.player_jump
+        self.melee_damage = 3
         
         # Flags for if player is moving/facing left/right, idle, walking_f
         self.facing_right = True
@@ -44,6 +45,7 @@ class Player:
         self.jumping = False
         self.shooting = False
         self.hitting = False
+        self.hit = False
 
         # Inits frame
         self.frame_count = 0
@@ -116,6 +118,7 @@ class Player:
             return
 
         self.hitting = True
+        self.hit = False
         self.max_fc = self.melee_f.fc
         self.frame_count = 0
         self.frame_wait = 0
@@ -196,7 +199,7 @@ class Player:
 
     def check_collision(self, obj_rect):
         if self.get_rect().colliderect(obj_rect):
-            return True
+            return self.melee_damage
         return False
 
     def get_rect(self):
@@ -210,6 +213,9 @@ class Player:
         self.shooting = False
         self.moving_left = False
         self.moving_right = False
+        self.hitting = False
+        self.shooting = False
+        self.hit = False
         self.frame_wait = 0
         self.frame_count = 0
 
@@ -225,6 +231,7 @@ class Player:
         self.idle_f.clear()
         self.walking_f.clear()
         self.jumping_f.clear()
+        self.melee_f.clear()
         self.shooting_f.clear()
 
     def add_projectile(self):
