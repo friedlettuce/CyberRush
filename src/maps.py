@@ -400,6 +400,7 @@ class Zone:
 
         for enemy in self.enemies:
             if enemy.health is 0:
+                pygame.mixer.Sound.play(self.game_settings.enemy_death_sound)
                 self.enemies.remove(enemy)
             enemy.update()
             # Shoots projectile if enemy in range of player

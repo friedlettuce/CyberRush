@@ -75,6 +75,8 @@ class Settings:
 
         self.enemy_attack_sound = pygame.mixer.Sound(os.path.join(self.sound_effect_folder, "Enemy_Attack.wav"))
 
+        self.enemy_death_sound = pygame.mixer.Sound(os.path.join(self.sound_effect_folder, "Explosion.wav"))
+
         # Settings Screen Settings
         self.vol_up_path = os.path.join(self.resources_folder, "VolUpButton.bmp")
         self.vol_down_path = os.path.join(self.resources_folder, "VolDownButton.bmp")
