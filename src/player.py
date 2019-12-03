@@ -154,7 +154,7 @@ class Player:
         self.y = self.y - self.vel_y
 
         # Resets variables at ground
-        if self.y > 365:
+        if self.y > 330:
             self.jumping = False
             self.vel_y = 0
 
