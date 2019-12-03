@@ -51,6 +51,9 @@ class GameScreen(object):
             # Deals damage to player when collides with projectiles
             damage_player = enemy.collide_projectiles(self.player)
             damage_enemy = self.player.collide_projectiles(enemy)
+            if self.player.hitting and self.player.frame_count > 2 and not self.player.hit:
+                damage_enemy += self.player.check_collision(enemy.get_rect())
+                self.player.hit = True
 
             if damage_player > 0 or damage_enemy > 0:
                 pygame.mixer.Sound.play(self.game_settings.player_damage_sound)
@@ -180,7 +183,9 @@ class GameScreen(object):
                     self.player.set_movement(True)
 
                 if event.key == self.input['melee']:
-                    self.player.hit()
+                    self.player.melee()
+                elif event.key == self.input['shoot']:
+                    self.player.shoot()
 
             elif event.type == pygame.KEYUP:
 

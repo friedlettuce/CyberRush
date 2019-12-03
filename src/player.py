@@ -20,7 +20,10 @@ class Player:
         self.walking_f = Frames(self.size)
         self.jumping_f = Frames(self.size)
         self.shooting_f = Frames(self.size)
-        self.proj_f = Frames(self.proj_size)
+
+        self.melee_f = Frames(self.size)
+
+        self.proj_f = Frames(game_settings.player_frames['projectile']['size'])
 
         self.load_frames(game_settings.player_frames)
 
@@ -35,6 +38,7 @@ class Player:
         self.vel_x = game_settings.player_speed
         self.vel_y = 0
         self.vel_jump = game_settings.player_jump
+        self.melee_damage = 3
         
         # Flags for if player is moving/facing left/right, idle, walking_f
         self.facing_right = True
@@ -42,6 +46,8 @@ class Player:
         self.moving_right = False
         self.jumping = False
         self.shooting = False
+        self.hitting = False
+        self.hit = False
 
         # Inits frame
         self.frame_count = 0
@@ -77,7 +83,7 @@ class Player:
             else:
                 self.moving_right = False
 
-            if not self.moving_right and not self.moving_left and not self.jumping and not self.shooting:
+            if not (self.moving_right or self.moving_left) and not (self.jumping or self.shooting):
                 self.max_fc = self.idle_f.fc
 
     def jump(self):
@@ -100,10 +106,22 @@ class Player:
             self.frame_count = 0
             self.frame_wait = 0
 
-    def hit(self):
+    def shoot(self):
+        if self.hitting:
+            return
 
         self.shooting = True
         self.max_fc = self.shooting_f.fc
+        self.frame_count = 0
+        self.frame_wait = 0
+
+    def melee(self):
+        if self.shooting:
+            return
+
+        self.hitting = True
+        self.hit = False
+        self.max_fc = self.melee_f.fc
         self.frame_count = 0
         self.frame_wait = 0
 
@@ -116,20 +134,22 @@ class Player:
             else:
                 self.x -= self.vel_x
 
-            if not self.jumping and not self.shooting:
+            if not (self.jumping or self.shooting or self.hitting):
                 self.current_frame = self.walking_f.frame(self.frame_count, self.facing_right)
 
-        elif not self.jumping and not self.shooting:
+        elif not (self.jumping or self.shooting or self.hitting):
             self.land()
             self.current_frame = self.idle_f.frame(self.frame_count, self.facing_right)
 
-        if self.jumping and not self.shooting:
+        if self.jumping and not (self.shooting or self.hitting):
             self.current_frame = self.jumping_f.frame(self.frame_count, self.facing_right)
 
         if self.shooting:
             self.current_frame = self.shooting_f.frame(self.frame_count, self.facing_right)
             if self.frame_count is self.max_fc - 2:
                 self.add_projectile()
+        elif self.hitting:
+            self.current_frame = self.melee_f.frame(self.frame_count, self.facing_right)
         
         self.vel_y -= 3
         self.y = self.y - self.vel_y
@@ -146,13 +166,13 @@ class Player:
                 self.projectiles.remove(projectile)
 
         self.frame_wait += 1
-        self.frame_count = self.frame_wait // self.max_fc
+        self.frame_count = self.frame_wait // 5
 
-        if self.frame_wait > self.max_fc * 10 or self.frame_count >= self.max_fc:
+        if self.frame_count >= self.max_fc:
             self.frame_wait = 0
             self.frame_count = 0
 
-        if self.shooting and self.frame_count is (self.max_fc - 1):
+        if (self.shooting or self.hitting) and self.frame_count >= (self.max_fc - 1):
             self.frame_count = 0
             self.frame_wait = 0
             if self.moving_left or self.moving_right:
@@ -162,6 +182,7 @@ class Player:
             else:
                 self.max_fc = self.idle_f.fc
             self.shooting = False
+            self.hitting = False
 
     def move_by_amount(self, x, y):
         # moves player by specified x and y number of pixels
@@ -180,7 +201,7 @@ class Player:
 
     def check_collision(self, obj_rect):
         if self.get_rect().colliderect(obj_rect):
-            return True
+            return self.melee_damage
         return False
 
     def get_rect(self):
@@ -194,6 +215,9 @@ class Player:
         self.shooting = False
         self.moving_left = False
         self.moving_right = False
+        self.hitting = False
+        self.shooting = False
+        self.hit = False
         self.frame_wait = 0
         self.frame_count = 0
 
@@ -202,12 +226,14 @@ class Player:
         self.walking_f.load_frames(player_frames['walking'], player_frames['file_type'])
         self.jumping_f.load_frames(player_frames['jumping'], player_frames['file_type'])
         self.shooting_f.load_frames(player_frames['shooting'], player_frames['file_type'])
+        self.melee_f.load_frames(player_frames['melee'], player_frames['file_type'])
         self.proj_f.load_frames(player_frames['projectile'], player_frames['file_type'])
 
     def clear_frames(self):
         self.idle_f.clear()
         self.walking_f.clear()
         self.jumping_f.clear()
+        self.melee_f.clear()
         self.shooting_f.clear()
 
     def add_projectile(self):

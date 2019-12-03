@@ -108,7 +108,7 @@ class Settings:
         self.mountains_background_path = os.path.join(self.resources_folder, "parallax-mountain-bg.png")
         
         # Player Controls
-        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s,
+        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'shoot': pygame.K_s,
                       'melee': pygame.K_e}
         self.controls_path = os.path.join(self.resources_folder, "Controls.txt")
 
@@ -138,7 +138,7 @@ class Settings:
     # Function Called To Reset Controls To Default
     def default_settings(self):
         self.control_flag = True
-        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s,
+        self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'shoot': pygame.K_s,
                       'melee': pygame.K_e}
         self.music_volume = .05
         pygame.mixer.music.set_volume(self.music_volume)
@@ -156,7 +156,7 @@ class Settings:
         self.input['right'] = int(first_line)
         self.input['left'] = int(file.readline())
         self.input['up'] = int(file.readline())
-        self.input['down'] = int(file.readline())
+        self.input['shoot'] = int(file.readline())
         self.input['melee'] = int(file.readline())
         self.music_volume = float(file.readline())
         self.player_skin = int(file.readline())
@@ -181,7 +181,7 @@ class Settings:
             file.write('%d' % self.input['up'])
             file.write("\n")
 
-            file.write('%d' % self.input['down'])
+            file.write('%d' % self.input['shoot'])
             file.write("\n")
 
             file.write('%d' % self.input['melee'])
