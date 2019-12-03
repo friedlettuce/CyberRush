@@ -3,7 +3,7 @@ import pygame
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
 import highscores
-from highscores import populateWithPlaceholders, initialDatabaseCreation, displayScores, returnAScore, return5Scores
+from highscores import populateWithPlaceholders, initialDatabaseCreation, displayScores, returnAScore, return5Scores, resetHighscores, deletePlayer
 
 
 # NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
@@ -347,7 +347,7 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
     def __init__(self, screen, game_settings):
         super().__init__(screen, game_settings)
         initialDatabaseCreation()
-        self.scoreIndex = 0 # Will hold the score index for the page displayed
+        self.scoreIndex = 0  # Will hold the score index for the page displayed
 
         self.mainmenu_button = Button(
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
@@ -364,45 +364,99 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
         self.TextRect = self.textSurface.get_rect()
         self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
         '''
-        firstscore = returnAScore()  # First score contains a tuple, [0] is the entry name [1] is the score
-        entry = firstscore[0] + " " + str(firstscore[1])  # Converts the entry to a string to be displayed
+        #firstscore = returnAScore()  # First score contains a tuple, [0] is the entry name [1] is the score
+        #entry = firstscore[0] + " " + str(firstscore[1])  # Converts the entry to a string to be displayed
+
 
         fivescores = return5Scores(self.scoreIndex)
-        score1 = fivescores[0]  #Each contains a tuple (playername, playerscore)
-        score2 = fivescores[1]
-        score3 = fivescores[2]
-        score4 = fivescores[3]
-        score5 = fivescores[4]
-        
-        text = entry
+
+
+        # Case of empty highscores list, inputs 5 placeholder values
+        if fivescores == None:
+            populateWithPlaceholders()
+
+
+        score1 = fivescores[0]  # Each contains a tuple (playername, playerscore)
+
+        try:
+            score2 = fivescores[1]
+        except(IndexError):
+            pass
+        try:
+            score3 = fivescores[2]
+        except(IndexError):
+            pass
+        try:
+            score4 = fivescores[3]
+        except(IndexError):
+            pass
+        try:
+            score5 = fivescores[4]
+        except(IndexError):
+            pass
+
+
+        try:
+            entry1 = score1[0] + "  " + str(score1[1])
+        except(UnboundLocalError):
+            pass
+        try:
+            entry2 = score2[0] + "  " + str(score2[1])
+        except(UnboundLocalError):
+            pass
+        try:
+            entry3 = score3[0] + "  " + str(score3[1])
+        except(UnboundLocalError):
+            pass
+        try:
+            entry4 = score4[0] + "  " + str(score4[1])
+        except(UnboundLocalError):
+            pass
+        try:
+            entry5 = score5[0] + "  " + str(score5[1])
+        except(UnboundLocalError):
+            pass
+
+        text = entry1
         score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
         self.textSurface1 = score1.render(text, True, (0, 0, 0))
         self.TextRect1 = self.textSurface1.get_rect()
         self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
 
-        text = "Score 2 3000"
-        score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface2 = score2.render(text, True, (0, 0, 0))
-        self.TextRect2 = self.textSurface2.get_rect()
-        self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
+        try:
+            text = entry2
+            score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
+            self.textSurface2 = score2.render(text, True, (0, 0, 0))
+            self.TextRect2 = self.textSurface2.get_rect()
+            self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
+        except(UnboundLocalError):
+            pass
+        try:
+            text = entry3
+            score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
+            self.textSurface3 = score3.render(text, True, (0, 0, 0))
+            self.TextRect3 = self.textSurface3.get_rect()
+            self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
+        except(UnboundLocalError):
+            pass
 
-        text = "Score 3 2000"
-        score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface3 = score3.render(text, True, (0, 0, 0))
-        self.TextRect3 = self.textSurface3.get_rect()
-        self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
+        try:
+            text = entry4
+            score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
+            self.textSurface4 = score4.render(text, True, (0, 0, 0))
+            self.TextRect4 = self.textSurface4.get_rect()
+            self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
+        except(UnboundLocalError):
+            pass
 
-        text = "Score 4 2000"
-        score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface4 = score4.render(text, True, (0, 0, 0))
-        self.TextRect4 = self.textSurface4.get_rect()
-        self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
-
-        text = "Score 5 2000"
-        score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface5 = score5.render(text, True, (0, 0, 0))
-        self.TextRect5 = self.textSurface5.get_rect()
-        self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
+        try:
+            text = entry5
+            score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
+            self.textSurface5 = score5.render(text, True, (0, 0, 0))
+            self.TextRect5 = self.textSurface5.get_rect()
+            self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
+        except(UnboundLocalError):
+            pass
 
     def check_events(self):
 
@@ -442,11 +496,26 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
 
     def blitme(self):
         self.screen.fill(self.bk_color)
-        self.screen.blit(self.textSurface1, self.TextRect1)
-        self.screen.blit(self.textSurface2, self.TextRect2)
-        self.screen.blit(self.textSurface3, self.TextRect3)
-        self.screen.blit(self.textSurface4, self.TextRect4)
-        self.screen.blit(self.textSurface5, self.TextRect5)
+        try:
+            self.screen.blit(self.textSurface1, self.TextRect1)
+        except(AttributeError):
+            pass
+        try:
+            self.screen.blit(self.textSurface2, self.TextRect2)
+        except(AttributeError):
+            pass
+        try:
+            self.screen.blit(self.textSurface3, self.TextRect3)
+        except(AttributeError):
+            pass
+        try:
+            self.screen.blit(self.textSurface4, self.TextRect4)
+        except(AttributeError):
+            pass
+        try:
+            self.screen.blit(self.textSurface5, self.TextRect5)
+        except(AttributeError):
+            pass
 
         self.mainmenu_button.blitme()
         self.addplaceholders_button.blitme()

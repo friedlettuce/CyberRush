@@ -26,16 +26,24 @@ def populateWithPlaceholders():
     c = conn.cursor()
     # NOTE: need to pass in the players name and score into this function
     # to successfully implement this
-    playername = "Placeholder 1"
+    playername = "Player 1"
     playerscore = 100
     c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
               {'playerName': playername, 'playerScore': playerscore})
-    playername = "Placeholder 2"
+    playername = "Player 2"
     playerscore = 150
     c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
               {'playerName': playername, 'playerScore': playerscore})
-    playername = "Placeholder 3"
+    playername = "Player 2"
     playerscore = 15
+    c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
+              {'playerName': playername, 'playerScore': playerscore})
+    playername = "Player 3"
+    playerscore = 245
+    c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
+              {'playerName': playername, 'playerScore': playerscore})
+    playername = "Player 5"
+    playerscore = 69
     c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
               {'playerName': playername, 'playerScore': playerscore})
     conn.commit()
@@ -131,4 +139,23 @@ def return5Scores(index):
     c = conn.cursor()
     c.execute("SELECT playerName, playerScore from highscores ORDER BY playerScore DESC",)
     scores = c.fetchall()
-    return (scores[index], scores[index+1], scores[index+2], scores[index+3], scores[index+4])
+    try:
+        return (scores[index], scores[index+1], scores[index+2], scores[index+3], scores[index+4])
+    except(IndexError):
+        pass
+    try:
+        return (scores[index], scores[index+1], scores[index+2], scores[index+3])
+    except(IndexError):
+        pass
+    try:
+        return (scores[index], scores[index+1], scores[index+2])
+    except(IndexError):
+        pass
+    try:
+        return (scores[index], scores[index+1])
+    except(IndexError):
+        pass
+    try:
+        return (scores[index])
+    except(IndexError):
+        pass
