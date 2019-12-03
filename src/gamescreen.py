@@ -18,7 +18,7 @@ class GameScreen(object):
 
         # Map
         level_path = path.dirname(path.realpath("resources"))
-        self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_02.txt'))
+        self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
         self.cur_zone_coords = self.map.spawnpoint
         self.cur_zone = self.map.zones[self.cur_zone_coords[0]][self.cur_zone_coords[1]]
         self.spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
