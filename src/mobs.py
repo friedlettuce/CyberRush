@@ -286,3 +286,41 @@ class Projectile(object):
     def blitme(self):
         pygame.draw.rect(self.screen, (0, 255, 0), (self.x, self.y, self.width, self.height))
 
+
+class ShipEnemy(Enemy):
+    # Stores frames
+
+    def __init__(self, screen, game_settings, num, facing, x, y, width, height, end_x=0, end_y=0):
+        super().__init__(screen, x, y, width, height, end_x, end_y)
+
+        # this enemy moves
+        self.moving = True
+
+        # Load frames
+        game_settings.load_ship(num)
+        self.ship = Parts(game_settings.ship['parts'], facing, self.x, self.y)
+        self.left_frames = None
+        self.right_frames = None
+
+        self.frame = None
+        self.frame_rect = None
+        self.projectile_speed = None
+        self.projectile_num = None
+        # If the enemy moves along a path, sets velocity not to 0
+        if self.moving_x:
+            self.vel_x = game_settings.ship['ship_vel_x']
+        if self.moving_y:
+            self.vel_y = game_settings.ship['ship_vel_y']
+
+
+class Parts:
+
+    def __init__(self, parts, x, y):
+
+        path = parts['path']
+        offset = parts['offset']
+        priority = parts['priority']
+        size = parts['size']
+
+
+

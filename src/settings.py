@@ -49,6 +49,10 @@ class Settings:
 
         self.l_turret_path = os.path.join(sprites_folder, "LeftTurret.png")
         self.r_turret_path = os.path.join(sprites_folder, "RightTurret.png")
+
+        # Spaceship Enemy Boss Settings
+        self.ship_path = os.path.join(sprites_folder, "spaceships")
+        self.ship = {}
         
         # Custom font
         self.cb2_path = os.path.join(self.resources_folder, "cb2.ttf")
@@ -254,6 +258,57 @@ class Settings:
                 'size': (33, 11)
             },
             'file_type': '.png'
+        }
+
+    def load_ship(self, number):
+        if number < 0 or number > 6:
+            number = 3
+        ship_path = os.path.join(self.ship_path, 'Ship' + str(number))
+        parts_path = os.path.join(ship_path, 'Parts')
+        parts_list = os.path.join(parts_path, 'list.txt')
+
+        parts = []
+        path = None
+        size = None
+        offset = None
+        part_priority = None
+
+        with open(parts_list, 'r') as pl:
+
+            for line in pl:
+                # Checks list of parts for file, offset, and size by line
+                for word in line:
+
+                    if path is None:
+                        path = word
+                    elif offset is None:
+                        # Splits at 4 to check for sign
+                        x = int(word[:4])
+                        y = int(word[4:])
+                        offset = (x, y)
+                    elif part_priority is None:
+                        part_priority = int(word)
+                    elif size is None:
+                        # Splits at 4 to check for sign
+                        x = int(word[:4])
+                        y = int(word[4:])
+                        size = (x, y)
+
+                parts.append({
+                    'path': os.path.join(parts_path, path),
+                    'offset': offset,
+                    'priority': part_priority,
+                    'size': size
+                })
+                path = size = offset = part_priority = None
+
+        self.ship = {
+            'parts': parts,
+            'shots': os.path.join(os.path.join(ship_path, 'Shot' + str(number)), 'shot' + str(number) + '_'),
+            'shots_file': '.png',
+            'shots_fc': 4,
+            'ship_vel_x': 5,
+            'ship_vel_y': 2
         }
 
 
