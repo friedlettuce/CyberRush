@@ -32,7 +32,6 @@ class Player:
         # Initial Player Starting Point
         self.x = x
         self.y = y
-        self.ground = None
         self.vel_x = game_settings.player_speed
         self.vel_y = 0
         self.vel_jump = game_settings.player_jump
@@ -155,8 +154,7 @@ class Player:
         self.y = self.y - self.vel_y
 
         # Resets variables at ground
-        if self.y > self.ground:
-            self.y = self.ground
+        if self.y > 365:
             self.jumping = False
             self.vel_y = 0
 

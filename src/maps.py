@@ -389,25 +389,22 @@ class Zone:
                 cur_zone_coords[0] -= 1
                 return cur_zone_coords, "left"
             player.x += player.vel_x
-            return cur_zone_coords, "none"
-        elif player.x >= self.screen_rect.width - player.width:
+        if player.x >= self.screen_rect.width - player.width:
             if self.right_used:
                 cur_zone_coords[0] += 1
                 return cur_zone_coords, "right"
             player.x -= player.vel_x
-            return cur_zone_coords, "none"
-        elif player.y <= 0:
+        if player.y <= 0:
             if self.up_used:
                 cur_zone_coords[1] -= 1
                 return cur_zone_coords, "up"
             player.y -= player.vel_y
-            return cur_zone_coords, "none"
-        elif player.y >= player.ground:
+        if player.y >= 365:
+            print("fixing")
             if self.down_used:
                 cur_zone_coords[1] += 1
                 return cur_zone_coords, "down"
-            player.y = player.ground
-            return cur_zone_coords, "none"
+            player.y = 365
         return cur_zone_coords, "none"
 
     def update_enemies(self, player):

@@ -36,9 +36,6 @@ class GameScreen(object):
         self.player.clear_frames()
         self.player.load_frames(self.game_settings.player_frames)
 
-        # sets player ground
-        self.player.ground = self.cur_zone.leftspawn[1]
-
     def check_collisions(self, collidable):
 
         for enemy in self.cur_zone.enemies:
@@ -176,6 +173,7 @@ class GameScreen(object):
             self.player.x = self.cur_zone.upspawn[0]
             self.player.y = self.cur_zone.upspawn[1]
         self.ui.update(self.player)
+        print(self.player.y)
 
     def check_events(self):
 
