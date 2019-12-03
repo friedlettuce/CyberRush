@@ -275,7 +275,10 @@ class Settings:
 
         with open(parts_list, 'r') as pl:
 
+            survivable = int(pl.readline())
+
             for line in pl:
+                line = line.split()
                 # Checks list of parts for file, offset, and size by line
                 for word in line:
 
@@ -304,11 +307,15 @@ class Settings:
 
         self.ship = {
             'parts': parts,
+            'parts_file': '.png',
             'shots': os.path.join(os.path.join(ship_path, 'Shot' + str(number)), 'shot' + str(number) + '_'),
             'shots_file': '.png',
             'shots_fc': 4,
-            'ship_vel_x': 5,
-            'ship_vel_y': 2
+            'width': 86,
+            'height': 39,
+            'vel_x': 5,
+            'vel_y': 2,
+            'survivable': survivable
         }
 
 

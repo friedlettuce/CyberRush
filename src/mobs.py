@@ -290,7 +290,7 @@ class Projectile(object):
 class ShipEnemy(Enemy):
     # Stores frames
 
-    def __init__(self, screen, game_settings, num, facing, x, y, width, height, end_x=0, end_y=0):
+    def __init__(self, screen, game_settings, num, x, y, width=None, height=None, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
         # this enemy moves
@@ -298,29 +298,120 @@ class ShipEnemy(Enemy):
 
         # Load frames
         game_settings.load_ship(num)
-        self.ship = Parts(game_settings.ship['parts'], facing, self.x, self.y)
-        self.left_frames = None
-        self.right_frames = None
+        self.ship = Parts(game_settings.ship['parts'],
+                          game_settings.ship['survivable'], self.x, self.y)
+        self.width = game_settings.ship['width']
+        self.height = game_settings.ship['height']
 
         self.frame = None
         self.frame_rect = None
         self.projectile_speed = None
         self.projectile_num = None
+
         # If the enemy moves along a path, sets velocity not to 0
         if self.moving_x:
-            self.vel_x = game_settings.ship['ship_vel_x']
+            self.vel_x = game_settings.ship['vel_x']
         if self.moving_y:
-            self.vel_y = game_settings.ship['ship_vel_y']
+            self.vel_y = game_settings.ship['vel_y']
+
+    def update(self):
+
+        if self.moving_x:
+            self.update_x()
+        if self.moving_y:
+            self.update_y()
+
+        if self.frame_counter + 1 == 60:
+            self.frame_counter = 0
+
+        # Changes frames as enemy moves left/right
+        if self.vel_x < 0 and self.moving_x or not self.facing_right:
+            self.ship.facing_right = False
+        elif (self.vel_x >= 0 and self.moving_x) or self.facing_right:
+            self.ship.facing_right = True
+
+        # Sets hitbox vertical and horizontal start/width/height
+        self.update_hitbox()
+
+        for projectile in self.projectiles:
+            if projectile.move() == 0:
+                self.projectiles.remove(projectile)
+
+    def blitme(self):
+        self.ship.blitme(self.screen)
 
 
 class Parts:
 
-    def __init__(self, parts, x, y):
+    def __init__(self, parts, survivable, x, y):
 
-        path = parts['path']
-        offset = parts['offset']
-        priority = parts['priority']
-        size = parts['size']
+        self.frames = []
+        self.x = x
+        self.y = y
+        self.survivable = survivable
+        self.facing_right = True
+
+        self.load_frames(parts)
+
+    def move(self, x, y):
+
+        for frame in range(len(self.frames)):
+            frame['rrect'].x += x
+            frame['rrect'].y += y
+            frame['lrect'].x += x
+            frame['lrect'].y += y
+
+    def blitme(self, screen):
+
+        for frame in range(len(self.frames)):
+
+            # Prints parts by order of priority
+            current_frame = None
+            for f_tmp in self.frames:
+                if frame is f_tmp['priority']:
+                    current_frame = f_tmp
+
+            if self.facing_right:
+                screen.blit(current_frame['rframe'], current_frame['rrect'])
+            else:
+                screen.blit(current_frame['lframe'], current_frame['lrect'])
+
+    def load_frames(self, parts):
+
+        # Goes through list of ship parts from settings
+        for frame in parts:
+
+            # Loads frame image (and transforms if size given)
+            if frame['size']:
+                current_frame_r = pygame.transform.smoothscale(
+                    pygame.image.load(frame['path']), frame['size'])
+                rect = pygame.Rect(((self.x, self.y) + frame['offset']), frame['size'])
+            else:
+                current_frame_r = pygame.image.load(frame['path'])
+                rect = current_frame_r.get_rect()
+
+            # Flips frame for facing opposite direction
+            current_frame_l = pygame.transform.flip(current_frame_r, True, False)
+
+            r_rect = rect
+            r_rect.x = self.x + frame['offset'][0]
+            r_rect.y = self.y + frame['offset'][1]
+            l_rect = rect
+            r_rect.x = self.x - frame['offset'][0]
+            r_rect.y = self.y + frame['offset'][1]
+
+            print(frame['path'])
+
+            # Stores frames into list with offsets and sizes
+            self.frames.append({
+                'lframe': current_frame_l,
+                'lrect': l_rect,
+                'rframe': current_frame_r,
+                'rrect': r_rect,
+                'offset': frame['offset'],
+                'size': frame['size'],
+                'priority': frame['priority']
+            })
 
 
 

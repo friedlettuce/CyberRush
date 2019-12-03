@@ -1,6 +1,7 @@
-ship3_body.png 00000000 5
-ship3_detail.png -0500000 0
-ship3_head.png 00500000 3
-ship3_head2.png 00400000 4
-ship3_tail.png -0400000 2
-ship3_turbine.png -0400000 1
+3
+ship3_body.png 00000000 2
+ship3_detail.png -0050005 3
+ship3_head.png 00250002 5
+ship3_head2.png 00150002 4
+ship3_tail.png -0350005 1
+ship3_turbine.png -0350008 0
