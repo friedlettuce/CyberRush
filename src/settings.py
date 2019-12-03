@@ -18,13 +18,15 @@ class Settings:
         self.title_background_path = os.path.join(resources_folder, "title_bg.png")
         self.bk_color = (39, 184, 184)
 
-        self.num_buttons = 5    #Changed this from 4 to 5
+        self.num_buttons = 5  # Changed this from 4 to 5
         self.title_path = os.path.join(resources_folder, "Title.bmp")
         self.play_path = os.path.join(resources_folder, "PlayButton.bmp")
         self.quit_path = os.path.join(resources_folder, "QuitButton.bmp")
         self.about_path = os.path.join(resources_folder, "AboutButton.bmp")
-        self.highscores_path = os.path.join(resources_folder, "HighScoresButton.bmp")   # Added button to go to highscores screen
-        self.placeholder_path = os.path.join(resources_folder, "PlaceholdersButton.bmp")    # Added button to add placeholders in highscores
+        self.highscores_path = os.path.join(resources_folder,
+                                            "HighScoresButton.bmp")  # Added button to go to highscores screen
+        self.placeholder_path = os.path.join(resources_folder,
+                                             "PlaceholdersButton.bmp")  # Added button to add placeholders in highscores
         self.settings_path = os.path.join(resources_folder, "SettingsButton.bmp")
         self.mainmenu_path = os.path.join(resources_folder, "MainMenuButton.bmp")
 
@@ -41,13 +43,13 @@ class Settings:
         self.rhr1_path = os.path.join(sprites_folder, "RobotHoverRight1.png")
         self.rhr2_path = os.path.join(sprites_folder, "RobotHoverRight2.png")
         self.rhA_path = os.path.join(sprites_folder, "RobotHoverLeftAttack.png")
-        
+
         # Custom font
         self.cb2_path = os.path.join(resources_folder, "cb2.ttf")
-        
+
         # Music Settings
         music_folder = os.path.join(resources_folder, "music")
-        
+
         self.titleMusic_path = os.path.join(music_folder, "Title Music.mp3")
 
         self.music_volume = .05
@@ -76,7 +78,7 @@ class Settings:
         # Screen Backgrounds
         self.city_background_path = os.path.join(resources_folder, "city_bg.png")
         self.mountains_background_path = os.path.join(resources_folder, "parallax-mountain-bg.png")
-        
+
         # Player Controls
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s}
         self.controls_path = os.path.join(resources_folder, "Controls.txt")

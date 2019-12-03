@@ -3,14 +3,14 @@ import pygame
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
 import highscores
-from highscores import populateWithPlaceholders, initialDatabaseCreation, displayScores, returnAScore
+from highscores import populateWithPlaceholders, initialDatabaseCreation, displayScores, returnAScore, return5Scores
+
 
 # NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
 
 class Screen:
 
     def __init__(self, screen, game_settings):
-
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
@@ -41,7 +41,7 @@ class TitleScreen(Screen):
         self.background_img = pygame.transform.scale(
             self.background_img, (game_settings.screen_w, game_settings.screen_h))
         self.background_rect = self.background_img.get_rect()
-        
+
         self.background_rect.centerx = self.screen_rect.centerx
         self.background_rect.centery = self.screen_rect.centery
 
@@ -64,7 +64,7 @@ class TitleScreen(Screen):
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
 
         button_num -= 1
-        #ADDED THIS LINE
+        # ADDED THIS LINE
         self.highscores_button = Button(
             screen, game_settings.highscores_path, int(self.screen_rect.centerx * 1.5),
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
@@ -75,12 +75,14 @@ class TitleScreen(Screen):
             screen, game_settings.quit_path, int(self.screen_rect.centerx * 1.5),
             int(self.screen_rect.height - (button_num * self.screen_rect.height) / (game_settings.num_buttons + 1)))
 
-        self.buttons = [self.play_button, self.settings_button, self.about_button, self.highscores_button, self.quit_button]
-        
-        self.Robot1 = HoveringEnemy(screen, game_settings, 0, (self.screen_rect.centery*1.25),
-                    game_settings.hov_size[0], game_settings.hov_size[0], (self.screen_rect.centerx/1.25))
+        self.buttons = [self.play_button, self.settings_button, self.about_button, self.highscores_button,
+                        self.quit_button]
+
+        self.Robot1 = HoveringEnemy(screen, game_settings, 0, (self.screen_rect.centery * 1.25),
+                                    game_settings.hov_size[0], game_settings.hov_size[0],
+                                    (self.screen_rect.centerx / 1.25))
         self.Robot2 = HoveringEnemy(screen, game_settings, self.screen_rect.centerx, 0,
-                    game_settings.hov_size[0], game_settings.hov_size[0], 0, self.screen_rect.centery)
+                                    game_settings.hov_size[0], game_settings.hov_size[0], 0, self.screen_rect.centery)
 
     def screen_start(self):
         # Music
@@ -112,7 +114,8 @@ class TitleScreen(Screen):
                     ret_game_state = GameState.SETTINGS
                 elif self.about_button.image_rect.colliderect(mouse_pos):
                     ret_game_state = GameState.ABOUT
-                elif self.highscores_button.image_rect.colliderect(mouse_pos):      # ADDED THIS, IF BUTTON IS CLICKED GOES TO THIS EVENT
+                elif self.highscores_button.image_rect.colliderect(
+                        mouse_pos):  # ADDED THIS, IF BUTTON IS CLICKED GOES TO THIS EVENT
                     ret_game_state = GameState.HIGHSCORES
                 elif self.quit_button.image_rect.colliderect(mouse_pos):
                     ret_game_state = GameState.QUIT
@@ -131,7 +134,7 @@ class TitleScreen(Screen):
         self.about_button.blitme()
         self.highscores_button.blitme()
         self.quit_button.blitme()
-        
+
         self.Robot1.blitme()
         self.Robot2.blitme()
 
@@ -139,7 +142,6 @@ class TitleScreen(Screen):
 class Button:
 
     def __init__(self, screen, image_path, posx, posy):
-
         self.screen = screen
         self.image = pygame.image.load(image_path)
 
@@ -259,7 +261,7 @@ class SettingsScreen(Screen):
         # Volume Buttons
         self.vol_up_button.blitme()
         self.vol_down_button.blitme()
-        
+
         # Volume Percentage
         self.volume_display()
 
@@ -270,42 +272,42 @@ class SettingsScreen(Screen):
         self.control_down_button.blitme()
         self.control_right_button.blitme()
         self.reset_button.blitme()
-    
+
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
 
         key = pygame.key.name(self.game_settings.input['right'])
         key = key.upper()
-        
-        right_control = large_text.render((str('Right Control: ') + str(key)), True, (0, 0 ,0))
-        self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
+
+        right_control = large_text.render((str('Right Control: ') + str(key)), True, (0, 0, 0))
+        self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1 * 1.75)))
 
         key = pygame.key.name(self.game_settings.input['left'])
         key = key.upper()
 
-        left_control = large_text.render((str("Left Control: ") + str(key)), True, (0, 0 ,0))
-        self.screen.blit(left_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.25)))
+        left_control = large_text.render((str("Left Control: ") + str(key)), True, (0, 0, 0))
+        self.screen.blit(left_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1 * 1.25)))
 
         key = pygame.key.name(self.game_settings.input['up'])
         key = key.upper()
 
-        up_control = large_text.render((str("Up Control: ") + str(key)), True, (0, 0 ,0))
-        self.screen.blit(up_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1)))
+        up_control = large_text.render((str("Up Control: ") + str(key)), True, (0, 0, 0))
+        self.screen.blit(up_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1 * 1)))
 
         key = pygame.key.name(self.game_settings.input['down'])
         key = key.upper()
 
-        down_control = large_text.render(str("Down Control: " + str(key)), True, (0, 0 ,0))
-        self.screen.blit(down_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.5)))
+        down_control = large_text.render(str("Down Control: " + str(key)), True, (0, 0, 0))
+        self.screen.blit(down_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1 * 1.5)))
 
     def volume_display(self):
 
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
-        volume_display = self.game_settings.music_volume*100
-        
+        volume_display = self.game_settings.music_volume * 100
+
         volume_display = large_text.render((str(round(volume_display, 2)) + "%"), True, (0, 0, 0))
         self.screen.blit(volume_display, (int(self.screen_rect.centerx / 1.25), int(self.screen_rect.centery / 1.7)))
-        
+
 
 class AboutScreen(Screen):
 
@@ -340,13 +342,12 @@ class AboutScreen(Screen):
         self.mainmenu_button.blitme()
 
 
-
-
-class HighScoresScreen(Screen): # Need to find a way to display the scores
+class HighScoresScreen(Screen):  # Need to find a way to display the scores
 
     def __init__(self, screen, game_settings):
         super().__init__(screen, game_settings)
         initialDatabaseCreation()
+        self.scoreIndex = 0 # Will hold the score index for the page displayed
 
         self.mainmenu_button = Button(
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
@@ -363,8 +364,16 @@ class HighScoresScreen(Screen): # Need to find a way to display the scores
         self.TextRect = self.textSurface.get_rect()
         self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
         '''
-        firstscore = returnAScore()     # First score contains a tuple, [0] is the entry name [1] is the score
-        entry = firstscore[0] +" " + str(firstscore[1])  #Converts the entry to a string to be displayed
+        firstscore = returnAScore()  # First score contains a tuple, [0] is the entry name [1] is the score
+        entry = firstscore[0] + " " + str(firstscore[1])  # Converts the entry to a string to be displayed
+
+        fivescores = return5Scores(self.scoreIndex)
+        score1 = fivescores[0]  #Each contains a tuple (playername, playerscore)
+        score2 = fivescores[1]
+        score3 = fivescores[2]
+        score4 = fivescores[3]
+        score5 = fivescores[4]
+        
         text = entry
         score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
         self.textSurface1 = score1.render(text, True, (0, 0, 0))
@@ -415,8 +424,8 @@ class HighScoresScreen(Screen): # Need to find a way to display the scores
                     # Call the populate with placeholders function inside highscores.py
                     populateWithPlaceholders()
 
-
         return ret_game_state
+
     ''''
     def displayHighScores(self):
         firstscore = returnAScore()
@@ -426,12 +435,10 @@ class HighScoresScreen(Screen): # Need to find a way to display the scores
         self.TextRect1 = self.textSurface1.get_rect()
         self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
         '''
-       # large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
-        #firstScore = returnAScore()
-        #self.textSurface = large_text.render(firstScore, True, (0, 0, 0))
 
-
-
+    # large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+    # firstScore = returnAScore()
+    # self.textSurface = large_text.render(firstScore, True, (0, 0, 0))
 
     def blitme(self):
         self.screen.fill(self.bk_color)
@@ -440,8 +447,6 @@ class HighScoresScreen(Screen): # Need to find a way to display the scores
         self.screen.blit(self.textSurface3, self.TextRect3)
         self.screen.blit(self.textSurface4, self.TextRect4)
         self.screen.blit(self.textSurface5, self.TextRect5)
-
-
 
         self.mainmenu_button.blitme()
         self.addplaceholders_button.blitme()

@@ -4,7 +4,7 @@ import pygame
 # Generic Enemy Class For Enemies To Utilize
 class Enemy(object):
     # Enemy class handles directional movement, hitbox, and frames
-    
+
     def __init__(self, screen, x, y, width, height, end_x, end_y):
         self.screen = screen
         self.x = x
@@ -56,7 +56,7 @@ class Enemy(object):
                 self.vel_x *= -1
                 self.x = self.x + self.vel_x
                 self.movement = 0
-                
+
         # If Velocity < 0, Enemy Is Moving To The Left
         elif self.vel_x < 0:
             if self.x > self.path_x[0] - self.vel_x:
@@ -67,7 +67,7 @@ class Enemy(object):
                 self.vel_x *= -1
                 self.x = self.x + self.vel_x
                 self.movement = 0
-    
+
     # Function For An Enemy To Move Side To Side On The Y Axis
     def update_y(self):
         # If Velocity > 0, Enemy Is Moving Down
@@ -78,7 +78,7 @@ class Enemy(object):
                 self.vel_y *= -1
                 self.y += self.vel_y
                 self.movement = 0
-                
+
         # If Velocity < 0, Enemy Is Moving Up
         elif self.vel_y < 0:
             if self.y > self.path_y[0] - self.vel_y:
@@ -131,8 +131,9 @@ class Enemy(object):
         # Adds a projectile if it hasn't shot to many yet
         if len(self.projectiles) < self.projectile_num:
             self.projectiles.append(Projectile(self.screen,
-                self.frame_rect.centerx + self.x, self.y + int(self.frame_rect.height * .2), 10,
-                    5, dir_x, dir_y, self.projectile_speed))
+                                               self.frame_rect.centerx + self.x,
+                                               self.y + int(self.frame_rect.height * .2), 10,
+                                               5, dir_x, dir_y, self.projectile_speed))
 
     def range_y(self, y):
         return self.y in range(y - 20, y + 20)
@@ -156,9 +157,9 @@ class HoveringEnemy(Enemy):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
         self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), game_settings.hov_size),
-                         pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]
+                            pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]
         self.right_frames = [pygame.transform.scale(pygame.image.load(game_settings.rhr1_path), game_settings.hov_size),
-                          pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
+                             pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
 
         self.frame = self.right_frames[0]
         self.frame_rect = self.right_frames[0].get_rect()
@@ -175,7 +176,6 @@ class HoveringEnemy(Enemy):
 class Projectile(object):
 
     def __init__(self, screen, x, y, width, height, dir_x, dir_y, speed):
-
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
@@ -194,7 +194,7 @@ class Projectile(object):
         # Activates removal if off screen
         if (self.x > self.screen_rect.width or self.x < 0) or (
                 self.y > self.screen_rect.height or self.y < 0):
-            return 0    # Pop self
+            return 0  # Pop self
 
     def blitme(self):
         pygame.draw.rect(self.screen, (0, 255, 0), (self.x, self.y, self.width, self.height))

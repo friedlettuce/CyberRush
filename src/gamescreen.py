@@ -4,6 +4,7 @@ from settings import GameState
 from player import Player
 from mobs import HoveringEnemy
 from maps import Map
+from highscores import addNewPlayer
 
 
 class GameScreen(object):
@@ -67,7 +68,9 @@ class GameScreen(object):
 
         for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:       # Calculate the score here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                #Need to find a way to calculate the score here
+                #addNewPlayer(playername, playerscore)
                 ret_game_state = GameState.QUIT
 
         if self.player.off_left:

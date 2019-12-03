@@ -8,12 +8,11 @@ from gamescreen import GameScreen
 
 
 def run_game():
-
     pygame.init()
     cur_gamestate = GameState(1)
-    new_gamestate = GameState(0)    # Used to track which game state we are switching to
+    new_gamestate = GameState(0)  # Used to track which game state we are switching to
     game_settings = Settings()
-    
+
     clock = pygame.time.Clock()
 
     screen = pygame.display.set_mode((
@@ -39,15 +38,13 @@ def run_game():
     while True:
 
         clock.tick(game_settings.clock_tick_interval)
-        
-        if new_gamestate is GameState.QUIT:
 
+        if new_gamestate is GameState.QUIT:
             game_settings.save_controls()
             pygame.quit()
             sys.exit()
 
         if cur_gamestate != new_gamestate:
-
             # Run screen start function
             cur_gamestate = new_gamestate
             screen = screens[cur_gamestate]
@@ -57,7 +54,6 @@ def run_game():
         screen.blitme()
 
         if cur_gamestate != new_gamestate:
-
             # If gamestate has changed, run screen end function
             screen.screen_end()
 

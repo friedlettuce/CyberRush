@@ -21,19 +21,17 @@ class Player:
         load_frames = game_settings.player_frames
 
         for frame in range(load_frames['idle_fc']):
-
             self.idle_r_frames.append(pygame.transform.scale(
                 pygame.image.load(load_frames['idle_path'] + str(
                     frame) + load_frames['file_type']), self.player_size))
             self.idle_l_frames.append(pygame.transform.flip(self.idle_r_frames[frame], True, False))
 
         for frame in range(load_frames['walk_fc']):
-
             self.walk_r_frames.append(pygame.transform.scale(
                 pygame.image.load(load_frames['walk_path'] + str(
                     frame) + load_frames['file_type']), self.player_size))
             self.walk_l_frames.append(pygame.transform.flip(self.walk_r_frames[frame], True, False))
-        
+
         # Initial Player Starting Point
         self.x = x
         self.y = self.screen_ground = int((self.screen_rect.bottom / 1.5))
@@ -45,7 +43,7 @@ class Player:
         # Flags if player has gone to another map
         self.off_left = False
         self.off_right = False
-        
+
         # Flags for if player is moving/facing left/right, idle, walking
         self.facing_right = True
         self.moving_left = False
@@ -56,13 +54,13 @@ class Player:
         # Inits frame
         self.frame_count = 0
         self.current_frame = self.idle_r_frames[self.frame_count]
-        
+
         # Init Controls
         self.input = game_settings.input
-        
+
     def move(self):
         keys = pygame.key.get_pressed()
-        
+
         if keys[self.input['left']]:
 
             if (self.x - self.vel) < self.screen_rect.left and self.map_left:
@@ -103,6 +101,6 @@ class Player:
 
         self.frame_count += 1
         self.frame_count %= 8
-    
+
     def blitme(self):
         self.screen.blit(self.current_frame, (self.x, self.y, self.player_w, self.player_h))

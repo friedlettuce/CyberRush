@@ -123,3 +123,12 @@ def returnAScore():
     score = c.fetchone()
     conn.close()
     return score
+
+# Function will take in an index (page number) and return the next 5 scores
+# Example, index 1 returns first 5, index 2 returns the next 5, etc
+def return5Scores(index):
+    conn = sqlite3.connect('highscores.db')
+    c = conn.cursor()
+    c.execute("SELECT playerName, playerScore from highscores ORDER BY playerScore DESC",)
+    scores = c.fetchall()
+    return (scores[index], scores[index+1], scores[index+2], scores[index+3], scores[index+4])
