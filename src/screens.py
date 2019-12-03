@@ -175,6 +175,14 @@ class SettingsScreen(Screen):
             screen, game_settings.vol_down_path, int(self.screen_rect.centerx * 1.3),
             int(self.screen_rect.centery / 1.5))
 
+        # Projectile Settings
+        self.left_change_projectile_button = Button(
+            screen, game_settings.vol_up_path, int(self.screen_rect.centerx * 1.7),
+            int(self.screen_rect.centery * 1.3))
+        self.right_change_projectile_button = Button(
+            screen, game_settings.vol_down_path, int(self.screen_rect.centerx * 1.3),
+            int(self.screen_rect.centery * 1.3))
+
         # Volume text
         text = "Change Volume"
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
@@ -283,7 +291,6 @@ class SettingsScreen(Screen):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
                     self.control_right_button_2.blitme()
-
                     pygame.display.update()
 
                     self.game_settings.change_control('melee')
@@ -296,12 +303,22 @@ class SettingsScreen(Screen):
                 elif self.left_change_player_button.image_rect.colliderect(mouse_pos):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
-                    self.game_settings.change_player(1)
+                    self.game_settings.change_player(1, None)
 
                 elif self.right_change_player_button.image_rect.colliderect(mouse_pos):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
 
-                    self.game_settings.change_player(0)
+                    self.game_settings.change_player(0, None)
+
+                elif self.left_change_projectile_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
+
+                    self.game_settings.change_player(None, 1)
+
+                elif self.right_change_projectile_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
+
+                    self.game_settings.change_player(None, 0)
 
         return ret_game_state
 
@@ -333,6 +350,10 @@ class SettingsScreen(Screen):
         # Change Player Buttons
         self.left_change_player_button.blitme()
         self.right_change_player_button.blitme()
+
+        # Change Player Projectile Buttons
+        self.left_change_projectile_button.blitme()
+        self.right_change_projectile_button.blitme()
 
         self.player_display()
 
@@ -375,9 +396,13 @@ class SettingsScreen(Screen):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
         small_text = pygame.font.Font(self.game_settings.cb2_path, 15)
         player = self.game_settings.player_skin + 1
+        projectile = self.game_settings.player_projectile + 1
 
         player_display = large_text.render(("Player Skin: " + str(player)), True, (0, 0, 0))
         self.screen.blit(player_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 3)))
+
+        projectile_display = large_text.render(("Projectile: " + str(projectile)), True, (0, 0, 0))
+        self.screen.blit(projectile_display, (int(self.screen_rect.centerx * 1.25), int(self.screen_rect.centery / 1)))
 
         if self.game_settings.player_skin == 0:
 
@@ -389,6 +414,15 @@ class SettingsScreen(Screen):
             self.screen.blit(pygame.transform.scale(pygame.image.load(self.game_settings.Player_Preview_2_path),
                 self.game_settings.player_size), (int(self.screen_rect.centerx * 1.42),
                 int(self.screen_rect.centery / 1.7)))
+
+        if self.game_settings.player_projectile == 0:
+
+            self.screen.blit(pygame.transform.scale(pygame.image.load(self.game_settings.Projectile_Preview_1_path),
+                (33, 11)),(int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery * 1.3)))
+        elif self.game_settings.player_projectile == 1:
+
+            self.screen.blit(pygame.transform.scale(pygame.image.load(self.game_settings.Projectile_Preview_2_path),
+                (33, 11)), (int(self.screen_rect.centerx * 1.45), int(self.screen_rect.centery * 1.3)))
 
 
 class AboutScreen(Screen):

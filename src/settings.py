@@ -83,9 +83,11 @@ class Settings:
 
         # Player Settings
         self.player_size = (56, 85)
+        self.proj_size = (33, 11)
         self.player_speed = 6
         self.player_jump = 30
         self.player_skin = 0
+        self.player_projectile = 0
         self.player_health = 15
         self.player_counter_divisor = 5
         self.player_counter_max = 16
@@ -96,6 +98,9 @@ class Settings:
 
         self.Player_Preview_1_path = os.path.join(player_folder, "0_preview.png")
         self.Player_Preview_2_path = os.path.join(player_folder, "1_preview.png")
+
+        self.Projectile_Preview_1_path = os.path.join(player_folder, "0_preview2.png")
+        self.Projectile_Preview_2_path = os.path.join(player_folder, "1_preview2.png")
 
         # Screen Backgrounds
         self.city_background_path = os.path.join(self.resources_folder, "city_bg.png")
@@ -136,6 +141,7 @@ class Settings:
                       'melee': pygame.K_e}
         self.music_volume = .05
         self.player_skin = 0
+        self.player_projectile = 0
 
     # Function That Reads In Controls From Controls.txt In Resources
     def initialize_settings(self):
@@ -152,7 +158,8 @@ class Settings:
         self.input['melee'] = int(file.readline())
         self.music_volume = float(file.readline())
         self.player_skin = int(file.readline())
-        self.change_player(self.player_skin)
+        self.player_projectile = int(file.readline())
+        self.change_player(self.player_skin, self.player_projectile)
 
         file.close()
 
@@ -184,9 +191,12 @@ class Settings:
             file.write('%d' % self.player_skin)
             file.write("\n")
 
+            file.write('%d' % self.player_projectile)
+            file.write("\n")
+
             file.close()
 
-    def change_player(self, number=None):
+    def change_player(self, number=None, number2=None):
 
         if number is None:
             number = self.player_skin
@@ -194,6 +204,13 @@ class Settings:
             self.player_skin = number
         else:
             self.player_skin = number = 0
+
+        if number2 is None:
+            number2 = self.player_projectile
+        elif number2 == 0 or number2 == 1:
+            self.player_projectile = number2
+        else:
+            self.player_projectile = number2 = 0
 
         self.control_flag = True
 
@@ -227,9 +244,8 @@ class Settings:
             },
             'projectile': {
                 'path': os.path.join(os.path.join(os.path.join(
-                    player_folder, "attack"), "projectile"), str(number) + '_projectile_'),
+                    player_folder, "attack"), "projectile"), str(number2) + '_projectile_'),
                 'fc': 4,
-                'size': (33, 11)
             },
             'file_type': '.png'
         }
