@@ -53,6 +53,8 @@ class Settings:
         # Spaceship Enemy Boss Settings
         self.ship_path = os.path.join(sprites_folder, "spaceships")
         self.ship = {}
+        self.ship_proj_speed = 10
+        self.ship_proj_num = 1
         
         # Custom font
         self.cb2_path = os.path.join(self.resources_folder, "cb2.ttf")

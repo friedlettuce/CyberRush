@@ -303,10 +303,11 @@ class ShipEnemy(Enemy):
         self.width = game_settings.ship['width']
         self.height = game_settings.ship['height']
 
-        self.frame = None
+        self.frame = self.ship.frames[0]
         self.frame_rect = None
-        self.projectile_speed = None
-        self.projectile_num = None
+        self.projectile_speed = game_settings.ship_proj_speed
+        self.projectile_num = game_settings.ship_proj_num
+        self.eye_sight = 20
 
         # If the enemy moves along a path, sets velocity not to 0
         if self.moving_x:
@@ -318,8 +319,10 @@ class ShipEnemy(Enemy):
 
         if self.moving_x:
             self.update_x()
+            self.ship.update_x(self.x)
         if self.moving_y:
             self.update_y()
+            self.ship.update_y(self.y)
 
         if self.frame_counter + 1 == 60:
             self.frame_counter = 0
@@ -337,8 +340,34 @@ class ShipEnemy(Enemy):
             if projectile.move() == 0:
                 self.projectiles.remove(projectile)
 
+        if self.facing_right:
+            self.frame_rect = self.frame['rrect']
+        else:
+            self.frame_rect = self.frame['lrect']
+
+    def add_projectile(self, dir_x=0, dir_y=0):
+        # Sets x travel direction based on enemy facing direction
+        if self.facing_right == 1:
+            dir_x = self.facing_right
+        else:
+            dir_x = -1
+
+        # Adds a projectile if it hasn't shot to many yet
+        if len(self.projectiles) < self.projectile_num:
+            self.projectiles.append(Projectile(self.screen,
+                self.x, self.y + int(self.frame_rect.height * .3), 10,
+                    5, dir_x, dir_y, self.projectile_speed))
+
+            return 1
+
+        return 0
+
     def blitme(self):
+
         self.ship.blitme(self.screen)
+
+        for projectile in self.projectiles:
+            projectile.blitme()
 
 
 class Parts:
@@ -353,13 +382,21 @@ class Parts:
 
         self.load_frames(parts)
 
-    def move(self, x, y):
+    def update_x(self, x):
 
-        for frame in range(len(self.frames)):
-            frame['rrect'].x += x
-            frame['rrect'].y += y
-            frame['lrect'].x += x
-            frame['lrect'].y += y
+        for frame in self.frames:
+            if not self.facing_right:
+                frame['rrect'].x = x - frame['offset'][0]
+            else:
+                frame['lrect'].x = x + frame['offset'][0]
+
+    def update_y(self, y):
+
+        for frame in self.frames:
+            if self.facing_right:
+                frame['rrect'].y = y + frame['offset'][1]
+            else:
+                frame['lrect'].y = y + frame['offset'][1]
 
     def blitme(self, screen):
 
@@ -375,6 +412,8 @@ class Parts:
                 screen.blit(current_frame['rframe'], current_frame['rrect'])
             else:
                 screen.blit(current_frame['lframe'], current_frame['lrect'])
+
+        return current_frame
 
     def load_frames(self, parts):
 
@@ -394,11 +433,11 @@ class Parts:
             current_frame_l = pygame.transform.flip(current_frame_r, True, False)
 
             r_rect = rect
-            r_rect.x = self.x + frame['offset'][0]
-            r_rect.y = self.y + frame['offset'][1]
-            l_rect = rect
             r_rect.x = self.x - frame['offset'][0]
             r_rect.y = self.y + frame['offset'][1]
+            l_rect = rect
+            l_rect.x = self.x + frame['offset'][0]
+            l_rect.y = self.y + frame['offset'][1]
 
             print(frame['path'])
 

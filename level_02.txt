@@ -18,7 +18,7 @@ setdownspawn=100,100
 
 addenemy
 setpos=300,300
-setendx=300
+setendx=600
 setendy=300
 setshipnum=3
 endshipenemy
