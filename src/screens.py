@@ -219,6 +219,13 @@ class SettingsScreen(Screen):
             screen, game_settings.control_button_path2,
             int(self.screen_rect.centerx / 10), int(self.screen_rect.centery * 1.8))
 
+        self.control_melee_button = Button(
+            screen, game_settings.control_button_path,
+            int(self.screen_rect.centerx), int(self.screen_rect.centery * 1.6))
+        self.control_melee_button_2 = Button(
+            screen, game_settings.control_button_path2,
+            int(self.screen_rect.centerx), int(self.screen_rect.centery * 1.6))
+
         self.reset_button = Button(
             screen, game_settings.reset_control_button_path,
             int(self.screen_rect.centerx * 1.5), int(self.screen_rect.centery * 1.9))
@@ -293,6 +300,14 @@ class SettingsScreen(Screen):
                     self.control_right_button_2.blitme()
                     pygame.display.update()
 
+                    self.game_settings.change_control('shoot')
+
+                elif self.control_melee_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound_2)
+
+                    self.control_melee_button_2.blitme()
+                    pygame.display.update()
+
                     self.game_settings.change_control('melee')
 
                 elif self.reset_button.image_rect.colliderect(mouse_pos):
@@ -343,6 +358,7 @@ class SettingsScreen(Screen):
         self.control_left_button.blitme()
         self.control_down_button.blitme()
         self.control_right_button.blitme()
+        self.control_melee_button.blitme()
 
         # Default Settings Button
         self.reset_button.blitme()
@@ -360,11 +376,17 @@ class SettingsScreen(Screen):
     def control_display(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
 
-        key = pygame.key.name(self.game_settings.input['melee'])
+        key = pygame.key.name(self.game_settings.input['shoot'])
         key = key.upper()
         
-        right_control = large_text.render((str('Attack Control: ') + str(key)), True, (0, 0, 0))
-        self.screen.blit(right_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
+        ranged_control = large_text.render((str('Ranged Attack: ') + str(key)), True, (0, 0, 0))
+        self.screen.blit(ranged_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.75)))
+
+        key = pygame.key.name(self.game_settings.input['melee'])
+        key = key.upper()
+
+        melee_control = large_text.render((str('Melee Attack: ') + str(key)), True, (0, 0, 0))
+        self.screen.blit(melee_control, (int(self.screen_rect.centerx + 20), int(self.screen_rect.centery * 1.55)))
 
         key = pygame.key.name(self.game_settings.input['left'])
         key = key.upper()
