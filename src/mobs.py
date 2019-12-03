@@ -4,13 +4,15 @@ import pygame
 # Generic Enemy Class For Enemies To Utilize
 class Enemy(object):
     # Enemy class handles directional movement, hitbox, and frames
-
+    
     def __init__(self, screen, x, y, width, height, end_x, end_y):
         self.screen = screen
         self.x = x
         self.y = y
         self.width = width
         self.height = height
+
+        self.health = 4
 
         self.vel_x = 0
         self.vel_y = 0
@@ -30,19 +32,28 @@ class Enemy(object):
 
         self.path_x = [self.x, self.end_x]
         self.path_y = [self.y, self.end_y]
-        self.movement = 0
+        self.frame_counter = 0
 
         self.left_frames = []
         self.right_frames = []
         self.frame = None
         self.frame_rect = None
 
-        self.hitbox = 0
-        self.hitbox2 = 0
+        self.hitbox_x = 0
+        self.hitbox_y = 0
+        self.hitbox_color = (255, 0, 0)
+
+        # Range for how wide enemy can see (range will be 2x this value)
+        self.eye_sight = 0
 
         self.projectiles = []
         self.projectile_speed = None
         self.projectile_num = None
+
+        # flag for if enemy moves
+        # default false
+        # should be set to true for each enemy type that moves
+        self.moving = False
 
     # Function For An Enemy To Move Side To Side On The X Axis
     def update_x(self):
@@ -55,8 +66,8 @@ class Enemy(object):
                 self.facing_right = False
                 self.vel_x *= -1
                 self.x = self.x + self.vel_x
-                self.movement = 0
-
+                self.frame_counter = 0
+                
         # If Velocity < 0, Enemy Is Moving To The Left
         elif self.vel_x < 0:
             if self.x > self.path_x[0] - self.vel_x:
@@ -66,8 +77,8 @@ class Enemy(object):
                 self.facing_right = True
                 self.vel_x *= -1
                 self.x = self.x + self.vel_x
-                self.movement = 0
-
+                self.frame_counter = 0
+    
     # Function For An Enemy To Move Side To Side On The Y Axis
     def update_y(self):
         # If Velocity > 0, Enemy Is Moving Down
@@ -77,8 +88,8 @@ class Enemy(object):
             else:
                 self.vel_y *= -1
                 self.y += self.vel_y
-                self.movement = 0
-
+                self.frame_counter = 0
+                
         # If Velocity < 0, Enemy Is Moving Up
         elif self.vel_y < 0:
             if self.y > self.path_y[0] - self.vel_y:
@@ -86,40 +97,34 @@ class Enemy(object):
             else:
                 self.vel_y *= -1
                 self.y += self.vel_y
-                self.movement = 0
+                self.frame_counter = 0
+
+    def update_hitbox(self):
+        # Place holder for enemy object hitbox
+        pass
 
     def update(self):
+
         if self.moving_x:
             self.update_x()
         if self.moving_y:
             self.update_y()
 
-        if self.movement + 1 == 60:
-            self.movement = 0
+        if self.frame_counter + 1 == 60:
+            self.frame_counter = 0
 
         # Changes frames as enemy moves left/right
         if self.vel_x < 0 and self.moving_x or not self.facing_right:
-            self.frame = self.left_frames[self.movement // 30]
+            self.frame = self.left_frames[self.frame_counter // 30]
         elif (self.vel_x >= 0 and self.moving_x) or self.facing_right:
-            self.frame = self.right_frames[self.movement // 30]
+            self.frame = self.right_frames[self.frame_counter // 30]
 
-        self.hitbox = (self.x + 50, self.y + 25, 45, 110)
-        self.hitbox2 = (self.x + 40, self.y + 25, 80, 35)
+        # Sets hitbox vertical and horizontal start/width/height
+        self.update_hitbox()
 
         for projectile in self.projectiles:
             if projectile.move() == 0:
                 self.projectiles.remove(projectile)
-
-    def draw_hitbox(self, screen):
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox, 2)
-        pygame.draw.rect(screen, (255, 0, 0), self.hitbox2, 2)
-
-        if not self.vel_y > self.path_y[0] - self.vel_y:
-            pass
-            # Projectile(self.x, self.y + 40, 25, 25, -1, screen)
-        elif not self.vel_y < self.path_y[1] + self.vel_y:
-            pass
-            # Projectile(self.x, self.y + 20, 25, 25, -1, screen)
 
     def add_projectile(self, dir_x=0, dir_y=0):
         # Sets x travel direction based on enemy facing direction
@@ -131,23 +136,54 @@ class Enemy(object):
         # Adds a projectile if it hasn't shot to many yet
         if len(self.projectiles) < self.projectile_num:
             self.projectiles.append(Projectile(self.screen,
-                                               self.frame_rect.centerx + self.x,
-                                               self.y + int(self.frame_rect.height * .2), 10,
-                                               5, dir_x, dir_y, self.projectile_speed))
+                self.frame_rect.centerx + self.x, self.y + int(self.frame_rect.height * .2), 10,
+                    5, dir_x, dir_y, self.projectile_speed))
+
+            return 1
+
+        return 0
 
     def range_y(self, y):
-        return self.y in range(y - 20, y + 20)
+        y = int(y)
+        # Checks if y is in a 40 pixel range of self
+        return self.y in range(y - self.eye_sight, y + self.eye_sight)
+
+    def get_rect(self):
+        return pygame.Rect(self.x, self.y, self.width, self.height)
+
+    def check_collision(self, obj_rect):
+        return self.get_rect().colliderect(obj_rect)
+
+    def collide_projectiles(self, obj):
+
+        damage = 0
+        # Checks if projectiles collide with object
+        for projectile in self.projectiles:
+
+            # Lowers health and removes if true
+            if projectile.check_collision(obj.get_rect()):
+                self.projectiles.remove(projectile)
+                damage += projectile.damage
+
+        return damage
+
+    def move_by_amount(self, x, y):
+        # moves mob by specified x and y number of pixels
+        # used for collision testing
+        self.x += x
+        self.y += y
 
     def blitme(self):
+        self.screen.blit(self.frame, (self.x, self.y, self.width, self.height))
 
-        self.update()
-        self.screen.blit(self.frame, (self.x, self.y))
-        # self.draw_hitbox(screen)
+        # Draws vert/horiz hitboxes, hardcoded color for now
+        #pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_x, 2)
+        #pygame.draw.rect(self.screen, self.hitbox_color, self.hitbox_y, 2)
 
         for projectile in self.projectiles:
             projectile.blitme()
 
-        self.movement += 1
+        self.frame_counter += 1
 
 
 class HoveringEnemy(Enemy):
@@ -156,10 +192,13 @@ class HoveringEnemy(Enemy):
     def __init__(self, screen, game_settings, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
+        # this enemy moves
+        self.moving = True
+
         self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.rhl1_path), game_settings.hov_size),
-                            pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]
+                         pygame.transform.scale(pygame.image.load(game_settings.rhl2_path), game_settings.hov_size)]
         self.right_frames = [pygame.transform.scale(pygame.image.load(game_settings.rhr1_path), game_settings.hov_size),
-                             pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
+                          pygame.transform.scale(pygame.image.load(game_settings.rhr2_path), game_settings.hov_size)]
 
         self.frame = self.right_frames[0]
         self.frame_rect = self.right_frames[0].get_rect()
@@ -172,10 +211,52 @@ class HoveringEnemy(Enemy):
         if self.moving_y:
             self.vel_y = game_settings.hovering_enemy_vel
 
+        self.hitbox_x = (self.x + 50, self.y + 25, 45, 110)
+        self.hitbox_y = (self.x + 40, self.y + 25, 80, 35)
+        self.hitbox_color = (255, 0, 0)
+        self.eye_sight = 20
+
+    def update_hitbox(self):
+        self.hitbox_x = (self.x + 50, self.y + 25, 45, 110)
+        self.hitbox_y = (self.x + 40, self.y + 25, 80, 35)
+
+
+class TurretEnemy(Enemy):
+
+    def __init__(self, screen, game_settings, facing, x, y, width, height, end_x=0, end_y=0):
+        super().__init__(screen, x, y, width, height, end_x, end_y)
+
+        self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size),
+                            pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size)]
+        self.right_frames = [pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size),
+                             pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size)]
+
+        self.moving = False
+
+        self.projectile_speed = game_settings.turret_proj_speed
+        self.projectile_num = game_settings.turret_proj_num
+        self.hitbox_x = (self.x, self.y, 80, 80)
+        self.hitbox_y = (self.x, self.y, 80, 80)
+        self.hitbox_color = (255, 0, 0)
+        self.eye_sight = 40
+
+        self.vel_x = 0
+        self.vel_y = 0
+
+        if facing == "right":
+            self.facing_right = True
+            self.frame = self.right_frames[0]
+            self.frame_rect = self.right_frames[0].get_rect()
+        elif facing == "left":
+            self.facing_right = False
+            self.frame = self.left_frames[0]
+            self.frame_rect = self.left_frames[0].get_rect()
+
 
 class Projectile(object):
 
     def __init__(self, screen, x, y, width, height, dir_x, dir_y, speed):
+
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
@@ -187,6 +268,8 @@ class Projectile(object):
         self.speed_x = dir_x * speed
         self.speed_y = dir_y * speed
 
+        self.damage = 2
+
     def move(self):
         self.x += self.speed_x
         self.y += self.speed_y
@@ -194,7 +277,12 @@ class Projectile(object):
         # Activates removal if off screen
         if (self.x > self.screen_rect.width or self.x < 0) or (
                 self.y > self.screen_rect.height or self.y < 0):
-            return 0  # Pop self
+            return 0    # Pop self
+        return 1
+
+    def check_collision(self, rect):
+        return pygame.Rect(self.x, self.y, self.width, self.height).colliderect(rect)
 
     def blitme(self):
         pygame.draw.rect(self.screen, (0, 255, 0), (self.x, self.y, self.width, self.height))
+

@@ -22,6 +22,8 @@ def run_game():
     title_screen = TitleScreen(screen, game_settings)
     settings_screen = SettingsScreen(screen, game_settings)
     about_screen = AboutScreen(screen, game_settings)
+
+    game_settings.initialize_settings()
     game_screen = GameScreen(screen, game_settings)
     highscores_screen = HighScoresScreen(screen, game_settings)
 
@@ -40,7 +42,8 @@ def run_game():
         clock.tick(game_settings.clock_tick_interval)
 
         if new_gamestate is GameState.QUIT:
-            game_settings.save_controls()
+            game_settings.save_settings()
+
             pygame.quit()
             sys.exit()
 
@@ -51,6 +54,7 @@ def run_game():
             screen.screen_start()
 
         new_gamestate = screen.check_events()
+        screen.update()
         screen.blitme()
 
         if cur_gamestate != new_gamestate:
