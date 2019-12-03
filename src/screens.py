@@ -1,4 +1,4 @@
-import pygame
+import pygame, os
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
@@ -431,7 +431,11 @@ class AboutScreen(Screen):
         super().__init__(screen, game_settings)
 
         self.mainmenu_button = Button(
-            screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
+            screen, game_settings.mainmenu_path, int(self.screen_rect.centerx - 100),
+            int(self.screen_rect.centery * 1.9))
+
+        self.credits_button = Button(
+            screen, game_settings.credits_path, int(self.screen_rect.centerx + 100),
             int(self.screen_rect.centery * 1.9))
 
     def check_events(self):
@@ -451,6 +455,11 @@ class AboutScreen(Screen):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.TITLE
 
+                elif self.credits_button.image_rect.colliderect(mouse_pos):
+                    pygame.mixer.Sound.play(self.game_settings.button_click_sound)
+                    os.startfile("Resources.txt")
+
+
         return ret_game_state
 
     def blitme(self):
@@ -458,9 +467,11 @@ class AboutScreen(Screen):
 
         self.display_about()
         self.mainmenu_button.blitme()
+        self.credits_button.blitme()
 
     def display_about(self):
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        medium_text = pygame.font.Font(self.game_settings.cb2_path, 20)
 
         line_1 = large_text.render(("A Software Engineering Project Made By: ") , True, (0, 0, 0))
         self.screen.blit(line_1, (int(self.screen_rect.centerx/3), int(self.screen_rect.centery / 3)))
@@ -476,6 +487,7 @@ class AboutScreen(Screen):
 
         line_5 = large_text.render(("-Jared Usher"), True, (0, 0, 0))
         self.screen.blit(line_5, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery * 1.25)))
+
 
 
 

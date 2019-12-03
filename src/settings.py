@@ -25,6 +25,7 @@ class Settings:
         self.about_path = os.path.join(self.resources_folder, "AboutButton.bmp")
         self.settings_path = os.path.join(self.resources_folder, "SettingsButton.bmp")
         self.mainmenu_path = os.path.join(self.resources_folder, "MainMenuButton.bmp")
+        self.credits_path = os.path.join(self.resources_folder, "Credits.bmp")
 
         # Mob Settings
         sprites_folder = os.path.join(self.resources_folder, "sprites")
