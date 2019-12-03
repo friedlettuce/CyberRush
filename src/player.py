@@ -61,6 +61,7 @@ class Player:
 
         # Sounds
         self.player_jump_sound = game_settings.player_jump_sound
+        self.player_ranged_sound = game_settings.player_ranged_sound
 
     def set_movement(self, direction, move=True):
 
@@ -244,6 +245,8 @@ class Player:
     def add_projectile(self):
         if len(self.projectiles) >= self.proj_max:
             return
+
+        pygame.mixer.Sound.play(self.player_ranged_sound)
 
         if self.facing_right:
             dir_x = 1
