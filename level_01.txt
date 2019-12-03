@@ -125,11 +125,11 @@ endcollidable
 addcollidable
 setpos=600,250
 setcolor=100100100
-setdims=25,85
+setdims=25,65
 endcollidable
 
 addcollidable
-setpos=625,310
+setpos=625,290
 setcolor=100100100
 setdims=75,25
 endcollidable
