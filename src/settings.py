@@ -141,6 +141,7 @@ class Settings:
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'down': pygame.K_s,
                       'melee': pygame.K_e}
         self.music_volume = .05
+        pygame.mixer.music.set_volume(self.music_volume)
         self.player_skin = 0
         self.player_projectile = 0
 
