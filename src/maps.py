@@ -142,6 +142,7 @@ class Map:
             if self.line == "endzone":
                 # go back to mapinfo state
                 self.load_state = MapLoadState.MAPINFO
+                self.zones[self.cur_zone[0]][self.cur_zone[1]].used = True
             elif self.line == "addenemy":
                 # go to add enemy state
                 self.load_state = MapLoadState.ENEMY
@@ -171,7 +172,7 @@ class Map:
                 pos = self.line.find(',')
                 x = int(self.line[eqpos + 1:pos])
                 y = int(self.line[pos + 1:])
-                self.zones[self.cur_zone[0]][self.cur_zone[1]].set_up_spawn(x, y)
+                self.zones[self.cur_zone[0]][self.cur_zone[1]].set_right_spawn(x, y)
             elif self.line[:eqpos] == "setupspawn":
                 # set spawn when coming from up
                 pos = self.line.find(',')
@@ -265,22 +266,22 @@ class Map:
                 # only check zones which are used
                 if y > 0:
                     # if y>0, check the zone above us, which is y-1
-                    if self.zones[x][y-1]:
+                    if self.zones[x][y-1].used:
                         # if this zone is used, set up zone used flag in current zone to true
                         self.zones[x][y].up_used = True
                 if y < self.sizey-1:
                     # if y<max size, check the zone below us, which is y+1
-                    if self.zones[x][y+1]:
+                    if self.zones[x][y+1].used:
                         # if this zone is used, set up zone used flag in current zone to true
                         self.zones[x][y].down_used = True
                 if x > 0:
                     # if y>0, check the zone to our left, which is x-1
-                    if self.zones[x-1][y]:
+                    if self.zones[x-1][y].used:
                         # if this zone is used, set left zone used flag in current zone to true
                         self.zones[x][y].left_used = True
                 if x < self.sizex-1:
                     # if x<max size, check the zone to our right, which is x+1
-                    if self.zones[x+1][y]:
+                    if self.zones[x+1][y].used:
                         # if this zone is used, set right zone used flag in current zone to true
                         self.zones[x][y].right_used = True
 
@@ -382,19 +383,32 @@ class Zone:
         return (is_colliding and not was_colliding)
 
     #checks if player is out of bounds and corrects it
-    def check_oob(self, player):
-        if not self.left_used and player.x <= 0:
+    def check_oob(self, player, cur_zone_coords):
+        if player.x <= 0:
+            if self.left_used:
+                cur_zone_coords[0] -= 1
+                return cur_zone_coords, "left"
             player.x += player.vel_x
-            return
-        elif not self.right_used and player.x >= self.screen_rect.width - player.width:
+            return cur_zone_coords, "none"
+        elif player.x >= self.screen_rect.width - player.width:
+            if self.right_used:
+                cur_zone_coords[0] += 1
+                return cur_zone_coords, "right"
             player.x -= player.vel_x
-            return
-        elif not self.up_used and player.y <= 0:
+            return cur_zone_coords, "none"
+        elif player.y <= 0:
+            if self.up_used:
+                cur_zone_coords[1] -= 1
+                return cur_zone_coords, "up"
             player.y -= player.vel_y
-            return
-        elif not self.down_used and player.y >= player.ground:
+            return cur_zone_coords, "none"
+        elif player.y >= player.ground:
+            if self.down_used:
+                cur_zone_coords[1] += 1
+                return cur_zone_coords, "down"
             player.y = player.ground
-            return
+            return cur_zone_coords, "none"
+        return cur_zone_coords, "none"
 
     def update_enemies(self, player):
 

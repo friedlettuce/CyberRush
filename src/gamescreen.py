@@ -19,9 +19,13 @@ class GameScreen(object):
         # Map
         level_path = path.dirname(path.realpath("resources"))
         self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
-        self.cur_zone = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
+        self.cur_zone_coords = self.map.spawnpoint
+        self.cur_zone = self.map.zones[self.cur_zone_coords[0]][self.cur_zone_coords[1]]
         self.spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
-
+        print(self.cur_zone.leftspawn)
+        print(self.cur_zone.rightspawn)
+        print(self.cur_zone.upspawn)
+        print(self.cur_zone.downspawn)
         self.player = Player(self.screen, game_settings, self.spawn.leftspawn[0], self.spawn.leftspawn[1])
         self.ui = UI(self.screen, self.player)
 
@@ -157,7 +161,28 @@ class GameScreen(object):
             # the add collidables vel_x, so collidable carries player
             self.player.x += moving_collidable.vel_x
 
-        self.cur_zone.check_oob(self.player)
+        self.cur_zone_coords, dir = self.cur_zone.check_oob(self.player, self.cur_zone_coords)
+        self.cur_zone = self.map.zones[self.cur_zone_coords[0]][self.cur_zone_coords[1]]
+        if dir == "right":
+            print("right")
+            #we moved to the right
+            self.player.x = self.cur_zone.leftspawn[0]
+            self.player.y = self.cur_zone.leftspawn[1]
+        if dir == "left":
+            print("left")
+            #we moved to the left
+            self.player.x = self.cur_zone.rightspawn[0]
+            self.player.y = self.cur_zone.rightspawn[1]
+        if dir == "up":
+            print("up")
+            #we moved up
+            self.player.x = self.cur_zone.downspawn[0]
+            self.player.y = self.cur_zone.downspawn[1]
+        if dir == "down":
+            print("down")
+            #we moved down
+            self.player.x = self.cur_zone.upspawn[0]
+            self.player.y = self.cur_zone.upspawn[1]
         self.ui.update(self.player)
 
     def check_events(self):
