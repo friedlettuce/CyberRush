@@ -13,7 +13,7 @@ class Settings:
         self.screen_w = 900
         self.screen_h = 450
         self.game_name = "Cyber Rush"
-        self.level = 'level_02.txt'
+        self.level = 'level_01.txt'
 
         # Title Screen Settings
         self.title_background_path = os.path.join(self.resources_folder, "title_bg.png")
