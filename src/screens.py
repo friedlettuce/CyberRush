@@ -2,7 +2,6 @@ import pygame
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
-import highscores
 from highscores import populateWithPlaceholders, initialDatabaseCreation, displayScores, returnAScore, return5Scores, resetHighscores, deletePlayer
 
 
@@ -528,7 +527,7 @@ class AboutScreen(Screen):
 
 
 
-class HighScoresScreen(Screen):  # Need to find a way to display the scores
+class HighScoresScreen(Screen):
 
     def __init__(self, screen, game_settings):
         super().__init__(screen, game_settings)
@@ -538,10 +537,22 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
         self.mainmenu_button = Button(
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
             int(self.screen_rect.centery * 1.9))
+
         # Button will add placeholders to the high scores list for demo purposes
         self.addplaceholders_button = Button(
             screen, game_settings.placeholder_path, int(self.screen_rect.centerx * .3),
             int(self.screen_rect.centery * 1.9))
+
+        # Button will index to next page of high scores
+        self.nextpagebutton = Button(
+            screen, game_settings.vol_up_path, int(self.screen_rect.centerx + 65),
+            int(self.screen_rect.centery + 120))
+
+        # Button will index to previous page of high scores
+        self.prevpagebutton = Button(
+            screen, game_settings.vol_down_path, int(self.screen_rect.centerx - 65),
+            int(self.screen_rect.centery + 120))
+
         '''
         # Volume text
         text = "Change Volume"
@@ -562,7 +573,8 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
             populateWithPlaceholders()
 
 
-        score1 = fivescores[0]  # Each contains a tuple (playername, playerscore)
+        # Maybe do fivescores[self.scoreIndex]
+        score1 = fivescores[self.scoreIndex]  # Each contains a tuple (playername, playerscore)
 
         try:
             score2 = fivescores[1]
@@ -644,6 +656,15 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
         except(UnboundLocalError):
             pass
 
+    # Function indexes and displays the next page of scores
+    def advance_page(self):
+        self.scoreIndex += 1    # Add 1 to access next page of scores
+
+    # Function decrements to the previous page of scores
+    def previous_page(self):
+        self.scoreIndex -= 1
+
+
     def check_events(self):
 
         ret_game_state = GameState(4)
@@ -663,6 +684,14 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
                 elif self.addplaceholders_button.image_rect.colliderect(mouse_pos):
                     # Call the populate with placeholders function inside highscores.py
                     populateWithPlaceholders()
+
+                elif self.nextpagebutton.image_rect.colliderect(mouse_pos):
+                    # Advance the page
+                    self.advance_page()
+
+                elif self.prevpagebutton.image_rect.colliderect(mouse_pos):
+                    # Decrement the page
+                    self.previous_page()
 
         return ret_game_state
 
@@ -705,6 +734,8 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
 
         self.mainmenu_button.blitme()
         self.addplaceholders_button.blitme()
+        self.nextpagebutton.blitme()
+        self.prevpagebutton.blitme()
         #self.credits_button.blitme()
 
 
