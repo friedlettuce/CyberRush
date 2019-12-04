@@ -3,7 +3,7 @@ import os
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
-from highscores import populateWithPlaceholders, initialDatabaseCreation, returnAScore, return5Scores, returnscoreavg
+from highscores import populateWithPlaceholders, initialDatabaseCreation, returnAScore, return5Scores, returnscoreavg, resetHighscores
 
 
 # NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
@@ -616,13 +616,14 @@ class HighScoresScreen(Screen):
         except(UnboundLocalError):
             pass
 
-        text = "Score Average:" + str(returnscoreavg())
-        #print(returnscoreavg())
+        # Will display the average score in the top right
+        text = "Score Average:" + str(round(returnscoreavg(), 2))
         scoreavg = pygame.font.Font(self.game_settings.cb2_path, 25)
         self.textSurfaceAvg = scoreavg.render(text, True, (0, 0, 0))
         self.TextRect6 = self.textSurfaceAvg.get_rect()
-        self.TextRect6.center = ((self.screen_rect.centerx + 300), (self.screen_rect.centery - 150))
+        self.TextRect6.center = ((self.screen_rect.centerx + 280), (self.screen_rect.centery - 190))
 
+        # The following text will display the first top 5 scores on the screen
         text = entry1
         score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
         self.textSurface1 = score1.render(text, True, (0, 0, 0))
@@ -669,11 +670,95 @@ class HighScoresScreen(Screen):
         self.scoreIndex += 1    # Add 1 to access next page of scores
         fivescores = return5Scores(self.scoreIndex)
         score1 = fivescores[0]
+        score2 = fivescores[1]
+        score3 = fivescores[2]
+        score4 = fivescores[3]
+        score5 = fivescores[4]
+        entry1 = score1[0] + "  " + str(score1[1])
+        entry2 = score2[0] + "  " + str(score2[1])
+        entry3 = score3[0] + "  " + str(score3[1])
+        entry4 = score4[0] + "  " + str(score4[1])
+        entry5 = score5[0] + "  " + str(score5[1])
+
+        text = entry1
+        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface1 = score1.render(text, True, (0, 0, 0))
+        self.TextRect1 = self.textSurface1.get_rect()
+        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
+
+        text = entry2
+        score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface2 = score2.render(text, True, (0, 0, 0))
+        self.TextRect2 = self.textSurface2.get_rect()
+        self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
+
+        text = entry3
+        score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface3 = score3.render(text, True, (0, 0, 0))
+        self.TextRect3 = self.textSurface3.get_rect()
+        self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
+
+        text = entry4
+        score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface4 = score4.render(text, True, (0, 0, 0))
+        self.TextRect4 = self.textSurface4.get_rect()
+        self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
+
+        text = entry5
+        score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface5 = score5.render(text, True, (0, 0, 0))
+        self.TextRect5 = self.textSurface5.get_rect()
+        self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
+
 
 
     # Function decrements to the previous page of scores
     def previous_page(self):
+        if self.scoreIndex <= 0:
+            return
         self.scoreIndex -= 1
+        fivescores = return5Scores(self.scoreIndex)
+        score1 = fivescores[0]
+        score2 = fivescores[1]
+        score3 = fivescores[2]
+        score4 = fivescores[3]
+        score5 = fivescores[4]
+        entry1 = score1[0] + "  " + str(score1[1])
+        entry2 = score2[0] + "  " + str(score2[1])
+        entry3 = score3[0] + "  " + str(score3[1])
+        entry4 = score4[0] + "  " + str(score4[1])
+        entry5 = score5[0] + "  " + str(score5[1])
+
+        text = entry1
+        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface1 = score1.render(text, True, (0, 0, 0))
+        self.TextRect1 = self.textSurface1.get_rect()
+        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
+
+        text = entry2
+        score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface2 = score2.render(text, True, (0, 0, 0))
+        self.TextRect2 = self.textSurface2.get_rect()
+        self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
+
+        text = entry3
+        score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface3 = score3.render(text, True, (0, 0, 0))
+        self.TextRect3 = self.textSurface3.get_rect()
+        self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
+
+        text = entry4
+        score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface4 = score4.render(text, True, (0, 0, 0))
+        self.TextRect4 = self.textSurface4.get_rect()
+        self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
+
+        text = entry5
+        score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurface5 = score5.render(text, True, (0, 0, 0))
+        self.TextRect5 = self.textSurface5.get_rect()
+        self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
+
 
 
     def check_events(self):
