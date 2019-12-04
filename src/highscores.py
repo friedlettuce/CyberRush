@@ -146,7 +146,8 @@ def return5Scores(index):
         try:
             return [scores[index+offset] for offset in range(i)]
         except IndexError:
-            return None
+            pass
+    return None
 
 
 # Returns the average of all scores

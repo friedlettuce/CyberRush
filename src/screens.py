@@ -527,11 +527,11 @@ class AboutScreen(Screen):
         self.credits_button.blitme()
 
 
-
 class HighScoresScreen(Screen):
 
     def __init__(self, screen, game_settings):
         super().__init__(screen, game_settings)
+
         initialDatabaseCreation()
         self.scoreIndex = 0  # Will hold the score index for the page displayed
 
@@ -554,216 +554,87 @@ class HighScoresScreen(Screen):
             screen, game_settings.vol_down_path, int(self.screen_rect.centerx - 65),
             int(self.screen_rect.centery + 120))
 
-        '''
-        # Volume text
-        text = "Change Volume"
-        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface = large_text.render(text, True, (0, 0, 0))
-        self.TextRect = self.textSurface.get_rect()
-        self.TextRect.center = ((self.screen_rect.centerx / 2), (self.screen_rect.centery / 3))
-        '''
-        #firstscore = returnAScore()  # First score contains a tuple, [0] is the entry name [1] is the score
-        #entry = firstscore[0] + " " + str(firstscore[1])  # Converts the entry to a string to be displayed
+        self.average_surface = None
+        self.average_rect = None
 
+        self.textSurfaces = []
+        self.textRects = []
+        self.textRects = []
 
-        fivescores = return5Scores(self.scoreIndex)
-
+        # firstscore = returnAScore()  # First score contains a tuple, [0] is the entry name [1] is the score
+        # entry = firstscore[0] + " " + str(firstscore[1])  # Converts the entry to a string to be displayed
 
         # Case of empty highscores list, inputs 5 placeholder values
-        if fivescores is None:
-            populateWithPlaceholders()
-
+        # if fivescores is None:
+        # populateWithPlaceholders()
 
         # Maybe do fivescores[self.scoreIndex]
-        score1 = fivescores[0]  # Each contains a tuple (playername, playerscore)
+        # score1 = fivescores[0]  # Each contains a tuple (playername, playerscore)
+
+    def screen_start(self):
+        self.load_scores()
+
+    def advance_page(self):
+
+        self.scoreIndex += 1  # Add 1 to access next page of scores
+
+        # Checks if was out of bounds
+        fivescores = return5Scores(self.scoreIndex)
+        if len(fivescores) < 5:
+            self.scoreIndex -= 1
+        else:
+            if self.load_scores() is False:
+                self.scoreIndex -= 1
+
+    # Function decrements to the previous page of scores
+    def previous_page(self):
+
+        if self.scoreIndex <= 0:
+            return
+        self.scoreIndex -= 1
+
+        self.load_scores()
+
+    # Function indexes and displays the next page of scores
+    def load_scores(self):
+
+        # Checks to see if there are no scores or less than 5
+        fivescores = return5Scores(self.scoreIndex)
+        if fivescores is None:
+            return False
+
+        self.textSurfaces = []
+        self.textRects = []
+        self.textRects = []
+        entries = []
 
         try:
-            score2 = fivescores[1]
-        except(IndexError):
-            pass
-        try:
-            score3 = fivescores[2]
-        except(IndexError):
-            pass
-        try:
-            score4 = fivescores[3]
-        except(IndexError):
-            pass
-        try:
-            score5 = fivescores[4]
-        except(IndexError):
-            pass
+            for score in fivescores:
+                entries.append(score[0] + "  " + str(score[1]))
+        except TypeError:
+            pass    # Passes if out of bounds in fivescores
 
+        y = self.screen_rect.centery - 150
 
-        try:
-            entry1 = score1[0] + "  " + str(score1[1])
-        except(UnboundLocalError):
-            pass
-        try:
-            entry2 = score2[0] + "  " + str(score2[1])
-        except(UnboundLocalError):
-            pass
-        try:
-            entry3 = score3[0] + "  " + str(score3[1])
-        except(UnboundLocalError):
-            pass
-        try:
-            entry4 = score4[0] + "  " + str(score4[1])
-        except(UnboundLocalError):
-            pass
-        try:
-            entry5 = score5[0] + "  " + str(score5[1])
-        except(UnboundLocalError):
-            pass
+        for e_num in range(len(entries)):
+
+            try:
+                # The following text will display the first top 5 scores on the screen
+                text = entries[e_num]
+                score = pygame.font.Font(self.game_settings.cb2_path, 25)
+                self.textSurfaces.append(score.render(text, True, (0, 0, 0)))
+                self.textRects.append(self.textSurfaces[e_num].get_rect())
+                self.textRects[e_num].center = (self.screen_rect.centerx, y)
+                y += 50
+            except UnboundLocalError:
+                pass
 
         # Will display the average score in the top right
         text = "Score Average:" + str(round(returnscoreavg(), 2))
         scoreavg = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurfaceAvg = scoreavg.render(text, True, (0, 0, 0))
-        self.TextRect6 = self.textSurfaceAvg.get_rect()
-        self.TextRect6.center = ((self.screen_rect.centerx + 280), (self.screen_rect.centery - 190))
-
-        # The following text will display the first top 5 scores on the screen
-        text = entry1
-        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface1 = score1.render(text, True, (0, 0, 0))
-        self.TextRect1 = self.textSurface1.get_rect()
-        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
-
-        try:
-            text = entry2
-            score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
-            self.textSurface2 = score2.render(text, True, (0, 0, 0))
-            self.TextRect2 = self.textSurface2.get_rect()
-            self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
-        except(UnboundLocalError):
-            pass
-        try:
-            text = entry3
-            score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
-            self.textSurface3 = score3.render(text, True, (0, 0, 0))
-            self.TextRect3 = self.textSurface3.get_rect()
-            self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
-        except(UnboundLocalError):
-            pass
-
-        try:
-            text = entry4
-            score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
-            self.textSurface4 = score4.render(text, True, (0, 0, 0))
-            self.TextRect4 = self.textSurface4.get_rect()
-            self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
-        except(UnboundLocalError):
-            pass
-
-        try:
-            text = entry5
-            score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
-            self.textSurface5 = score5.render(text, True, (0, 0, 0))
-            self.TextRect5 = self.textSurface5.get_rect()
-            self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
-        except(UnboundLocalError):
-            pass
-
-    # Function indexes and displays the next page of scores
-    def advance_page(self):
-        try:
-            self.scoreIndex += 1  # Add 1 to access next page of scores
-            fivescores = return5Scores(self.scoreIndex)
-            score1 = fivescores[0]
-            score2 = fivescores[1]
-            score3 = fivescores[2]
-            score4 = fivescores[3]
-            score5 = fivescores[4]
-            entry1 = score1[0] + "  " + str(score1[1])
-            entry2 = score2[0] + "  " + str(score2[1])
-            entry3 = score3[0] + "  " + str(score3[1])
-            entry4 = score4[0] + "  " + str(score4[1])
-            entry5 = score5[0] + "  " + str(score5[1])
-        except TypeError:
-            self.scoreIndex -= 1
-            return
-
-        text = entry1
-        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface1 = score1.render(text, True, (0, 0, 0))
-        self.TextRect1 = self.textSurface1.get_rect()
-        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
-
-        text = entry2
-        score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface2 = score2.render(text, True, (0, 0, 0))
-        self.TextRect2 = self.textSurface2.get_rect()
-        self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
-
-        text = entry3
-        score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface3 = score3.render(text, True, (0, 0, 0))
-        self.TextRect3 = self.textSurface3.get_rect()
-        self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
-
-        text = entry4
-        score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface4 = score4.render(text, True, (0, 0, 0))
-        self.TextRect4 = self.textSurface4.get_rect()
-        self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
-
-        text = entry5
-        score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface5 = score5.render(text, True, (0, 0, 0))
-        self.TextRect5 = self.textSurface5.get_rect()
-        self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
-
-
-
-    # Function decrements to the previous page of scores
-    def previous_page(self):
-        if self.scoreIndex <= 0:
-            return
-        self.scoreIndex -= 1
-        fivescores = return5Scores(self.scoreIndex)
-        score1 = fivescores[0]
-        score2 = fivescores[1]
-        score3 = fivescores[2]
-        score4 = fivescores[3]
-        score5 = fivescores[4]
-        entry1 = score1[0] + "  " + str(score1[1])
-        entry2 = score2[0] + "  " + str(score2[1])
-        entry3 = score3[0] + "  " + str(score3[1])
-        entry4 = score4[0] + "  " + str(score4[1])
-        entry5 = score5[0] + "  " + str(score5[1])
-
-        text = entry1
-        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface1 = score1.render(text, True, (0, 0, 0))
-        self.TextRect1 = self.textSurface1.get_rect()
-        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
-
-        text = entry2
-        score2 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface2 = score2.render(text, True, (0, 0, 0))
-        self.TextRect2 = self.textSurface2.get_rect()
-        self.TextRect2.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 100))
-
-        text = entry3
-        score3 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface3 = score3.render(text, True, (0, 0, 0))
-        self.TextRect3 = self.textSurface3.get_rect()
-        self.TextRect3.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 50))
-
-        text = entry4
-        score4 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface4 = score4.render(text, True, (0, 0, 0))
-        self.TextRect4 = self.textSurface4.get_rect()
-        self.TextRect4.center = ((self.screen_rect.centerx), (self.screen_rect.centery))
-
-        text = entry5
-        score5 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface5 = score5.render(text, True, (0, 0, 0))
-        self.TextRect5 = self.textSurface5.get_rect()
-        self.TextRect5.center = ((self.screen_rect.centerx), (self.screen_rect.centery + 50))
-
-
+        self.average_surface = scoreavg.render(text, True, (0, 0, 0))
+        self.average_rect = self.average_surface.get_rect()
+        self.average_rect.center = ((self.screen_rect.centerx + 280), (self.screen_rect.centery - 190))
 
     def check_events(self):
 
@@ -810,35 +681,25 @@ class HighScoresScreen(Screen):
     # self.textSurface = large_text.render(firstScore, True, (0, 0, 0))
 
     def blitme(self):
-        self.screen.fill(self.bk_color)
-        try:
-            self.screen.blit(self.textSurface1, self.TextRect1)
-        except(AttributeError):
-            pass
-        try:
-            self.screen.blit(self.textSurface2, self.TextRect2)
-        except(AttributeError):
-            pass
-        try:
-            self.screen.blit(self.textSurface3, self.TextRect3)
-        except(AttributeError):
-            pass
-        try:
-            self.screen.blit(self.textSurface4, self.TextRect4)
-        except(AttributeError):
-            pass
-        try:
-            self.screen.blit(self.textSurface5, self.TextRect5)
-        except(AttributeError):
-            pass
 
-        self.screen.blit(self.textSurfaceAvg, self.TextRect6)
+        self.screen.fill(self.bk_color)
+
+        for i in range(len(self.textSurfaces)):
+            try:
+                self.screen.blit(self.textSurfaces[i], self.textRects[i])
+            except AttributeError:
+                pass
+
+        try:
+            self.screen.blit(self.average_surface, self.average_rect)
+        except TypeError:
+            pass    # Incase there is no average
 
         self.mainmenu_button.blitme()
         self.addplaceholders_button.blitme()
         self.nextpagebutton.blitme()
         self.prevpagebutton.blitme()
-        #self.credits_button.blitme()
+        # self.credits_button.blitme()
 
 
 
