@@ -686,7 +686,6 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
 
         self.mainmenu_button.blitme()
         self.addplaceholders_button.blitme()
-=======
         self.credits_button.blitme()
 
     def display_about(self):
