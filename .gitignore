@@ -3,3 +3,4 @@ src/__pycache__/
 .idea
 .vs/
 resources/Controls.txt
+highscores.db

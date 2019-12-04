@@ -570,7 +570,7 @@ class HighScoresScreen(Screen):
 
 
         # Case of empty highscores list, inputs 5 placeholder values
-        if fivescores == None:
+        if fivescores is None:
             populateWithPlaceholders()
 
 
