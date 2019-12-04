@@ -416,15 +416,20 @@ class Zone:
 
     def update_enemies(self, player):
 
+        score = 0
+
         for enemy in self.enemies:
             if enemy.health is 0:
                 pygame.mixer.Sound.play(self.game_settings.enemy_death_sound)
                 self.enemies.remove(enemy)
+                score += 1
             enemy.update()
             # Shoots projectile if enemy in range of player
             if enemy.range_y(player.y):
                 if enemy.add_projectile() == 1:
                     pygame.mixer.Sound.play(self.game_settings.enemy_attack_sound)
+
+        return score
 
     def blitme(self):
 

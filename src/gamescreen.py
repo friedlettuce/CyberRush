@@ -74,7 +74,6 @@ class GameScreen(object):
                 self.player.health -= damage_player
             if damage_enemy > enemy.health:
                 enemy.health = 0
-                self.player_score += 1
             else:
                 enemy.health -= damage_enemy
 
@@ -124,7 +123,7 @@ class GameScreen(object):
     def update(self):
 
         self.player.move()
-        self.cur_zone.update_enemies(self.player)
+        self.player_score += self.cur_zone.update_enemies(self.player)
 
         yfixed = False
         moving_collidable = None
@@ -232,7 +231,6 @@ class GameScreen(object):
     def save_score(self):
         # Need to find a way to calculate the score here
         name = input("Enter player name: ")
-        print(self.player_score)
         addNewPlayer(name, self.player_score)
 
     def screen_end(self):
