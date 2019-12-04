@@ -667,18 +667,22 @@ class HighScoresScreen(Screen):
 
     # Function indexes and displays the next page of scores
     def advance_page(self):
-        self.scoreIndex += 1    # Add 1 to access next page of scores
-        fivescores = return5Scores(self.scoreIndex)
-        score1 = fivescores[0]
-        score2 = fivescores[1]
-        score3 = fivescores[2]
-        score4 = fivescores[3]
-        score5 = fivescores[4]
-        entry1 = score1[0] + "  " + str(score1[1])
-        entry2 = score2[0] + "  " + str(score2[1])
-        entry3 = score3[0] + "  " + str(score3[1])
-        entry4 = score4[0] + "  " + str(score4[1])
-        entry5 = score5[0] + "  " + str(score5[1])
+        try:
+            self.scoreIndex += 1  # Add 1 to access next page of scores
+            fivescores = return5Scores(self.scoreIndex)
+            score1 = fivescores[0]
+            score2 = fivescores[1]
+            score3 = fivescores[2]
+            score4 = fivescores[3]
+            score5 = fivescores[4]
+            entry1 = score1[0] + "  " + str(score1[1])
+            entry2 = score2[0] + "  " + str(score2[1])
+            entry3 = score3[0] + "  " + str(score3[1])
+            entry4 = score4[0] + "  " + str(score4[1])
+            entry5 = score5[0] + "  " + str(score5[1])
+        except TypeError:
+            self.scoreIndex -= 1
+            return
 
         text = entry1
         score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
