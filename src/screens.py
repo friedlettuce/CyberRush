@@ -1,4 +1,5 @@
 import pygame
+import os
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
@@ -574,7 +575,7 @@ class HighScoresScreen(Screen):
 
 
         # Maybe do fivescores[self.scoreIndex]
-        score1 = fivescores[self.scoreIndex]  # Each contains a tuple (playername, playerscore)
+        score1 = fivescores[0]  # Each contains a tuple (playername, playerscore)
 
         try:
             score2 = fivescores[1]
@@ -659,6 +660,9 @@ class HighScoresScreen(Screen):
     # Function indexes and displays the next page of scores
     def advance_page(self):
         self.scoreIndex += 1    # Add 1 to access next page of scores
+        fivescores = return5Scores(self.scoreIndex)
+        score1 = fivescores[0]
+
 
     # Function decrements to the previous page of scores
     def previous_page(self):
