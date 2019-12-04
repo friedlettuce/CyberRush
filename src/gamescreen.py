@@ -182,7 +182,9 @@ class GameScreen(object):
 
         for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:
+            if event.type == pygame.QUIT:       # Calculate the score here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                #Need to find a way to calculate the score here
+                #addNewPlayer(playername, playerscore)
                 ret_game_state = GameState.QUIT
 
             elif event.type == pygame.KEYDOWN:
@@ -220,3 +222,4 @@ class GameScreen(object):
         self.ui.blitme()
         # pygame.draw.rect(self.screen,(111,111,111),self.player.get_rect())
         self.player.blitme()
+

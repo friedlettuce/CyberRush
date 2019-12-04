@@ -18,14 +18,19 @@ class Settings:
         self.title_background_path = os.path.join(self.resources_folder, "title_bg.png")
         self.bk_color = (39, 184, 184)
 
-        self.num_buttons = 4
+        self.num_buttons = 5  # Changed this from 4 to 5
         self.title_path = os.path.join(self.resources_folder, "Title.bmp")
         self.play_path = os.path.join(self.resources_folder, "PlayButton.bmp")
         self.quit_path = os.path.join(self.resources_folder, "QuitButton.bmp")
         self.about_path = os.path.join(self.resources_folder, "AboutButton.bmp")
+        self.highscores_path = os.path.join(self.resources_folder,
+                                            "HighScoresButton.bmp")  # Added button to go to highscores screen
+        self.placeholder_path = os.path.join(self.resources_folder,
+                                             "PlaceholdersButton.bmp")  # Added button to add placeholders in highscores
         self.settings_path = os.path.join(self.resources_folder, "SettingsButton.bmp")
         self.mainmenu_path = os.path.join(self.resources_folder, "MainMenuButton.bmp")
         self.credits_path = os.path.join(self.resources_folder, "Credits.bmp")
+
 
         # Mob Settings
         sprites_folder = os.path.join(self.resources_folder, "sprites")
@@ -64,6 +69,7 @@ class Settings:
 
         self.titleMusic_path = os.path.join(self.music_folder, "Title Music.mp3")
 
+
         self.music_volume = .05
 
         # Sound Effect Settings
@@ -93,6 +99,7 @@ class Settings:
         self.clock_tick_interval = 30
 
         # Player Settings
+
         self.player_size = (56, 85)
         self.player_speed = 6
         self.player_jump = 30
@@ -101,6 +108,7 @@ class Settings:
         self.player_health = 15
         self.player_counter_divisor = 5
         self.player_counter_max = 16
+
 
         player_folder = os.path.join(sprites_folder, "player")
 
@@ -113,6 +121,7 @@ class Settings:
         self.Projectile_Preview_2_path = os.path.join(player_folder, "1_preview2.png")
 
         # Screen Backgrounds
+
         self.city_background_path = os.path.join(self.resources_folder, "city_bg.png")
         self.mountains_background_path = os.path.join(self.resources_folder, "parallax-mountain-bg.png")
         
@@ -147,6 +156,7 @@ class Settings:
     # Function Called To Reset Controls To Default
     def default_settings(self):
         self.control_flag = True
+
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'shoot': pygame.K_s,
                       'melee': pygame.K_e}
         self.music_volume = .05
@@ -172,9 +182,11 @@ class Settings:
         self.player_projectile = int(file.readline())
         self.change_player(self.player_skin, self.player_projectile)
 
+
         file.close()
 
     # Function Called When Game Is Closed In Order To Save The Current Controls
+
     def save_settings(self):
         if self.control_flag is False:
             pass
@@ -189,6 +201,7 @@ class Settings:
 
             file.write('%d' % self.input['up'])
             file.write("\n")
+
 
             file.write('%d' % self.input['shoot'])
             file.write("\n")
@@ -326,5 +339,5 @@ class GameState(Enum):
     SETTINGS = 1
     ABOUT = 2
     PLAYING = 3
-    SCORE = 4
+    HIGHSCORES = 4
     QUIT = 5
