@@ -580,6 +580,9 @@ class HighScoresScreen(Screen):
 
         # Checks if was out of bounds
         fivescores = return5Scores(self.scoreIndex)
+        if fivescores is None:
+            return
+        
         if len(fivescores) < 5:
             self.scoreIndex -= 1
         else:
