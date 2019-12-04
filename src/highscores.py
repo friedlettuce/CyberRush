@@ -123,6 +123,7 @@ def searchScores(playername):
     for entry in entries:
         print(entry)
 
+
 def returnAScore():
     conn = sqlite3.connect('highscores.db')
     c = conn.cursor()
@@ -131,6 +132,7 @@ def returnAScore():
     score = c.fetchone()
     conn.close()
     return score
+
 
 # Function will take in an index (page number) and return the next 5 scores
 # Example, index 1 returns first 5, index 2 returns the next 5, etc
@@ -159,3 +161,18 @@ def return5Scores(index):
         return (scores[index])
     except(IndexError):
         pass
+
+# Returns the average of all scores
+def returnscoreavg():
+    conn = sqlite3.connect('highscores.db')
+    c = conn.cursor()
+    c.execute("SELECT playerName, playerScore from highscores ORDER BY playerScore DESC",)
+    scores = c.fetchall()
+    scoreavg = 0
+    numscores = 0
+    for score in scores:
+        #print(scores[0][1])
+        scoreavg += scores[numscores][1]
+        numscores += 1
+    scoreavg = scoreavg / numscores
+    return scoreavg

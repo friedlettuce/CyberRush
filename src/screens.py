@@ -3,7 +3,7 @@ import os
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
-from highscores import populateWithPlaceholders, initialDatabaseCreation, displayScores, returnAScore, return5Scores, resetHighscores, deletePlayer
+from highscores import populateWithPlaceholders, initialDatabaseCreation, returnAScore, return5Scores, returnscoreavg
 
 
 # NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
@@ -616,6 +616,13 @@ class HighScoresScreen(Screen):
         except(UnboundLocalError):
             pass
 
+        text = "Score Average:" + str(returnscoreavg())
+        #print(returnscoreavg())
+        scoreavg = pygame.font.Font(self.game_settings.cb2_path, 25)
+        self.textSurfaceAvg = scoreavg.render(text, True, (0, 0, 0))
+        self.TextRect6 = self.textSurfaceAvg.get_rect()
+        self.TextRect6.center = ((self.screen_rect.centerx + 300), (self.screen_rect.centery - 150))
+
         text = entry1
         score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
         self.textSurface1 = score1.render(text, True, (0, 0, 0))
@@ -735,6 +742,8 @@ class HighScoresScreen(Screen):
             self.screen.blit(self.textSurface5, self.TextRect5)
         except(AttributeError):
             pass
+
+        self.screen.blit(self.textSurfaceAvg, self.TextRect6)
 
         self.mainmenu_button.blitme()
         self.addplaceholders_button.blitme()
