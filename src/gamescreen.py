@@ -5,6 +5,7 @@ from settings import GameState
 from player import Player
 from maps import Map
 from ui import UI
+from highscores import addNewPlayer
 
 
 class GameScreen(object):
@@ -24,18 +25,13 @@ class GameScreen(object):
         self.spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
         self.player = Player(self.screen, game_settings, self.spawn.leftspawn[0], self.spawn.leftspawn[1])
         self.ui = UI(self.screen, self.player)
+        self.player_score = 0
 
         pygame.mixer.set_num_channels(8)
 
     def reset(self):
         # Map
-        print('Reset')
-        self.map = None
-        self.cur_zone_coords = None
-        self.cur_zone = None
-        self.spawn = None
-        self.player = None
-        self.ui = None
+        self.player_score = 0
         level_path = path.dirname(path.realpath("resources"))
         self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
         self.cur_zone_coords = self.map.spawnpoint
@@ -78,6 +74,7 @@ class GameScreen(object):
                 self.player.health -= damage_player
             if damage_enemy > enemy.health:
                 enemy.health = 0
+                self.player_score += 1
             else:
                 enemy.health -= damage_enemy
 
@@ -194,15 +191,15 @@ class GameScreen(object):
     def check_events(self):
 
         if self.player.health <= 0:
+            self.save_score()
             self.reset()
             return GameState(4)     # Go to leaderboard when integrated
         ret_game_state = GameState(3)
 
         for event in pygame.event.get():
 
-            if event.type == pygame.QUIT:       # Calculate the score here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                #Need to find a way to calculate the score here
-                #addNewPlayer(playername, playerscore)
+            if event.type == pygame.QUIT:
+                self.save_score()
                 ret_game_state = GameState.HIGHSCORES
                 self.reset()
 
@@ -231,6 +228,12 @@ class GameScreen(object):
                     self.player.set_movement(True, False)
 
         return ret_game_state
+
+    def save_score(self):
+        # Need to find a way to calculate the score here
+        name = input("Enter player name: ")
+        print(self.player_score)
+        addNewPlayer(name, self.player_score)
 
     def screen_end(self):
         pass

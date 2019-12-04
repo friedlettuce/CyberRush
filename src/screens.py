@@ -127,7 +127,6 @@ class TitleScreen(Screen):
                     pygame.mixer.Sound.play(self.game_settings.button_click_sound)
                     ret_game_state = GameState.QUIT
 
-        print(ret_game_state)
         return ret_game_state
 
     def blitme(self):
