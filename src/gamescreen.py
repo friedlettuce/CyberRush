@@ -27,6 +27,23 @@ class GameScreen(object):
 
         pygame.mixer.set_num_channels(8)
 
+    def reset(self):
+        # Map
+        print('Reset')
+        self.map = None
+        self.cur_zone_coords = None
+        self.cur_zone = None
+        self.spawn = None
+        self.player = None
+        self.ui = None
+        level_path = path.dirname(path.realpath("resources"))
+        self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
+        self.cur_zone_coords = self.map.spawnpoint
+        self.cur_zone = self.map.zones[self.cur_zone_coords[0]][self.cur_zone_coords[1]]
+        self.spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
+        self.player = Player(self.screen, self.game_settings, self.spawn.leftspawn[0], self.spawn.leftspawn[1])
+        self.ui = UI(self.screen, self.player)
+
     def screen_start(self):
         pygame.mixer.music.stop()
 
@@ -177,7 +194,8 @@ class GameScreen(object):
     def check_events(self):
 
         if self.player.health <= 0:
-            return GameState(5)     # Go to leaderboard when integrated
+            self.reset()
+            return GameState(4)     # Go to leaderboard when integrated
         ret_game_state = GameState(3)
 
         for event in pygame.event.get():
@@ -185,7 +203,8 @@ class GameScreen(object):
             if event.type == pygame.QUIT:       # Calculate the score here!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 #Need to find a way to calculate the score here
                 #addNewPlayer(playername, playerscore)
-                ret_game_state = GameState.QUIT
+                ret_game_state = GameState.HIGHSCORES
+                self.reset()
 
             elif event.type == pygame.KEYDOWN:
 
