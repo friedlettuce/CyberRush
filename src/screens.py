@@ -500,6 +500,25 @@ class AboutScreen(Screen):
 
         return ret_game_state
 
+    def display_about(self):
+        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
+        medium_text = pygame.font.Font(self.game_settings.cb2_path, 20)
+
+        line_1 = large_text.render(("A Software Engineering Project Made By: ") , True, (0, 0, 0))
+        self.screen.blit(line_1, (int(self.screen_rect.centerx/3), int(self.screen_rect.centery / 3)))
+
+        line_2 = large_text.render(("-Garett Anderson"), True, (0, 0, 0))
+        self.screen.blit(line_2, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery / 1.5)))
+
+        line_3 = large_text.render(("-Daniel Brown"), True, (0, 0, 0))
+        self.screen.blit(line_3, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery / 1.15)))
+
+        line_4 = large_text.render(("-Cameron Heffelfinger"), True, (0, 0, 0))
+        self.screen.blit(line_4, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery * 1.05)))
+
+        line_5 = large_text.render(("-Jared Usher"), True, (0, 0, 0))
+        self.screen.blit(line_5, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery * 1.25)))
+
     def blitme(self):
         self.screen.fill(self.bk_color)
 
@@ -686,24 +705,7 @@ class HighScoresScreen(Screen):  # Need to find a way to display the scores
 
         self.mainmenu_button.blitme()
         self.addplaceholders_button.blitme()
-        self.credits_button.blitme()
+        #self.credits_button.blitme()
 
-    def display_about(self):
-        large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
-        medium_text = pygame.font.Font(self.game_settings.cb2_path, 20)
 
-        line_1 = large_text.render(("A Software Engineering Project Made By: ") , True, (0, 0, 0))
-        self.screen.blit(line_1, (int(self.screen_rect.centerx/3), int(self.screen_rect.centery / 3)))
-
-        line_2 = large_text.render(("-Garett Anderson"), True, (0, 0, 0))
-        self.screen.blit(line_2, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery / 1.5)))
-
-        line_3 = large_text.render(("-Daniel Brown"), True, (0, 0, 0))
-        self.screen.blit(line_3, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery / 1.15)))
-
-        line_4 = large_text.render(("-Cameron Heffelfinger"), True, (0, 0, 0))
-        self.screen.blit(line_4, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery * 1.05)))
-
-        line_5 = large_text.render(("-Jared Usher"), True, (0, 0, 0))
-        self.screen.blit(line_5, (int(self.screen_rect.centerx / 3), int(self.screen_rect.centery * 1.25)))
 
