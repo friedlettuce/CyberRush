@@ -15,11 +15,12 @@ class GameScreen(object):
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
         self.game_settings = game_settings
+        self.level = game_settings.level
         self.input = game_settings.input
 
         # Map
         level_path = path.dirname(path.realpath("resources"))
-        self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
+        self.map = Map(self.screen, self.game_settings, path.join(level_path, self.level))
         self.cur_zone_coords = self.map.spawnpoint
         self.cur_zone = self.map.zones[self.cur_zone_coords[0]][self.cur_zone_coords[1]]
         self.spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
@@ -33,7 +34,7 @@ class GameScreen(object):
         # Map
         self.player_score = 0
         level_path = path.dirname(path.realpath("resources"))
-        self.map = Map(self.screen, self.game_settings, path.join(level_path, 'level_01.txt'))
+        self.map = Map(self.screen, self.game_settings, path.join(level_path, self.level))
         self.cur_zone_coords = self.map.spawnpoint
         self.cur_zone = self.map.zones[self.cur_zone_coords[0]][self.cur_zone_coords[1]]
         self.spawn = self.map.zones[self.map.spawnpoint[0]][self.map.spawnpoint[1]]
