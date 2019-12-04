@@ -329,7 +329,7 @@ class Settings:
             'width': 86,
             'height': 39,
             'vel_x': 5,
-            'vel_y': 2,
+            'vel_y': 6,
             'survivable': survivable
         }
 
