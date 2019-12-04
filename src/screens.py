@@ -582,7 +582,7 @@ class HighScoresScreen(Screen):
         fivescores = return5Scores(self.scoreIndex)
         if fivescores is None:
             return
-        
+
         if len(fivescores) < 5:
             self.scoreIndex -= 1
         else:
@@ -658,6 +658,7 @@ class HighScoresScreen(Screen):
                 elif self.addplaceholders_button.image_rect.colliderect(mouse_pos):
                     # Call the populate with placeholders function inside highscores.py
                     populateWithPlaceholders()
+                    self.load_scores()
 
                 elif self.nextpagebutton.image_rect.colliderect(mouse_pos):
                     # Advance the page
