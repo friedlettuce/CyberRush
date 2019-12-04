@@ -174,22 +174,3 @@ setendy=325
 endhoverenemy
 
 endzone
-
-editzone=3,0
-
-setbg=city_bg.png
-setmusic=Title Music.mp3
-
-setleftspawn=30,330
-setrightspawn=800,324
-setupspawn=100,100
-setdownspawn=100,100
-
-addenemy
-setpos=700,100
-setendx=500
-setendy=380
-setshipnum=3
-endshipenemy
-
-endzone

@@ -211,7 +211,7 @@ class Map:
                 self.load_state = MapLoadState.ZONEINFO
 
             elif self.line == 'endshipenemy':
-                enemy = ShipEnemy(self.screen, self.game_settings, self.ship_num,
+                enemy = ShipEnemy(self.screen, self.game_settings, self.ship_num, self.enemy_facing,
                                   self.enemy_x, self.enemy_y, end_x=self.enemy_endx, end_y=self.enemy_endy)
                 self.zones[self.cur_zone[0]][self.cur_zone[1]].add_enemy(enemy)
                 # go back to zoneinfo state

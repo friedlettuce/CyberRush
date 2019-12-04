@@ -290,7 +290,7 @@ class Projectile(object):
 class ShipEnemy(Enemy):
     # Stores frames
 
-    def __init__(self, screen, game_settings, num, x, y, width=None, height=None, end_x=0, end_y=0):
+    def __init__(self, screen, game_settings, num, facing, x, y, width=None, height=None, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
         # this enemy moves
@@ -436,17 +436,15 @@ class Parts:
             r_rect.x = self.x - frame['offset'][0]
             r_rect.y = self.y + frame['offset'][1]
             l_rect = rect
-            l_rect.x = self.x + frame['offset'][0]
+            l_rect.x = self.x - frame['offset'][0]
             l_rect.y = self.y + frame['offset'][1]
-
-            print(frame['path'])
 
             # Stores frames into list with offsets and sizes
             self.frames.append({
                 'lframe': current_frame_l,
                 'lrect': l_rect,
                 'rframe': current_frame_r,
-                'rrect': r_rect,
+                'rrect': rect,
                 'offset': frame['offset'],
                 'size': frame['size'],
                 'priority': frame['priority']
