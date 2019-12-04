@@ -419,6 +419,8 @@ class Zone:
         score = 0
 
         for enemy in self.enemies:
+            if enemy.oob():
+                self.enemies.remove(enemy)
             if enemy.health is 0:
                 pygame.mixer.Sound.play(self.game_settings.enemy_death_sound)
                 self.enemies.remove(enemy)

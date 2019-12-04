@@ -154,6 +154,9 @@ class Enemy(object):
     def check_collision(self, obj_rect):
         return self.get_rect().colliderect(obj_rect)
 
+    def oob(self):
+        pass
+
     def collide_projectiles(self, obj):
 
         damage = 0
@@ -295,6 +298,7 @@ class ShipEnemy(Enemy):
 
         # this enemy moves
         self.moving = True
+        self.health = 8
 
         # Load frames
         game_settings.load_ship(num)
@@ -316,6 +320,15 @@ class ShipEnemy(Enemy):
             self.vel_y = game_settings.ship['vel_y']
 
     def update(self):
+
+        if len(self.ship.frames) < self.ship.survivable:
+            self.health = 0
+        if 4 < self.health <= 6:
+            pass
+        elif 2 < self.health <= 4:
+            pass
+        elif 0 < self.health <= 2:
+            pass
 
         if self.moving_x:
             self.update_x()
@@ -369,6 +382,9 @@ class ShipEnemy(Enemy):
         for projectile in self.projectiles:
             projectile.blitme()
 
+    def oob(self):
+        self.ship.oob(self.screen.get_rect())
+
 
 class Parts:
 
@@ -381,6 +397,7 @@ class Parts:
         self.facing_right = True
 
         self.load_frames(parts)
+        self.num_parts = len(self.frames)
 
     def update_x(self, x):
 
@@ -398,12 +415,24 @@ class Parts:
             else:
                 frame['lrect'].y = y + frame['offset'][1]
 
+    def oob(self, screen_rect):
+
+        for frame in self.frames:
+            if frame['lrect'].x < 0 or frame['rrect'].x < 0:
+                self.frames.remove(frame)
+            if frame['lrect'].x > screen_rect.width or frame['rrect'].x > screen_rect.width:
+                self.frames.remove(frame)
+            if frame['lrect'].y < 0 or frame['rrect'].y < 0:
+                self.frames.remove(frame)
+            if frame['lrect'].y > screen_rect.height or frame['rrect'].y > screen_rect.height:
+                self.frames.remove(frame)
+
     def blitme(self, screen):
+        current_frame = None
 
         for frame in range(len(self.frames)):
 
             # Prints parts by order of priority
-            current_frame = None
             for f_tmp in self.frames:
                 if frame is f_tmp['priority']:
                     current_frame = f_tmp
