@@ -307,6 +307,9 @@ class ShipEnemy(Enemy):
         self.width = game_settings.ship['width']
         self.height = game_settings.ship['height']
 
+        self.fallen_parts = Parts(None, None, None, None)
+        self.falling_accel = 2
+
         self.frame = self.ship.frames[0]
         self.frame_rect = None
         self.projectile_speed = game_settings.ship_proj_speed
@@ -323,12 +326,19 @@ class ShipEnemy(Enemy):
 
         if len(self.ship.frames) < self.ship.survivable:
             self.health = 0
-        if 4 < self.health <= 6:
-            pass
-        elif 2 < self.health <= 4:
-            pass
-        elif 0 < self.health <= 2:
-            pass
+        for threshold in range(self.ship.num_parts, 1, -2):
+            if threshold-2 < self.health <= threshold:
+                try:
+                    print(len(self.ship.frames), int(threshold + 4 / (threshold % self.ship.num_parts)))
+                    if len(self.ship.frames) is int(threshold + 4 / (threshold % self.ship.num_parts)):
+                        print("!")
+                        self.fallen_parts.frames.append(self.ship.frames.pop())
+                        print(self.fallen_parts.frames[-1]['priority'])
+                except ZeroDivisionError:
+                    if len(self.ship.frames) is threshold:
+                        print("!")
+                        self.fallen_parts.frames.append(self.ship.frames.pop())
+                        print(self.fallen_parts.frames[-1]['priority'])
 
         if self.moving_x:
             self.update_x()
@@ -336,6 +346,7 @@ class ShipEnemy(Enemy):
         if self.moving_y:
             self.update_y()
             self.ship.update_y(self.y)
+        self.fallen_parts.update_falling_y(.1)
 
         if self.frame_counter + 1 == 60:
             self.frame_counter = 0
@@ -378,12 +389,14 @@ class ShipEnemy(Enemy):
     def blitme(self):
 
         self.ship.blitme(self.screen)
+        self.fallen_parts.blitme(self.screen)
 
         for projectile in self.projectiles:
             projectile.blitme()
 
     def oob(self):
         self.ship.oob(self.screen.get_rect())
+        self.fallen_parts.oob(self.screen.get_rect())
 
 
 class Parts:
@@ -393,8 +406,10 @@ class Parts:
         self.frames = []
         self.x = x
         self.y = y
+
         self.survivable = survivable
         self.facing_right = True
+        self.falling_vel = 0
 
         self.load_frames(parts)
         self.num_parts = len(self.frames)
@@ -415,6 +430,17 @@ class Parts:
             else:
                 frame['lrect'].y = y + frame['offset'][1]
 
+    # Overload for falling parts
+    def update_falling_y(self, accel):
+
+        for frame in self.frames:
+            if self.facing_right:
+                frame['rrect'].y += frame['offset'][1] - self.falling_vel
+            else:
+                frame['lrect'].y += frame['offset'][1] - self.falling_vel
+
+        self.falling_vel -= accel
+
     def oob(self, screen_rect):
 
         for frame in self.frames:
@@ -430,12 +456,13 @@ class Parts:
     def blitme(self, screen):
         current_frame = None
 
+        # print(len(self.frames))
         for frame in range(len(self.frames)):
 
             # Prints parts by order of priority
-            for f_tmp in self.frames:
-                if frame is f_tmp['priority']:
-                    current_frame = f_tmp
+            for f_cur in range(len(self.frames)):
+                if self.frames[frame]['priority'] is self.frames[f_cur]['priority']:
+                    current_frame = self.frames[frame]
 
             if self.facing_right:
                 screen.blit(current_frame['rframe'], current_frame['rrect'])
@@ -445,6 +472,8 @@ class Parts:
         return current_frame
 
     def load_frames(self, parts):
+        if parts is None:
+            return
 
         # Goes through list of ship parts from settings
         for frame in parts:

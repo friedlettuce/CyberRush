@@ -17,10 +17,17 @@ setupspawn=100,100
 setdownspawn=100,100
 
 addenemy
-setpos=150,150
+setpos=400,330
 setendx=400
-setendy=400
-endhoverenemy
+setendy=330
+setshipnum=3
+endshipenemy
+
+#addenemy
+#setpos=150,150
+#setendx=400
+#setendy=400
+#endhoverenemy
 
 addcollidable
 setpos=600,250
