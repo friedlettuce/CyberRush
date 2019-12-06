@@ -161,13 +161,13 @@ endshipenemy
 
 addcollidable
 setpos=250,300
-setcolor=061031061
+setcolor=100100100
 setdims=100,25
 endcollidable
 
 addcollidable
 setpos=50,175
-setcolor=061031061
+setcolor=100100100
 setdims=100,25
 endcollidable
 

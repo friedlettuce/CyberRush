@@ -19,6 +19,7 @@ class Enemy(object):
         self.height = height
 
         self.health = 4
+        self.score = 1
 
         self.vel_x = 0
         self.vel_y = 0
@@ -207,7 +208,7 @@ class HoveringEnemy(Enemy):
     def __init__(self, screen, game_settings, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
-        self.name = 'H'
+        self.score = 2
         # this enemy moves
         self.moving = True
 
@@ -242,7 +243,7 @@ class TurretEnemy(Enemy):
     def __init__(self, screen, game_settings, facing, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
-        self.name = 'T'
+        self.score = 1
         self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size),
                             pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size)]
         self.right_frames = [pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size),
@@ -313,6 +314,7 @@ class ShipEnemy(Enemy):
         # this enemy moves
         self.moving = True
         self.health = 16
+        self.score = 5
 
         self.hover_y = abs(self.end_y - self.y)
 
@@ -331,7 +333,7 @@ class ShipEnemy(Enemy):
         self.frame = self.ship.frames[0]
         self.frame_rect = None
         self.projectile_speed = game_settings.ship_proj_speed
-        self.proj_accel = 3
+        self.proj_accel = 4
         self.projectile_num = game_settings.ship_proj_num
         self.proj_dmg_inc = 1
         self.eye_sight = 20
@@ -380,7 +382,7 @@ class ShipEnemy(Enemy):
         if self.moving_y:
             self.update_y()
             self.ship.update_y(self.y)
-        self.fallen_parts.update_falling_y(.01)
+        self.fallen_parts.update_falling_y(.05)
 
         # If the ship reaches a new height it resets it to just hover
         if self.to_new_height:
@@ -492,7 +494,7 @@ class Parts:
 
         self.survivable = survivable
         self.facing_right = True
-        self.falling_vel = .09
+        self.falling_vel = .05
 
         self.load_frames(parts)
         self.num_parts = len(self.frames)
