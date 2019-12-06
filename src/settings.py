@@ -309,8 +309,8 @@ class Settings:
                         part_priority = int(word)
                     elif size is None:
                         # Splits at 4 to check for sign
-                        x = int(word[:4])
-                        y = int(word[4:])
+                        x = int(word[:3])
+                        y = int(word[3:])
                         size = (x, y)
 
                 parts.append({
@@ -330,7 +330,7 @@ class Settings:
             'width': 86,
             'height': 39,
             'vel_x': 5,
-            'vel_y': 5,
+            'vel_y': 1,
             'survivable': survivable
         }
 

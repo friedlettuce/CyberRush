@@ -452,8 +452,10 @@ class Parts:
             # Loads frame image (and transforms if size given)
             if frame['size']:
                 current_frame_r = pygame.transform.smoothscale(
-                    pygame.image.load(frame['path']), frame['size'])
-                rect = pygame.Rect(((self.x, self.y) + frame['offset']), frame['size'])
+                    pygame.image.load(frame['path']), (frame['size'][0], frame['size'][1]))
+                print(frame['size'])
+                rect = pygame.Rect(self.x + frame['offset'][0], self.y + frame['offset'][1],
+                                   frame['size'][0], frame['size'][1])
             else:
                 current_frame_r = pygame.image.load(frame['path'])
                 rect = current_frame_r.get_rect()
