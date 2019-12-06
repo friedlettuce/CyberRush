@@ -443,6 +443,9 @@ class Parts:
         self.load_frames(parts)
         self.num_parts = len(self.frames)
 
+        for frame in self.frames:
+            print(frame['priority'])
+
     def update_x(self, x):
 
         for frame in self.frames:
@@ -484,13 +487,19 @@ class Parts:
 
     def blitme(self, screen):
         current_frame = None
+        # print('------ BLIT -------')
 
         for frame in range(len(self.frames)):
+            lowest = self.num_parts - frame
 
             # Prints parts by order of priority
-            for f_cur in range(len(self.frames)):
-                if self.frames[frame]['priority'] is self.frames[f_cur]['priority']:
-                    current_frame = self.frames[frame]
+            for f_cur in self.frames:
+                if current_frame is None:
+                    current_frame = f_cur
+                    lowest = current_frame['priority']
+                if lowest > f_cur['priority'] > current_frame['priority']:
+                    lowest = current_frame['priority']
+                    current_frame = f_cur
 
             if self.facing_right:
                 screen.blit(current_frame['rframe'], current_frame['rrect'])

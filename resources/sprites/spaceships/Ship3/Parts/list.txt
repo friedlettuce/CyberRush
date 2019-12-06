@@ -1,7 +1,7 @@
 3
 ship3_body.png 00000000 2 094078
-ship3_detail.png -0050005 3 066052 
+ship3_head2.png 00150008 4 076058 
 ship3_head.png 00400008 5 076074
-ship3_head2.png 00150008 4 076058
 ship3_tail.png -0700010 1 058060
+ship3_detail.png -0050005 3 066052
 ship3_turbine.png -0700015 0 050046
