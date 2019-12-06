@@ -1,3 +1,5 @@
+from copy import copy
+
 import pygame
 
 
@@ -57,6 +59,9 @@ class Enemy(object):
 
     # Function For An Enemy To Move Side To Side On The X Axis
     def update_x(self):
+
+        if self.x > self.end_x:
+            self.vel_x *= -1
         # If Velocity > 0, Enemy Is Moving To The Right
         if self.vel_x > 0:
             if self.x < self.path_x[1] + self.vel_x:
@@ -81,6 +86,9 @@ class Enemy(object):
     
     # Function For An Enemy To Move Side To Side On The Y Axis
     def update_y(self):
+
+        if self.y > self.end_y:
+            self.vel_y *= -1
         # If Velocity > 0, Enemy Is Moving Down
         if self.vel_y > 0:
             if self.y < self.path_y[1] + self.vel_y:
@@ -195,6 +203,7 @@ class HoveringEnemy(Enemy):
     def __init__(self, screen, game_settings, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
+        self.name = 'H'
         # this enemy moves
         self.moving = True
 
@@ -229,6 +238,7 @@ class TurretEnemy(Enemy):
     def __init__(self, screen, game_settings, facing, x, y, width, height, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
+        self.name = 'T'
         self.left_frames = [pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size),
                             pygame.transform.scale(pygame.image.load(game_settings.l_turret_path), game_settings.turret_size)]
         self.right_frames = [pygame.transform.scale(pygame.image.load(game_settings.r_turret_path), game_settings.turret_size),
@@ -296,9 +306,11 @@ class ShipEnemy(Enemy):
     def __init__(self, screen, game_settings, num, facing, x, y, width=None, height=None, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
+        self.name = 'S'
         # this enemy moves
         self.moving = True
         self.health = 8
+        self.tmp_vel = None
 
         # Load frames
         game_settings.load_ship(num)
@@ -306,6 +318,10 @@ class ShipEnemy(Enemy):
                           game_settings.ship['survivable'], self.x, self.y)
         self.width = game_settings.ship['width']
         self.height = game_settings.ship['height']
+
+        self.fallen_parts = Parts(None, None, None, None)
+        self.to_new_height = False
+        self.falling_accel = 2
 
         self.frame = self.ship.frames[0]
         self.frame_rect = None
@@ -323,12 +339,22 @@ class ShipEnemy(Enemy):
 
         if len(self.ship.frames) < self.ship.survivable:
             self.health = 0
-        if 4 < self.health <= 6:
-            pass
-        elif 2 < self.health <= 4:
-            pass
-        elif 0 < self.health <= 2:
-            pass
+
+        if (4 < self.health <= 6 and len(self.ship.frames) is 6) or (
+                2 < self.health <= 4 and len(self.ship.frames) is 5) or (
+                0 < self.health <= 2 and len(self.ship.frames) is 4):
+
+            self.fallen_parts.frames.append(self.ship.frames.pop())
+            if self.y >= self.screen.get_rect().centery + 25:
+                self.end_y = int(self.screen.get_rect().height / 8)
+            elif self.screen.get_rect().height/2 >= self.y >= self.screen.get_rect().centery/2 - 25:
+                self.end_y = int(self.screen.get_rect().height * 3 / 4)
+            else:
+                self.end_y = int(self.screen.get_rect().height / 2)
+            self.path_y = [self.y, self.end_y]
+            self.to_new_height = self.end_y
+            self.tmp_vel = copy(self.vel_y)
+            self.vel_y = 5
 
         if self.moving_x:
             self.update_x()
@@ -336,6 +362,20 @@ class ShipEnemy(Enemy):
         if self.moving_y:
             self.update_y()
             self.ship.update_y(self.y)
+        self.fallen_parts.update_falling_y(.1)
+
+        # If the ship reaches a new height it resets it to just hover
+        if self.to_new_height:
+            reached_from_below = self.y > self.to_new_height >= (self.y - self.vel_y * 2)
+            reached_from_above = self.y < self.to_new_height <= (self.y + self.vel_y * 2)
+
+            if reached_from_below or reached_from_above:
+                if reached_from_below:
+                    self.end_y = self.end_y + 25
+                elif reached_from_above:
+                    self.end_y = self.end_y - 25
+                self.vel_y = copy(self.tmp_vel)
+                self.path_y = [self.y, self.end_y]
 
         if self.frame_counter + 1 == 60:
             self.frame_counter = 0
@@ -378,12 +418,14 @@ class ShipEnemy(Enemy):
     def blitme(self):
 
         self.ship.blitme(self.screen)
+        self.fallen_parts.blitme(self.screen)
 
         for projectile in self.projectiles:
             projectile.blitme()
 
     def oob(self):
         self.ship.oob(self.screen.get_rect())
+        self.fallen_parts.oob(self.screen.get_rect())
 
 
 class Parts:
@@ -393,8 +435,10 @@ class Parts:
         self.frames = []
         self.x = x
         self.y = y
+
         self.survivable = survivable
         self.facing_right = True
+        self.falling_vel = .09
 
         self.load_frames(parts)
         self.num_parts = len(self.frames)
@@ -415,6 +459,17 @@ class Parts:
             else:
                 frame['lrect'].y = y + frame['offset'][1]
 
+    # Overload for falling parts
+    def update_falling_y(self, accel):
+
+        for frame in self.frames:
+            if self.facing_right:
+                frame['rrect'].y += frame['offset'][1] - self.falling_vel
+            else:
+                frame['lrect'].y += frame['offset'][1] - self.falling_vel
+
+        self.falling_vel -= accel
+
     def oob(self, screen_rect):
 
         for frame in self.frames:
@@ -433,9 +488,9 @@ class Parts:
         for frame in range(len(self.frames)):
 
             # Prints parts by order of priority
-            for f_tmp in self.frames:
-                if frame is f_tmp['priority']:
-                    current_frame = f_tmp
+            for f_cur in range(len(self.frames)):
+                if self.frames[frame]['priority'] is self.frames[f_cur]['priority']:
+                    current_frame = self.frames[frame]
 
             if self.facing_right:
                 screen.blit(current_frame['rframe'], current_frame['rrect'])
@@ -445,6 +500,8 @@ class Parts:
         return current_frame
 
     def load_frames(self, parts):
+        if parts is None:
+            return
 
         # Goes through list of ship parts from settings
         for frame in parts:
@@ -453,7 +510,6 @@ class Parts:
             if frame['size']:
                 current_frame_r = pygame.transform.smoothscale(
                     pygame.image.load(frame['path']), (frame['size'][0], frame['size'][1]))
-                print(frame['size'])
                 rect = pygame.Rect(self.x + frame['offset'][0], self.y + frame['offset'][1],
                                    frame['size'][0], frame['size'][1])
             else:
