@@ -3,7 +3,7 @@ import os
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
-from highscores import populateWithPlaceholders, initialDatabaseCreation, returnAScore, return5Scores, returnscoreavg, resetHighscores
+from highscores import initialDatabaseCreation, returnAScore, return5Scores, returnscoreavg, resetHighscores
 
 
 # NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
@@ -539,11 +539,6 @@ class HighScoresScreen(Screen):
             screen, game_settings.mainmenu_path, int(self.screen_rect.centerx),
             int(self.screen_rect.centery * 1.9))
 
-        # Button will add placeholders to the high scores list for demo purposes
-        self.addplaceholders_button = Button(
-            screen, game_settings.placeholder_path, int(self.screen_rect.centerx * .3),
-            int(self.screen_rect.centery * 1.9))
-
         # Button will index to next page of high scores
         self.nextpagebutton = Button(
             screen, game_settings.vol_up_path, int(self.screen_rect.centerx + 65),
@@ -560,16 +555,6 @@ class HighScoresScreen(Screen):
         self.textSurfaces = []
         self.textRects = []
         self.textRects = []
-
-        # firstscore = returnAScore()  # First score contains a tuple, [0] is the entry name [1] is the score
-        # entry = firstscore[0] + " " + str(firstscore[1])  # Converts the entry to a string to be displayed
-
-        # Case of empty highscores list, inputs 5 placeholder values
-        # if fivescores is None:
-        # populateWithPlaceholders()
-
-        # Maybe do fivescores[self.scoreIndex]
-        # score1 = fivescores[0]  # Each contains a tuple (playername, playerscore)
 
     def screen_start(self):
         self.load_scores()
@@ -655,11 +640,6 @@ class HighScoresScreen(Screen):
                 if self.mainmenu_button.image_rect.colliderect(mouse_pos):
                     ret_game_state = GameState.TITLE
 
-                elif self.addplaceholders_button.image_rect.colliderect(mouse_pos):
-                    # Call the populate with placeholders function inside highscores.py
-                    populateWithPlaceholders()
-                    self.load_scores()
-
                 elif self.nextpagebutton.image_rect.colliderect(mouse_pos):
                     # Advance the page
                     self.advance_page()
@@ -700,7 +680,6 @@ class HighScoresScreen(Screen):
             pass    # Incase there is no average
 
         self.mainmenu_button.blitme()
-        self.addplaceholders_button.blitme()
         self.nextpagebutton.blitme()
         self.prevpagebutton.blitme()
         # self.credits_button.blitme()
