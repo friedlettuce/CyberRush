@@ -9,6 +9,10 @@ class Enemy(object):
     
     def __init__(self, screen, x, y, width, height, end_x, end_y):
         self.screen = screen
+        self.bot = int(self.screen.get_rect().height * 3 / 4)
+        self.mid = int(self.screen.get_rect().height / 2)
+        self.top = int(self.screen.get_rect().height / 8)
+
         self.x = x
         self.y = y
         self.width = width
@@ -306,11 +310,11 @@ class ShipEnemy(Enemy):
     def __init__(self, screen, game_settings, num, facing, x, y, width=None, height=None, end_x=0, end_y=0):
         super().__init__(screen, x, y, width, height, end_x, end_y)
 
-        self.name = 'S'
         # this enemy moves
         self.moving = True
-        self.health = 8
-        self.tmp_vel = None
+        self.health = 16
+
+        self.hover_y = abs(self.end_y - self.y)
 
         # Load frames
         game_settings.load_ship(num)
@@ -322,11 +326,14 @@ class ShipEnemy(Enemy):
         self.fallen_parts = Parts(None, None, None, None)
         self.to_new_height = False
         self.falling_accel = 2
+        self.accel_y = 2
 
         self.frame = self.ship.frames[0]
         self.frame_rect = None
         self.projectile_speed = game_settings.ship_proj_speed
+        self.proj_accel = 3
         self.projectile_num = game_settings.ship_proj_num
+        self.proj_dmg_inc = 1
         self.eye_sight = 20
 
         # If the enemy moves along a path, sets velocity not to 0
@@ -340,21 +347,32 @@ class ShipEnemy(Enemy):
         if len(self.ship.frames) < self.ship.survivable:
             self.health = 0
 
-        if (4 < self.health <= 6 and len(self.ship.frames) is 6) or (
-                2 < self.health <= 4 and len(self.ship.frames) is 5) or (
-                0 < self.health <= 2 and len(self.ship.frames) is 4):
+        dmg_inc = 4
+        dmg_part1 = dmg_inc*2 < self.health <= dmg_inc*3
+        dmg_part2 = dmg_inc < self.health <= dmg_inc*2
+        dmg_part3 = 0 < self.health <= dmg_inc
+        first_fallen = dmg_part1 and len(self.ship.frames) is 6
+        second_fallen = not first_fallen and dmg_part2 and len(self.ship.frames) is 5
+        third_fallen = not second_fallen and dmg_part3 and len(self.ship.frames) is 4
+
+        if first_fallen or second_fallen or third_fallen:
 
             self.fallen_parts.frames.append(self.ship.frames.pop())
-            if self.y >= self.screen.get_rect().centery + 25:
-                self.end_y = int(self.screen.get_rect().height / 8)
-            elif self.screen.get_rect().height/2 >= self.y >= self.screen.get_rect().centery/2 - 25:
-                self.end_y = int(self.screen.get_rect().height * 3 / 4)
-            else:
-                self.end_y = int(self.screen.get_rect().height / 2)
+            self.fallen_parts.num_parts += 1
+            self.strafe_top_bot_mid()
+
             self.path_y = [self.y, self.end_y]
             self.to_new_height = self.end_y
-            self.tmp_vel = copy(self.vel_y)
-            self.vel_y = 5
+            self.projectile_speed += self.proj_accel
+            if self.vel_y < 0:
+                self.vel_y -= self.accel_y
+            else:
+                self.vel_y += self.accel_y
+
+        if dmg_part2 and not self.to_new_height:
+            self.strafe_top_bot()
+        elif dmg_part3 and not self.to_new_height:
+            self.strafe_top_bot_mid()
 
         if self.moving_x:
             self.update_x()
@@ -362,7 +380,7 @@ class ShipEnemy(Enemy):
         if self.moving_y:
             self.update_y()
             self.ship.update_y(self.y)
-        self.fallen_parts.update_falling_y(.1)
+        self.fallen_parts.update_falling_y(.01)
 
         # If the ship reaches a new height it resets it to just hover
         if self.to_new_height:
@@ -371,11 +389,11 @@ class ShipEnemy(Enemy):
 
             if reached_from_below or reached_from_above:
                 if reached_from_below:
-                    self.end_y = self.end_y + 25
+                    self.end_y = self.end_y + self.hover_y
                 elif reached_from_above:
-                    self.end_y = self.end_y - 25
-                self.vel_y = copy(self.tmp_vel)
+                    self.end_y = self.end_y - self.hover_y
                 self.path_y = [self.y, self.end_y]
+                self.to_new_height = False
 
         if self.frame_counter + 1 == 60:
             self.frame_counter = 0
@@ -397,6 +415,42 @@ class ShipEnemy(Enemy):
             self.frame_rect = self.frame['rrect']
         else:
             self.frame_rect = self.frame['lrect']
+
+    def strafe_top_bot_mid(self):
+
+        if self.end_y is self.bot - self.hover_y or self.end_y is self.bot + self.hover_y:
+            # If ship at bottom, send to top
+            self.end_y = int(self.screen.get_rect().height / 8)
+            self.path_y = [self.y, self.end_y]
+            self.to_new_height = self.end_y
+        elif self.end_y is self.mid - self.hover_y or self.end_y is self.bot + self.hover_y:
+            # If ship in middle, send to bottom
+            self.end_y = int(self.screen.get_rect().height * 3/4)
+            self.path_y = [self.y, self.end_y]
+            self.to_new_height = self.end_y
+        elif self.end_y is self.top + self.hover_y or self.end_y is self.top - self.hover_y:
+            # If ship at top, send to middle
+            self.end_y = int(self.screen.get_rect().height / 2)
+            self.path_y = [self.y, self.end_y]
+            self.to_new_height = self.end_y
+        else:
+            # If ship starts from set postition, send to top
+            self.end_y = int(self.screen.get_rect().height / 8)
+            self.path_y = [self.y, self.end_y]
+            self.to_new_height = self.end_y
+
+    def strafe_top_bot(self):
+
+        if self.end_y is self.bot - self.hover_y or self.end_y is self.bot + self.hover_y:
+            # If ship at bottom, send to top
+            self.end_y = int(self.screen.get_rect().height / 8)
+            self.path_y = [self.y, self.end_y]
+            self.to_new_height = self.end_y
+        elif self.end_y is self.top + self.hover_y or self.end_y is self.top - self.hover_y:
+            # If ship at top, send to middle
+            self.end_y = int(self.screen.get_rect().height / 2)
+            self.path_y = [self.y, self.end_y]
+            self.to_new_height = self.end_y
 
     def add_projectile(self, dir_x=0, dir_y=0):
         # Sets x travel direction based on enemy facing direction
@@ -443,9 +497,6 @@ class Parts:
         self.load_frames(parts)
         self.num_parts = len(self.frames)
 
-        for frame in self.frames:
-            print(frame['priority'])
-
     def update_x(self, x):
 
         for frame in self.frames:
@@ -486,27 +537,16 @@ class Parts:
                 self.frames.remove(frame)
 
     def blitme(self, screen):
-        current_frame = None
-        # print('------ BLIT -------')
 
-        for frame in range(len(self.frames)):
-            lowest = self.num_parts - frame
+        for frame in range(self.num_parts):
 
             # Prints parts by order of priority
             for f_cur in self.frames:
-                if current_frame is None:
-                    current_frame = f_cur
-                    lowest = current_frame['priority']
-                if lowest > f_cur['priority'] > current_frame['priority']:
-                    lowest = current_frame['priority']
-                    current_frame = f_cur
-
-            if self.facing_right:
-                screen.blit(current_frame['rframe'], current_frame['rrect'])
-            else:
-                screen.blit(current_frame['lframe'], current_frame['lrect'])
-
-        return current_frame
+                if f_cur['priority'] is frame:
+                    if self.facing_right:
+                        screen.blit(f_cur['rframe'], f_cur['rrect'])
+                    else:
+                        screen.blit(f_cur['lframe'], f_cur['lrect'])
 
     def load_frames(self, parts):
         if parts is None:

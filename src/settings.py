@@ -327,10 +327,10 @@ class Settings:
             'shots': os.path.join(os.path.join(ship_path, 'Shot' + str(number)), 'shot' + str(number) + '_'),
             'shots_file': '.png',
             'shots_fc': 4,
-            'width': 86,
-            'height': 39,
+            'width': 172,
+            'height': 78,
             'vel_x': 5,
-            'vel_y': 1,
+            'vel_y': 3,
             'survivable': survivable
         }
 
