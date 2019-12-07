@@ -7,6 +7,7 @@ class Player:
 
     def __init__(self, screen, game_settings, x, y):
 
+        self.maxjump = 2
         self.screen = screen
         self.screen_rect = self.screen.get_rect()
 
@@ -86,14 +87,15 @@ class Player:
 
     def jump(self):
 
-        if not self.jumping:
+        if self.maxjump > 0:
             pygame.mixer.Sound.play(self.player_jump_sound)
             self.jumping = True
             self.vel_y = self.vel_jump
+            self.maxjump -= 1
 
     def land(self):
         self.jumping = False
-
+        self.maxjump = 2
         if self.moving_left or self.moving_right:
             self.max_fc = self.walking_f.fc
         elif self.hitting or self.shooting:
