@@ -192,7 +192,10 @@ class Player:
                 self.projectiles.remove(projectile)
 
         self.frame_wait += 1
-        self.frame_count = self.frame_wait // 5
+        if self.rolling:
+            self.frame_count = self.frame_wait // 2
+        else:
+            self.frame_count = self.frame_wait // 5
 
         if self.frame_count >= self.max_fc:
             self.frame_wait = 0
