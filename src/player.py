@@ -21,6 +21,7 @@ class Player:
         self.jumping_f = Frames(self.size)
         self.shooting_f = Frames()
         self.melee_f = Frames()
+        self.roll_f = Frames()
 
         self.proj_f = Frames(game_settings.player_frames['projectile']['size'])
 
@@ -46,6 +47,7 @@ class Player:
         self.shooting = False
         self.hitting = False
         self.hit = False
+        self.rolling = False
 
         # Inits frame
         self.frame_count = 0
@@ -93,6 +95,18 @@ class Player:
             self.vel_y = self.vel_jump
             self.maxjump -= 1
 
+    def roll(self):
+        print("roll")
+        self.moving_left = False
+        self.moving_right = False
+        self.jumping = False
+        self.shooting = False
+        self.hitting = False
+        self.rolling = True
+        self.max_fc = self.roll_f.fc
+        self.frame_count = 0
+        self.frame_wait = 0
+
     def land(self):
         self.jumping = False
         self.maxjump = 2
@@ -137,6 +151,18 @@ class Player:
 
             if not (self.jumping or self.shooting or self.hitting):
                 self.current_frame = self.walking_f.frame(self.frame_count, self.facing_right)
+        
+        print(self.frame_count)
+        if self.rolling:
+            if self.facing_right:
+                self.x += 2 * self.vel_x
+            else:
+                self.x -= 2 * self.vel_x
+            self.current_frame = self.roll_f.frame(self.frame_count, self.facing_right)
+            if(self.frame_count >= (self.max_fc - 1)):
+                self.rolling = False
+
+
 
         elif not (self.jumping or self.shooting or self.hitting):
             self.land()
@@ -234,6 +260,7 @@ class Player:
         self.shooting_f.load_frames(player_frames['shooting'], player_frames['file_type'])
         self.melee_f.load_frames(player_frames['melee'], player_frames['file_type'])
         self.proj_f.load_frames(player_frames['projectile'], player_frames['file_type'])
+        self.roll_f.load_frames(player_frames['roll'], player_frames['file_type'])
 
     def clear_frames(self):
         self.idle_f.clear()

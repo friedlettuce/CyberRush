@@ -219,6 +219,7 @@ class GameScreen(object):
                 elif event.key == self.input['shoot']:
                     self.player.shoot()
 
+
             elif event.type == pygame.KEYUP:
 
                 if event.key == self.input['left']:
@@ -226,6 +227,9 @@ class GameScreen(object):
 
                 if event.key == self.input['right']:
                     self.player.set_movement(True, False)
+
+                if event.key == self.input['roll']:
+                    self.player.roll()
 
         return ret_game_state
 

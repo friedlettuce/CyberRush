@@ -422,6 +422,12 @@ class SettingsScreen(Screen):
         down_control = large_text.render(str("Right Control: " + str(key)), True, (0, 0, 0))
         self.screen.blit(down_control, (int(self.screen_rect.centerx / 7), int(self.screen_rect.centery / 1*1.5)))
 
+        key = pygame.key.name(self.game_settings.input['roll'])
+        key = key.upper()
+
+        roll_control = large_text.render(str("Roll Control: " + str(key)), True, (0, 0, 0))
+        self.screen.blit(roll_control, (int(self.screen_rect.centerx + 20), int(self.screen_rect.centery / 1*1.5)))
+
     def volume_display(self):
 
         large_text = pygame.font.Font(self.game_settings.cb2_path, 25)

@@ -128,7 +128,7 @@ class Settings:
         
         # Player Controls
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'shoot': pygame.K_s,
-                      'melee': pygame.K_e}
+                      'melee': pygame.K_e, 'roll': pygame.K_LSHIFT}
         self.controls_path = os.path.join(self.resources_folder, "Controls.txt")
 
         try:
@@ -159,7 +159,7 @@ class Settings:
         self.control_flag = True
 
         self.input = {'right': pygame.K_d, 'left': pygame.K_a, 'up': pygame.K_w, 'shoot': pygame.K_s,
-                      'melee': pygame.K_e}
+                      'melee': pygame.K_e, 'roll': pygame.K_LSHIFT}
         self.music_volume = .05
         pygame.mixer.music.set_volume(self.music_volume)
         self.player_skin = 0
@@ -178,6 +178,7 @@ class Settings:
         self.input['up'] = int(file.readline())
         self.input['shoot'] = int(file.readline())
         self.input['melee'] = int(file.readline())
+        self.input['roll'] = int(file.readline())
         self.music_volume = float(file.readline())
         self.player_skin = int(file.readline())
         self.player_projectile = int(file.readline())
@@ -208,6 +209,9 @@ class Settings:
             file.write("\n")
 
             file.write('%d' % self.input['melee'])
+            file.write("\n")
+
+            file.write('%d' % self.input['roll'])
             file.write("\n")
 
             file.write('%f' % self.music_volume)
@@ -272,6 +276,11 @@ class Settings:
                     player_folder, "attack"), "projectile"), str(number2) + '_projectile_'),
                 'fc': 4,
                 'size': (33, 11)
+            },
+            'roll': {
+                'path': os.path.join(os.path.join(
+                    player_folder, "extras"), str(number2) + '_roll_'),
+                'fc': 7,
             },
             'file_type': '.png'
         }
