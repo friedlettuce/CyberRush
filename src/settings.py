@@ -279,7 +279,7 @@ class Settings:
             },
             'roll': {
                 'path': os.path.join(os.path.join(
-                    player_folder, "extras"), str(number2) + '_roll_'),
+                    player_folder, "extras"), str(number) + '_roll_'),
                 'fc': 7,
             },
             'file_type': '.png'

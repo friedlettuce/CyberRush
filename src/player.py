@@ -275,6 +275,7 @@ class Player:
         self.jumping_f.clear()
         self.melee_f.clear()
         self.shooting_f.clear()
+        self.roll_f.clear()
 
     def add_projectile(self):
         if len(self.projectiles) >= self.proj_max:
