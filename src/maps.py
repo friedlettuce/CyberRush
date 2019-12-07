@@ -333,6 +333,8 @@ class Zone:
         is_colliding = False
         was_colliding = False
         x_vel = player.vel_x
+        if player.rolling:
+            x_vel = 2 * x_vel
         if player.facing_right:
             x_vel *= -1
 
