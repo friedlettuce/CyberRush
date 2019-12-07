@@ -18,44 +18,12 @@ def createTable():
     conn.close()
 
 
-# Function will populate the table with placeholders for testing
-# Purposes until we integrate the highscores into the actual game
-def populateWithPlaceholders():
-    # Will input three placeholders
-    conn = sqlite3.connect('highscores.db')
-    c = conn.cursor()
-    # NOTE: need to pass in the players name and score into this function
-    # to successfully implement this
-    playername = "Player 1"
-    playerscore = 100
-    c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
-              {'playerName': playername, 'playerScore': playerscore})
-    playername = "Player 2"
-    playerscore = 150
-    c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
-              {'playerName': playername, 'playerScore': playerscore})
-    playername = "Player 2"
-    playerscore = 15
-    c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
-              {'playerName': playername, 'playerScore': playerscore})
-    playername = "Player 3"
-    playerscore = 245
-    c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
-              {'playerName': playername, 'playerScore': playerscore})
-    playername = "Player 5"
-    playerscore = 69
-    c.execute("INSERT INTO highscores VALUES (:playerName, :playerScore)",
-              {'playerName': playername, 'playerScore': playerscore})
-    conn.commit()
-    conn.close()
-
-
 def initialDatabaseCreation():
     # Will run the initial database creation
     # Has error checking built in, so if a database already exists it will just pass
     try:
         createTable()
-    except(sqlite3.OperationalError):
+    except sqlite3.OperationalError:
         pass
 
 
@@ -68,70 +36,6 @@ def addNewPlayer(playername, playerscore):
               {'playerName': playername, 'playerScore': playerscore})
     conn.commit()
     conn.close()
-
-
-def deletePlayer(playername):
-    # Function will remove a player from the highscores list
-    conn = sqlite3.connect('highscores.db')
-    c = conn.cursor()
-    c.execute("DELETE from highscores where playerName =?",
-              (playername,))  # may not work need to test when up and running
-    conn.commit()
-    conn.close()
-
-
-def resetHighscores():
-    # Function will remove all entries in the highscores list
-    conn = sqlite3.connect('highscores.db')
-    c = conn.cursor()
-    c.execute("Delete from highscores;", )  # Need to test if this deletes all entries
-    conn.commit()
-    conn.close()
-
-
-def displayScores():
-    # We will first select the entries in descending order
-    # Based on score (higher scores shown first)
-    conn = sqlite3.connect('highscores.db')
-    c = conn.cursor()
-    c.execute("SELECT playerName, playerScore from highscores ORDER BY playerScore DESC")
-
-    # do we need to a commit here? Need to test
-    conn.commit()
-
-    # Rows will contain each sorted entry on every line
-    rows = c.fetchall()
-    conn.close()
-
-    # For now we will just print to console
-    # Until I can figure out how to display it to the pygame application
-    for row in rows:
-        print(row)
-
-
-def searchScores(playername):
-    # Function will allow the user to search the scores for a name
-    # And show that players scores in descending order
-    conn = sqlite3.connect('highscores.db')
-    c = conn.cursor()
-    c.execute("SELECT playerName, playerScore from highscores WHERE playerName =? ORDER BY playerScore DESC",
-              (playername,))
-    entries = c.fetchall()
-    conn.close()
-
-    # For now will just print to console
-    for entry in entries:
-        print(entry)
-
-
-def returnAScore():
-    conn = sqlite3.connect('highscores.db')
-    c = conn.cursor()
-    c.execute("SELECT playerName, playerScore from highscores WHERE playerName =? ORDER BY playerScore DESC",
-              ('Placeholder 1',))
-    score = c.fetchone()
-    conn.close()
-    return score
 
 
 # Function will take in an index (page number) and return the next 5 scores
@@ -158,10 +62,8 @@ def returnscoreavg():
     c.execute("SELECT playerName, playerScore from highscores ORDER BY playerScore DESC",)
     scores = c.fetchall()
     scoreavg = 0
-    numscores = 0
 
     for score in scores:
-        scoreavg += scores[numscores][1]
-        numscores += 1
-    scoreavg = scoreavg / numscores
+        scoreavg += score[1]
+    scoreavg = scoreavg / len(scores)
     return scoreavg

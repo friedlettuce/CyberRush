@@ -3,7 +3,7 @@ import os
 
 from settings import GameState
 from mobs import Enemy, HoveringEnemy
-from highscores import initialDatabaseCreation, returnAScore, return5Scores, returnscoreavg, resetHighscores
+from highscores import initialDatabaseCreation, return5Scores, returnscoreavg
 
 
 # NOTE: Need to edit the number of buttons in game settings, need to add a new one for high scores screen
@@ -671,20 +671,6 @@ class HighScoresScreen(Screen):
                     self.previous_page()
 
         return ret_game_state
-
-    ''''
-    def displayHighScores(self):
-        firstscore = returnAScore()
-        text = firstscore
-        score1 = pygame.font.Font(self.game_settings.cb2_path, 25)
-        self.textSurface1 = score1.render(text, True, (0, 0, 0))
-        self.TextRect1 = self.textSurface1.get_rect()
-        self.TextRect1.center = ((self.screen_rect.centerx), (self.screen_rect.centery - 150))
-        '''
-
-    # large_text = pygame.font.Font(self.game_settings.cb2_path, 25)
-    # firstScore = returnAScore()
-    # self.textSurface = large_text.render(firstScore, True, (0, 0, 0))
 
     def blitme(self):
 
