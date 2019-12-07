@@ -69,6 +69,7 @@ class Player:
 
         self.frame_count = 0
         self.frame_wait = 0
+        self.rolling = False
 
         if move:
             self.facing_right = direction
@@ -90,6 +91,7 @@ class Player:
     def jump(self):
 
         if self.maxjump > 0:
+            self.rolling = False
             pygame.mixer.Sound.play(self.player_jump_sound)
             self.jumping = True
             self.vel_y = self.vel_jump
@@ -122,6 +124,7 @@ class Player:
             self.frame_wait = 0
 
     def shoot(self):
+        self.rolling = False
         if self.hitting:
             return
 
@@ -131,6 +134,7 @@ class Player:
         self.frame_wait = 0
 
     def melee(self):
+        self.rolling = False
         if self.shooting:
             return
 
@@ -141,6 +145,7 @@ class Player:
         self.frame_wait = 0
 
     def move(self):
+        print(self.frame_count)
 
         if self.moving_left or self.moving_right:
 
@@ -151,9 +156,8 @@ class Player:
 
             if not (self.jumping or self.shooting or self.hitting):
                 self.current_frame = self.walking_f.frame(self.frame_count, self.facing_right)
-        
-        print(self.frame_count)
-        if self.rolling:
+
+        elif self.rolling:
             if self.facing_right:
                 self.x += 2 * self.vel_x
             else:
