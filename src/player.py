@@ -98,7 +98,6 @@ class Player:
             self.maxjump -= 1
 
     def roll(self):
-        print("roll")
         self.moving_left = False
         self.moving_right = False
         self.jumping = False
