@@ -145,8 +145,6 @@ class Player:
         self.frame_wait = 0
 
     def move(self):
-        print(self.frame_count)
-
         if self.moving_left or self.moving_right:
 
             if self.moving_right:
